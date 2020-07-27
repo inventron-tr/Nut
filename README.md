@@ -1,7 +1,7 @@
 # Nut
 
 
-[![Build Status](https://github.com/HamedMasafi/Nut/workflows/qt/badge.svg)](https://github.com/HamedMasafi/Nut/actions)
+![CI build](https://github.com/HamedMasafi/Nut/workflows/CI%20build/badge.svg)
 [![Travis build Status](https://travis-ci.org/HamedMasafi/Nut.svg?branch=master)](https://travis-ci.org/HamedMasafi/Nut)
 [![Appveyor build Status](https://ci.appveyor.com/api/projects/status/ebthxq6syuxob6jx?svg=true)](https://ci.appveyor.com/project/HamedMasafi/nut)
 [![GitLicense](https://gitlicense.com/badge/hamedmasafi/nut)](https://gitlicense.com/license/hamedmasafi/nut)
