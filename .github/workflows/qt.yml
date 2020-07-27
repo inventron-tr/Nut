@@ -81,7 +81,7 @@ jobs:
         working-directory: src/3rdparty/PackageKit-Qt
       - name: qmake
         run: |
-          qmake CONFIG+=install_ok QT_PLATFORM=${{matrix.platform}} "QT_TOOL_PATH=${{steps.qt.outputs.qtdir}}/Tools"
+          qmake CONFIG+=install_ok QT_PLATFORM=${{matrix.platform}} "QT_TOOL_PATH=${{steps.qt.outputs.qtdir}}/Tools" nut.pro
           ${{steps.qt.outputs.make}} qmake_all
         
       - name: upload module to releases
