@@ -3,7 +3,6 @@ QT       += sql gui
 TARGET = nut
 TEMPLATE = lib
 CONFIG += c++11
-CONFIG += staticlib
 
 DEFINES += QT_DEPRECATED_WARNINGS NUT_COMPILE_STATIC
 
