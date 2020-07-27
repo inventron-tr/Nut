@@ -58,10 +58,6 @@ jobs:
           version: ${{matrix.version}}
           platform: ${{matrix.platform}}
           packages: qt.tools.ifw.32
-      - name: qmake
-        run: |
-          qmake CONFIG+=install_ok QT_PLATFORM=${{matrix.platform}} "QT_TOOL_PATH=${{steps.qt.outputs.qtdir}}/Tools"
-          ${{steps.qt.outputs.make}} qmake_all
       - name: install packagekit
         if: matrix.platform == 'gcc_64'
         run: |
@@ -83,11 +79,11 @@ jobs:
           ${{steps.qt.outputs.make}} install
           pkg-config --exists packagekitqt5
         working-directory: src/3rdparty/PackageKit-Qt
-        
-      - name: make module
+      - name: qmake
         run: |
-          ${{steps.qt.outputs.make}}
-          ${{steps.qt.outputs.make}} INSTALL_ROOT="${{steps.qt.outputs.installdir}}" install
+          qmake CONFIG+=install_ok QT_PLATFORM=${{matrix.platform}} "QT_TOOL_PATH=${{steps.qt.outputs.qtdir}}/Tools"
+          ${{steps.qt.outputs.make}} qmake_all
+        
       - name: upload module to releases
         uses: Skycoder42/action-upload-release@master
         if: startsWith(github.ref, 'refs/tags/')
