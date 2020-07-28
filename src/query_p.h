@@ -33,7 +33,7 @@ class Database;
 class TableSetBase;
 class QueryBase;
 struct RelationModel;
-class QueryPrivate : public QSharedData {
+class NUT_EXPORT QueryPrivate : public QSharedData {
     QueryBase *q_ptr;
     Q_DECLARE_PUBLIC(QueryBase)
 

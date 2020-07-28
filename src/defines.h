@@ -31,10 +31,20 @@
 #include <QVariant>
 #include <QMetaClassInfo>
 
-#ifdef NUT_COMPILE_STATIC
-#   define NUT_EXPORT
+#if defined(NUT_SHARED) || !defined(NUT_STATIC)
+#  ifdef NUT_STATIC
+#    error "Both NUT_SHARED and NUT_STATIC defined, please make up your mind"
+#  endif
+#  ifndef NUT_SHARED
+#    define NUT_SHARED
+#  endif
+#  if defined(NUT_BUILD_LIB)
+#    define NUT_EXPORT Q_DECL_EXPORT
+#  else
+#    define NUT_EXPORT Q_DECL_IMPORT
+#  endif
 #else
-#   define NUT_EXPORT Q_DECL_EXPORT
+#  define NUT_EXPORT
 #endif
 
 #define NUT_INFO(type, name, value)                                            \
@@ -45,7 +55,7 @@
     Q_CLASSINFO(__nut_NAME_PERFIX type #name #value,                           \
                 type "\n" #name "\n" value)
 
-#define NUT_FIELD_PERFIX
+#define NUT_FIELD_PREFIX
 #define NUT_FIELD_POSTFIX Field
 
 // Database
