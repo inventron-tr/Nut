@@ -26,7 +26,7 @@
 
 NUT_BEGIN_NAMESPACE
 
-class SqliteGenerator : public SqlGeneratorBase
+class NUT_EXPORT SqliteGenerator : public SqlGeneratorBase
 {
 public:
     explicit SqliteGenerator(Database *parent = nullptr);

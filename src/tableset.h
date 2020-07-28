@@ -43,7 +43,7 @@ class BulkInserter;
 class Database;
 
 template<class T>
-class NUT_EXPORT TableSet : public TableSetBase
+class TableSet : public TableSetBase
 {
 public:
     typedef T value_type;

@@ -33,7 +33,7 @@ NUT_BEGIN_NAMESPACE
 //TODO: remove this class
 class Table;
 class TableSetBase;
-class QueryBase : public QObject
+class NUT_EXPORT QueryBase : public QObject
 {
     Q_OBJECT
 

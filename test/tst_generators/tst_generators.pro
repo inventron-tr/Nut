@@ -12,5 +12,3 @@ SOURCES += \
 
 HEADERS += \
     tst_generators.h
-
-include($$PWD/../../ci-test-init.pri)

@@ -26,7 +26,7 @@
 
 NUT_BEGIN_NAMESPACE
 
-class PostgreSqlGenerator : public SqlGeneratorBase
+class NUT_EXPORT PostgreSqlGenerator : public SqlGeneratorBase
 {
 private:
     bool readInsideParentese(QString &text, QString &out);

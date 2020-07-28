@@ -35,7 +35,7 @@ ConditionalPhrase::ConditionalPhrase(const ConditionalPhrase &other)
 }
 
 #ifdef Q_COMPILER_RVALUE_REFS
-ConditionalPhrase::ConditionalPhrase(const ConditionalPhrase &&other)
+ConditionalPhrase::ConditionalPhrase(ConditionalPhrase &&other)
 {
     this->data = qMove(other.data);
 }

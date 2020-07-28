@@ -15,5 +15,3 @@ HEADERS += \
     tst_json.h \
     db.h \
     sampletable.h
-
-include($$PWD/../../ci-test-init.pri)

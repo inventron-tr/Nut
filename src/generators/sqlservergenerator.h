@@ -26,7 +26,7 @@
 
 NUT_BEGIN_NAMESPACE
 
-class SqlServerGenerator : public SqlGeneratorBase
+class NUT_EXPORT SqlServerGenerator : public SqlGeneratorBase
 {
 public:
     explicit SqlServerGenerator(Database *parent = nullptr);
