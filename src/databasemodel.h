@@ -33,7 +33,7 @@ NUT_BEGIN_NAMESPACE
 
 class TableModel;
 struct RelationModel;
-class DatabaseModel : public QList<TableModel *>
+class NUT_EXPORT DatabaseModel : public QList<TableModel *>
 {
     QString _databaseClassName;
     int _version;

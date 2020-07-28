@@ -17,4 +17,3 @@ HEADERS += \
     sampletable.h \
     tst_datetime.h
 
-include($$PWD/../../ci-test-init.pri)

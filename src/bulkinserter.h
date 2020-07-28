@@ -11,7 +11,7 @@ NUT_BEGIN_NAMESPACE
 
 class PhraseList;
 class Database;
-class BulkInserter
+class NUT_EXPORT BulkInserter
 {
     Database *_database;
     QString _className;

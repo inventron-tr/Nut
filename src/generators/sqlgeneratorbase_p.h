@@ -37,7 +37,7 @@ class DatabaseModel;
 class TableModel;
 class Database;
 struct RelationModel;
-class SqlGeneratorBase : public QObject
+class NUT_EXPORT SqlGeneratorBase : public QObject
 {
 //    Q_OBJECT
 

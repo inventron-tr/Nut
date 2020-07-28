@@ -33,7 +33,7 @@ NUT_BEGIN_NAMESPACE
 class Table;
 class Database;
 class TableSetBaseData;
-class TableSetBase : public QObject
+class NUT_EXPORT TableSetBase : public QObject
 {
 
 public:

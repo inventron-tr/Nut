@@ -36,7 +36,7 @@ void Nut::BulkInserter::insert(std::initializer_list<QVariant> vars)
 
 int Nut::BulkInserter::apply()
 {
-    auto sql = _database->sqlGenertor()->insertBulk(_className, _fields, variants);
+    auto sql = _database->sqlGenerator()->insertBulk(_className, _fields, variants);
     QSqlQuery q = _database->exec(sql);
     return q.numRowsAffected();
 }

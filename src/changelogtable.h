@@ -26,7 +26,7 @@
 
 NUT_BEGIN_NAMESPACE
 
-class ChangeLogTable : public Table
+class NUT_EXPORT ChangeLogTable : public Table
 {
     Q_OBJECT
 
