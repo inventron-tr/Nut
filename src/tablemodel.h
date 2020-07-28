@@ -30,7 +30,7 @@ class QJsonObject;
 NUT_BEGIN_NAMESPACE
 
 class TableModel;
-struct FieldModel{
+struct NUT_EXPORT FieldModel{
     explicit FieldModel() : name(QString()), defaultValue(QString())
     {
 

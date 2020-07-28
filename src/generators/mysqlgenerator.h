@@ -26,7 +26,7 @@
 
 NUT_BEGIN_NAMESPACE
 
-class MySqlGenerator : public SqlGeneratorBase
+class NUT_EXPORT MySqlGenerator : public SqlGeneratorBase
 {
 public:
     explicit MySqlGenerator(Database *parent = nullptr);

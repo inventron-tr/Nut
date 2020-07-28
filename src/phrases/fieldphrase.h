@@ -27,27 +27,33 @@
 
 NUT_BEGIN_NAMESPACE
 
-template<typename T, typename enable = void>
-class NUT_EXPORT FieldPhrase : public AbstractFieldPhrase
+template<typename T>
+class FieldPhrase : public AbstractFieldPhrase
 {
 public:
     FieldPhrase(const char *className, const char *s) :
         AbstractFieldPhrase(className, s)
     {}
 
-    AssignmentPhrase operator =(const QVariant &other) {
-        return AssignmentPhrase(this, other);
-    }
+    virtual ~FieldPhrase() {}
 
-    ConditionalPhrase operator ==(const QVariant &other) {
-        return ConditionalPhrase(this, PhraseData::Equal, other);
-    }
-
+    AssignmentPhrase operator =(const QVariant &other);
+    ConditionalPhrase operator ==(const QVariant &other);
 };
+
+template<typename T>
+Q_OUTOFLINE_TEMPLATE AssignmentPhrase FieldPhrase<T>::operator =(const QVariant &other) {
+    return AssignmentPhrase(this, other);
+}
+
+template<typename T>
+Q_OUTOFLINE_TEMPLATE ConditionalPhrase FieldPhrase<T>::operator ==(const QVariant &other) {
+    return ConditionalPhrase(this, PhraseData::Equal, other);
+}
 
 
 template<>
-class NUT_EXPORT FieldPhrase<QString> : public AbstractFieldPhrase
+class FieldPhrase<QString> : public AbstractFieldPhrase
 {
 public:
     FieldPhrase(const char *className, const char *s) :
@@ -75,7 +81,7 @@ public:
     }
 
 template<>
-class NUT_EXPORT FieldPhrase<bool> : public AbstractFieldPhrase
+class FieldPhrase<bool> : public AbstractFieldPhrase
 {
 public:
     FieldPhrase(const char *className, const char *s) :

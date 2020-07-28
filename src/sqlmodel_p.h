@@ -10,7 +10,7 @@ NUT_BEGIN_NAMESPACE
 class SqlModel;
 class Table;
 class TableModel;
-class SqlModelPrivate : public QSharedData {
+class NUT_EXPORT SqlModelPrivate : public QSharedData {
 public:
     explicit SqlModelPrivate(SqlModel *parent);
 

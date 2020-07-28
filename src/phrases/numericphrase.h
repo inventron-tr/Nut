@@ -12,23 +12,13 @@ NUT_BEGIN_NAMESPACE
     return ConditionalPhrase(this, cond, other);                               \
 }
 
-template <typename T>
-class FieldPhrase<T, typename std::enable_if<
-            std::is_floating_point<T>::value || std::is_integral<T>::value
-        >::type>
-        : public AbstractFieldPhrase
+class NumericFieldPhrase : public AbstractFieldPhrase
 {
 public:
-    FieldPhrase(const char *className, const char *s) :
+    NumericFieldPhrase(const char *className, const char *s) :
         AbstractFieldPhrase(className, s)
     {}
 
-    AssignmentPhrase operator =(const QVariant &other) {
-        return AssignmentPhrase(this, other);
-    }
-    AssignmentPhrase operator =(ConditionalPhrase &&other) {
-        return AssignmentPhrase(new PhraseData(data, PhraseData::Equal, other.data));
-    }
     ConditionalPhrase between(const QVariant &min, const QVariant &max)
     {
         return ConditionalPhrase(this, PhraseData::Between,
@@ -65,25 +55,32 @@ public:
 
 #define SPECIALIZATION_NUMERIC_TYPE(type) \
     template<> \
-    class FieldPhrase<type> : public NumericPhrase \
+    class FieldPhrase<type> : public NumericFieldPhrase \
 { \
 public: \
 FieldPhrase(const char *className, const char *s) : \
-    NumericPhrase(className, s) \
+    NumericFieldPhrase(className, s) \
 {} \
+    AssignmentPhrase operator =(const QVariant &other) { \
+        return AssignmentPhrase(this, other); \
+    } \
+    AssignmentPhrase operator =(ConditionalPhrase &&other) { \
+        return AssignmentPhrase(new PhraseData(data, PhraseData::Equal, other.data)); \
+    } \
 };
 
-//SPECIALIZATION_NUMERIC_TYPE(qint8)
-//SPECIALIZATION_NUMERIC_TYPE(qint16)
-//SPECIALIZATION_NUMERIC_TYPE(qint32)
-//SPECIALIZATION_NUMERIC_TYPE(qint64)
+SPECIALIZATION_NUMERIC_TYPE(qint8)
+SPECIALIZATION_NUMERIC_TYPE(qint16)
+SPECIALIZATION_NUMERIC_TYPE(qint32)
+SPECIALIZATION_NUMERIC_TYPE(qint64)
 
-//SPECIALIZATION_NUMERIC_TYPE(quint8)
-//SPECIALIZATION_NUMERIC_TYPE(quint16)
-//SPECIALIZATION_NUMERIC_TYPE(quint32)
-//SPECIALIZATION_NUMERIC_TYPE(quint64)
+SPECIALIZATION_NUMERIC_TYPE(quint8)
+SPECIALIZATION_NUMERIC_TYPE(quint16)
+SPECIALIZATION_NUMERIC_TYPE(quint32)
+SPECIALIZATION_NUMERIC_TYPE(quint64)
 
-//SPECIALIZATION_NUMERIC_TYPE(qreal)
+SPECIALIZATION_NUMERIC_TYPE(qreal)
+SPECIALIZATION_NUMERIC_TYPE(float)
 
 NUT_END_NAMESPACE
 

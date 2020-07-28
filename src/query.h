@@ -49,7 +49,7 @@
 NUT_BEGIN_NAMESPACE
 
 template <class T>
-        class NUT_EXPORT Query : public QueryBase
+class Query : public QueryBase
 {
     QueryPrivate *d_ptr;
     Q_DECLARE_PRIVATE(Query)
