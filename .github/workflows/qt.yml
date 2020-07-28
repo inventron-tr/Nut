@@ -67,7 +67,7 @@ jobs:
           repo_token: ${{secrets.GITHUB_TOKEN}}
           directory: ${{steps.qt.outputs.outdir}}
           platform: ${{matrix.platform}}
-          asset_name: qtautoupdater-${{matrix.platform}}-${{matrix.version}}
+          asset_name: nut-${{matrix.platform}}-${{matrix.version}}
           tag: ${{github.ref}}
           overwrite: true
 
