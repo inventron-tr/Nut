@@ -117,8 +117,8 @@ QString SqlGeneratorBase::recordsPhrase(TableModel *table)
     QString ret = QString();
     foreach (FieldModel *f, table->fields()) {
         if (!ret.isEmpty())
-            ret.append(", ");
-        ret.append(QString("%1.%2 AS \"%1.%2\"").arg(table->name(), f->name));
+            ret.append(QLatin1String(", "));
+        ret.append(QString::fromUtf8("%1.%2 AS \"%1.%2\"").arg(table->name(), f->name));
     }
     return ret;
 }
@@ -132,11 +132,11 @@ QString SqlGeneratorBase::insertBulk(const QString &tableName, const PhraseList 
             values.append(escapeValue(v));
 
         if (!sql.isEmpty())
-            sql.append(", ");
-        sql.append("(" + values.join(", ") + ")");
+            sql.append(QLatin1String(", "));
+        sql.append(QLatin1String("(") + values.join(QLatin1String(", ")) + QLatin1String(")"));
     }
-    sql = "INSERT INTO " + tableName + "(" + createFieldPhrase(ph)
-            + ") VALUES" + sql;
+    sql = QString::fromUtf8("INSERT INTO %1 (%2) VALUES %3")
+              .arg(tableName, createFieldPhrase(ph), sql);
 
     removeTableNames(sql);
     return sql;
@@ -147,9 +147,15 @@ QString SqlGeneratorBase::fieldDeclare(FieldModel *field)
     QString type = fieldType(field);
     if (type.isEmpty())
         return type;
-    return field->name + " " + type
-            + (field->notNull ? " NOT NULL" : "")
-            + (field->isUnique ? " UNIQUE" : "");
+
+    QString ret = field->name + QStringLiteral(" ") + type;
+    if (field->notNull)
+        ret.append(QStringLiteral(" NOT NULL"));
+
+    if (field->isUnique)
+        ret.append(QStringLiteral(" UNIQUE"));
+
+    return ret;
 }
 
 QStringList SqlGeneratorBase::constraints(TableModel *table)
@@ -160,7 +166,7 @@ QStringList SqlGeneratorBase::constraints(TableModel *table)
 
 QString SqlGeneratorBase::relationDeclare(const RelationModel *relation)
 {
-    return QString("FOREIGN KEY (FK_%1) REFERENCES %2(%1)")
+    return QString::fromUtf8("FOREIGN KEY (FK_%1) REFERENCES %2(%1)")
             .arg(relation->localColumn, relation->slaveTable->name());
 }
 

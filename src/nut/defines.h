@@ -188,10 +188,10 @@ NUT_BEGIN_NAMESPACE
 inline bool nutClassInfo(const QMetaClassInfo &classInfo,
                          QString &type, QString &name, QVariant &value)
 {
-    if (!QString(classInfo.name()).startsWith(__nut_NAME_PERFIX))
+    if (!QString::fromUtf8(classInfo.name()).startsWith(QStringLiteral(__nut_NAME_PERFIX)))
         return false;
 
-    QStringList parts = QString(classInfo.value()).split("\n");
+    QStringList parts = QString::fromUtf8(classInfo.value()).split(QStringLiteral("\n"));
     if (parts.count() != 3)
         return false;
 
@@ -204,10 +204,10 @@ inline bool nutClassInfo(const QMetaClassInfo &classInfo,
 inline bool nutClassInfoString(const QMetaClassInfo &classInfo,
                               QString &type, QString &name, QString &value)
 {
-    if (!QString(classInfo.name()).startsWith(__nut_NAME_PERFIX))
+    if (!QString::fromUtf8(classInfo.name()).startsWith(QStringLiteral(__nut_NAME_PERFIX)))
         return false;
 
-    QStringList parts = QString(classInfo.value()).split("\n");
+    QStringList parts = QString::fromUtf8(classInfo.value()).split(QStringLiteral("\n"));
     if (parts.count() != 3)
         return false;
 
@@ -220,30 +220,30 @@ inline bool nutClassInfoString(const QMetaClassInfo &classInfo,
 inline bool nutClassInfoBool(const QMetaClassInfo &classInfo,
                               QString &type, QString &name, bool &value)
 {
-    if (!QString(classInfo.name()).startsWith(__nut_NAME_PERFIX))
+    if (!QString::fromUtf8(classInfo.name()).startsWith(QStringLiteral(__nut_NAME_PERFIX)))
         return false;
 
-    QStringList parts = QString(classInfo.value()).split("\n");
+    QStringList parts = QString::fromUtf8(classInfo.value()).split(QStringLiteral("\n"));
     if (parts.count() != 3)
         return false;
 
     QString buffer = parts[2].toLower();
-    if (buffer != "true" && buffer != "false")
+    if (buffer != QStringLiteral("true") && buffer != QStringLiteral("false"))
         return false;
 
     type = parts[0];
     name = parts[1];
-    value = (buffer == "true");
+    value = (buffer == QStringLiteral("true"));
     return true;
 }
 
 inline bool nutClassInfoInt(const QMetaClassInfo &classInfo,
                             QString &type, QString &name, bool &value)
 {
-    if (!QString(classInfo.name()).startsWith(__nut_NAME_PERFIX))
+    if (!QString::fromUtf8(classInfo.name()).startsWith(QStringLiteral(__nut_NAME_PERFIX)))
         return false;
 
-    QStringList parts = QString(classInfo.value()).split("\n");
+    QStringList parts = QString::fromUtf8(classInfo.value()).split(QStringLiteral("\n"));
     if (parts.count() != 3)
         return false;
     bool ok;

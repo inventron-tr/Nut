@@ -65,7 +65,7 @@ public:
     }
 
     ConditionalPhrase contains(const QString &term) {
-        return ConditionalPhrase(this, PhraseData::Like, "%" + term + "%");
+        return ConditionalPhrase(this, PhraseData::Like, QStringLiteral("%") + term + QStringLiteral("%"));
     }
 
     AssignmentPhrase operator =(const QVariant &v) {

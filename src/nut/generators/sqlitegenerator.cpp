@@ -32,28 +32,28 @@ SqliteGenerator::SqliteGenerator(Database *parent) : SqlGeneratorBase(parent)
 QString SqliteGenerator::fieldType(FieldModel *field)
 {
     switch (field->type) {
-    case QMetaType::Bool:           return "BOOLEAN";
+    case QMetaType::Bool:           return QStringLiteral("BOOLEAN");
     case QMetaType::QBitArray:
-    case QMetaType::QByteArray:     return "BLOB";
-    case QMetaType::QDate:          return "DATE";
-    case QMetaType::QDateTime:      return "DATETIME";
-    case QMetaType::QTime:          return "TIME";
-    case QMetaType::Double:         return "DOUBLE";
-    case QMetaType::Float:          return "FLOAT";
+    case QMetaType::QByteArray:     return QStringLiteral("BLOB");
+    case QMetaType::QDate:          return QStringLiteral("DATE");
+    case QMetaType::QDateTime:      return QStringLiteral("DATETIME");
+    case QMetaType::QTime:          return QStringLiteral("TIME");
+    case QMetaType::Double:         return QStringLiteral("DOUBLE");
+    case QMetaType::Float:          return QStringLiteral("FLOAT");
 
     case QMetaType::SChar:
-    case QMetaType::Char:           return "TINYINT";
-    case QMetaType::UChar:          return "TINYINT UNSIGNED";
-    case QMetaType::Short:          return "SMALLINT";
-    case QMetaType::UShort:         return "SMALLINT UNSIGNED";
-    case QMetaType::Int:            return "INT";
-    case QMetaType::UInt:           return "INT UNSIGNED";
-    case QMetaType::Long:           return "MEDIUMINT";
-    case QMetaType::ULong:          return "MEDIUMINT UNSIGNED";
-    case QMetaType::LongLong:       return "BIGINT";
-    case QMetaType::ULongLong:      return "BIGINT UNSIGNED";
+    case QMetaType::Char:           return QStringLiteral("TINYINT");
+    case QMetaType::UChar:          return QStringLiteral("TINYINT UNSIGNED");
+    case QMetaType::Short:          return QStringLiteral("SMALLINT");
+    case QMetaType::UShort:         return QStringLiteral("SMALLINT UNSIGNED");
+    case QMetaType::Int:            return QStringLiteral("INT");
+    case QMetaType::UInt:           return QStringLiteral("INT UNSIGNED");
+    case QMetaType::Long:           return QStringLiteral("MEDIUMINT");
+    case QMetaType::ULong:          return QStringLiteral("MEDIUMINT UNSIGNED");
+    case QMetaType::LongLong:       return QStringLiteral("BIGINT");
+    case QMetaType::ULongLong:      return QStringLiteral("BIGINT UNSIGNED");
 
-    case QMetaType::QChar:          return "NCHAR(1)";
+    case QMetaType::QChar:          return QStringLiteral("NCHAR(1)");
 
     case QMetaType::QUrl:
     case QMetaType::QJsonArray:
@@ -72,16 +72,16 @@ QString SqliteGenerator::fieldType(FieldModel *field)
     case QMetaType::QPolygonF:
     case QMetaType::QStringList:
     case QMetaType::QColor:
-    case QMetaType::QUuid:          return "TEXT";
+    case QMetaType::QUuid:          return QStringLiteral("TEXT");
 
 //        if (field->isAutoIncrement)
 //            dbType.append(" PRIMARY KEY AUTOINCREMENT");
 
     case QMetaType::QString:
         if(field->length)
-            return QString("VARCHAR(%1)").arg(field->length);
+            return QString::fromUtf8("VARCHAR(%1)").arg(field->length);
         else
-            return "TEXT";
+            return QStringLiteral("TEXT");
     default:
 //        qWarning("The type (%s) does not supported",
 //                 QMetaType::typeName(field->type));
@@ -96,18 +96,18 @@ QString SqliteGenerator::fieldDeclare(FieldModel *field)
         return type;
 
     if (isNumeric(field->type) && field->isPrimaryKey) {
-        type = "INTEGER PRIMARY KEY";
+        type = QStringLiteral("INTEGER PRIMARY KEY");
         if (field->isAutoIncrement)
-            type.append(" AUTOINCREMENT");
+            type.append(QStringLiteral(" AUTOINCREMENT"));
     }
 
     if (field->notNull)
-        type.append(" NOT NULL");
+        type.append(QStringLiteral(" NOT NULL"));
 
     if (field->isUnique)
-        type.append(" UNIQUE");
+        type.append(QStringLiteral(" UNIQUE"));
 
-    return field->name + " " + type;
+    return field->name + QStringLiteral(" ") + type;
 }
 
 bool SqliteGenerator::supportAutoIncrement(const QMetaType::Type &type)
@@ -127,7 +127,7 @@ QStringList SqliteGenerator::diff(TableModel *oldTable, TableModel *newTable)
     QStringList newTableSql = SqlGeneratorBase::diff(nullptr, newTable);
 
     if (!newTable)
-        return QStringList() << "DROP TABLE " + oldTable->name();
+        return QStringList() << QStringLiteral("DROP TABLE ") + oldTable->name();
 
     if (!oldTable)
         return newTableSql;
@@ -155,7 +155,7 @@ QStringList SqliteGenerator::diff(TableModel *oldTable, TableModel *newTable)
             continue;
 
         if (!columns.isEmpty())
-            columns.append(", ");
+            columns.append(QStringLiteral(", "));
         columns.append(f->name);
     }
 
@@ -181,21 +181,21 @@ QStringList SqliteGenerator::diff(TableModel *oldTable, TableModel *newTable)
     DROP TABLE sqlitestudio_temp_table;
     */
 
-    ret.append("ALTER TABLE " + newTable->name() + " RENAME TO sqlitestudio_temp_table;");
+    ret.append(QStringLiteral("ALTER TABLE ") + newTable->name() + QStringLiteral(" RENAME TO sqlitestudio_temp_table;"));
     ret.append(newTableSql);
-    ret.append(QString("INSERT INTO %1 ( %2 ) SELECT %2 FROM sqlitestudio_temp_table;")
+    ret.append(QString::fromUtf8("INSERT INTO %1 ( %2 ) SELECT %2 FROM sqlitestudio_temp_table;")
                .arg(newTable->name(), columns));
-    ret.append("DROP TABLE sqlitestudio_temp_table;");
+    ret.append(QStringLiteral("DROP TABLE sqlitestudio_temp_table;"));
     return ret;
 }
 void SqliteGenerator::appendSkipTake(QString &sql, int skip, int take)
 {
     if (take > 0 && skip > 0) {
-        sql.append(QString(" LIMIT %1 OFFSET %2")
+        sql.append(QString::fromUtf8(" LIMIT %1 OFFSET %2")
                    .arg(take)
                    .arg(skip));
     } else if (take > 0) {
-        sql.append(QString(" LIMIT %1").arg(take));
+        sql.append(QString::fromUtf8(" LIMIT %1").arg(take));
     }
 }
 
@@ -229,20 +229,20 @@ QString SqliteGenerator::createConditionalPhrase(const PhraseData *d) const
         case PhraseData::AddMonths:
         case PhraseData::AddDays: {
             int i = d->operand.toInt();
-            return QString("DATE(%1,'%2 %3')")
-                    .arg(createConditionalPhrase(d->left),
-                         (i < 0 ? "" : "+") + QString::number(i),
-                         dateTimePartName(op));
+            return QString::fromUtf8("DATE(%1,'%2 %3')")
+                .arg(createConditionalPhrase(d->left),
+                     (i < 0 ? QStringLiteral("") : QStringLiteral("+")) + QString::number(i),
+                     dateTimePartName(op));
             break;
         }
         case PhraseData::AddHours:
         case PhraseData::AddMinutes:
         case PhraseData::AddSeconds: {
             int i = d->operand.toInt();
-            return QString("TIME(%1,'%2 %3')")
-                    .arg(createConditionalPhrase(d->left),
-                         (i < 0 ? "" : "+") + QString::number(i),
-                         dateTimePartName(op));
+            return QString::fromUtf8("TIME(%1,'%2 %3')")
+                .arg(createConditionalPhrase(d->left),
+                     (i < 0 ? QStringLiteral("") : QStringLiteral("+")) + QString::number(i),
+                     dateTimePartName(op));
             break;
         }
         case PhraseData::AddYearsDateTime:
@@ -252,9 +252,9 @@ QString SqliteGenerator::createConditionalPhrase(const PhraseData *d) const
         case PhraseData::AddMinutesDateTime:
         case PhraseData::AddSecondsDateTime: {
             int i = d->operand.toInt();
-            return QString("DATETIME(%1,'%2 %3')")
+            return QString::fromUtf8("DATETIME(%1,'%2 %3')")
                     .arg(createConditionalPhrase(d->left),
-                         (i < 0 ? "" : "+") + QString::number(i),
+                     (i < 0 ? QStringLiteral("") : QStringLiteral("+")) + QString::number(i),
                          dateTimePartName(op));
             break;
         }
@@ -265,27 +265,27 @@ QString SqliteGenerator::createConditionalPhrase(const PhraseData *d) const
     if (d->type == PhraseData::WithoutOperand) {
         switch (op) {
         case PhraseData::DatePartYear:
-            return QString("CAST(strftime('%Y', %1) AS INT)")
+            return QString::fromUtf8("CAST(strftime('%Y', %1) AS INT)")
                     .arg(createConditionalPhrase(d->left));
 
         case PhraseData::DatePartMonth:
-            return QString("CAST(strftime('%m', %1) AS INT)")
+            return QString::fromUtf8("CAST(strftime('%m', %1) AS INT)")
                     .arg(createConditionalPhrase(d->left));
 
         case PhraseData::DatePartDay:
-            return QString("CAST(strftime('%d', %1) AS INT)")
+            return QString::fromUtf8("CAST(strftime('%d', %1) AS INT)")
                     .arg(createConditionalPhrase(d->left));
 
         case PhraseData::DatePartHour:
-            return QString("CAST(strftime('%H', %1) AS INT)")
+            return QString::fromUtf8("CAST(strftime('%H', %1) AS INT)")
                     .arg(createConditionalPhrase(d->left));
 
         case PhraseData::DatePartMinute:
-            return QString("CAST(strftime('%M', %1) AS INT)")
+            return QString::fromUtf8("CAST(strftime('%M', %1) AS INT)")
                     .arg(createConditionalPhrase(d->left));
 
         case PhraseData::DatePartSecond:
-            return QString("CAST(strftime('%S', %1) AS INT)")
+            return QString::fromUtf8("CAST(strftime('%S', %1) AS INT)")
                     .arg(createConditionalPhrase(d->left));
 
             //        case PhraseData::DatePartMilisecond:
@@ -302,13 +302,13 @@ QString SqliteGenerator::createConditionalPhrase(const PhraseData *d) const
 QString SqliteGenerator::escapeValue(const QVariant &v) const
 {
     if (v.type() == QVariant::Time)
-        return "'" + v.toTime().toString("HH:mm:ss") + "'";
+        return v.toTime().toString(QStringLiteral("'HH:mm:ss'"));
 
     if (v.type() == QVariant::Date)
-        return "'" + v.toDate().toString("yyyy-MM-dd") + "'";
+        return v.toDate().toString(QStringLiteral("'yyyy-MM-dd'"));
 
     if (v.type() == QVariant::DateTime)
-        return "'" + v.toDateTime().toString("yyyy-MM-dd HH:mm:ss") + "'";
+        return v.toDateTime().toString(QStringLiteral("'yyyy-MM-dd HH:mm:ss'"));
 
     return SqlGeneratorBase::escapeValue(v);
 }
