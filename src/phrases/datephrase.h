@@ -104,7 +104,6 @@ public:
     ConditionalPhrase addMonths(int months);
     ConditionalPhrase addDays(int days);
 
-
     ConditionalPhrase addHours(int hours);
     ConditionalPhrase addMinutes(int minutes);
     ConditionalPhrase addSeconds(int seconds);

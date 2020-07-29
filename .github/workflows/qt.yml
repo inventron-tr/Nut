@@ -59,8 +59,11 @@ jobs:
         run: |
           qmake CONFIG+=install_ok QT_PLATFORM=${{matrix.platform}} "QT_TOOL_PATH=${{steps.qt.outputs.qtdir}}/Tools" nut.pro
           ${{steps.qt.outputs.make}} qmake_all
-        
-      - name: upload module to releases
+      - name: make lib
+        run: |
+          ${{steps.qt.outputs.make}}
+          ${{steps.qt.outputs.make}} INSTALL_ROOT="${{steps.qt.outputs.installdir}}" install
+      - name: upload lib to releases
         uses: Skycoder42/action-upload-release@master
         if: startsWith(github.ref, 'refs/tags/')
         with:
