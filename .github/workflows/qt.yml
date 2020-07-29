@@ -20,7 +20,8 @@ jobs:
           - mingw81_64
           - mingw81_32
           - clang_64
-
+          - ios
+          
         include:
           - platform: gcc_64
             os: ubuntu-latest
@@ -42,7 +43,9 @@ jobs:
             os: windows-latest
           - platform: clang_64
             os: macos-latest
-
+          - platform: ios
+            os: macos-latest
+            
     runs-on: ${{matrix.os}}
     steps:
       - uses: actions/checkout@v1
