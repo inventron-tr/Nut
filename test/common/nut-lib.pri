@@ -23,7 +23,6 @@ win32 {
     }
 }
 
-LIBS += -L$$LIBDIR -lnut
 INCLUDEPATH += $$PWD/../../src $$PWD/../common
 
 DEFINES += NUT_SHARED_POINTER
