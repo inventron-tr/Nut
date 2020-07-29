@@ -1,8 +1,9 @@
 QT       += sql gui
 
-TARGET = nut
-TEMPLATE = lib
-CONFIG += c++11
+TARGET = QtNut
+#TARGET = nut
+#TEMPLATE = lib
+#CONFIG += c++11
 
 DEFINES += QT_DEPRECATED_WARNINGS NUT_SHARED NUT_BUILD_LIB
 
@@ -72,5 +73,7 @@ SOURCES += \
     $$PWD/phrases/phrasedatalist.cpp \
     $$PWD/phrases/phraselist.cpp \
     $$PWD/phrases/datephrase.cpp
+
+load(qt_module)
 
 include($$PWD/3rdparty/serializer/src/src.pri)
