@@ -22,7 +22,7 @@
 #define TABLEMODEL_H
 
 #include <QtCore/QVariant>
-#include <QDebug>
+#include <QtCore/QDebug>
 #include "defines.h"
 
 class QJsonObject;

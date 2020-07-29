@@ -22,8 +22,8 @@
 #include "../table.h"
 #include "../tablemodel.h"
 
-#include <QPoint>
-#include <QRegularExpression>
+#include <QtCore/QPoint>
+#include <QtCore/QRegularExpression>
 
 NUT_BEGIN_NAMESPACE
 

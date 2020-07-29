@@ -2,7 +2,7 @@
 #define BULKINSERTER_H
 
 #include <initializer_list>
-#include <QDebug>
+#include <QtCore/QDebug>
 #include "defines.h"
 #include "phrases/phraselist.h"
 #include "phrases/fieldphrase.h"

@@ -24,7 +24,7 @@
 #include "../defines.h"
 #include <QtCore/QObject>
 #include <QtCore/qglobal.h>
-#include <QVariant>
+#include <QtCore/QVariant>
 
 NUT_BEGIN_NAMESPACE
 

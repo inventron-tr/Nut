@@ -21,14 +21,14 @@
 #include "mysqlgenerator.h"
 #include "../tablemodel.h"
 
-#include <QPoint>
-#include <QPointF>
-#include <QTime>
-#include <QDate>
-#include <QDateTime>
+#include <QtCore/QPoint>
+#include <QtCore/QPointF>
+#include <QtCore/QTime>
+#include <QtCore/QDate>
+#include <QtCore/QDateTime>
 #ifdef QT_GUI_LIB
-#include <QPolygon>
-#include <QPolygonF>
+#   include <QtGui/QPolygon>
+#   include <QtGui/QPolygonF>
 #endif
 
 #include "sqlserializer.h"
@@ -45,42 +45,42 @@ QString MySqlGenerator::fieldType(FieldModel *field)
     QString dbType;
 
     switch (field->type) {
-    case QMetaType::Bool:        return "BOOLEAN";
+    case QMetaType::Bool:        return QStringLiteral("BOOLEAN");
     case QMetaType::Char:
-    case QMetaType::QChar:       return "CHAR(1)";
+    case QMetaType::QChar:       return QStringLiteral("CHAR(1)");
     case QMetaType::SChar:
-    case QMetaType::UChar:        return "TINYINT";
+    case QMetaType::UChar:       return QStringLiteral("TINYINT");
     case QMetaType::Short:
-    case QMetaType::UShort:        return "SMALLINT";
+    case QMetaType::UShort:      return QStringLiteral("SMALLINT");
     case QMetaType::UInt:
     case QMetaType::Int:
-        dbType = "INT";
+        dbType = QStringLiteral("INT");
         if(field->isAutoIncrement)
-            dbType += " AUTO_INCREMENT";
+            dbType += QStringLiteral(" AUTO_INCREMENT");
         break;
     case QMetaType::Long:
     case QMetaType::ULong:
     case QMetaType::LongLong:
     case QMetaType::ULongLong:
-        return "BIGINT";
+        return QStringLiteral("BIGINT");
 
     case QMetaType::Float:
-        return "FLOAT";
+        return QStringLiteral("FLOAT");
 
     case QMetaType::Double:
-        return "REAL";
+        return QStringLiteral("REAL");
 
-    case QMetaType::QBitArray:      return "VARBINARY";
-    case QMetaType::QByteArray:     return "BLOB";
-    case QMetaType::QDate:          return "DATE";
-    case QMetaType::QTime:          return "TIME";
-    case QMetaType::QDateTime:      return "DATETIME";
+    case QMetaType::QBitArray:      return QStringLiteral("VARBINARY");
+    case QMetaType::QByteArray:     return QStringLiteral("BLOB");
+    case QMetaType::QDate:          return QStringLiteral("DATE");
+    case QMetaType::QTime:          return QStringLiteral("TIME");
+    case QMetaType::QDateTime:      return QStringLiteral("DATETIME");
 
     case QMetaType::QString:
         if(field->length)
-            dbType = QString("VARCHAR(%1)").arg(field->length);
+            dbType = QString::fromUtf8("VARCHAR(%1)").arg(field->length);
         else
-            dbType = "TEXT";
+            dbType = QStringLiteral("TEXT");
         break;
 
 
@@ -109,7 +109,7 @@ QString MySqlGenerator::fieldType(FieldModel *field)
     case QMetaType::QJsonValue:
     case QMetaType::QJsonObject:
     case QMetaType::QJsonDocument:
-    case QMetaType::QStringList:    return "TEXT";
+    case QMetaType::QStringList:    return QStringLiteral("TEXT");
 
     default:
         qWarning("Type %s::%s(%d) is not supported",
@@ -128,16 +128,16 @@ QString MySqlGenerator::fieldType(FieldModel *field)
 QString MySqlGenerator::escapeValue(const QVariant &v) const
 {
     if (v.type() == QVariant::Bool)
-        return v.toBool() ? "1" : "0";
+        return v.toBool() ? QStringLiteral("1") : QStringLiteral("0");
 
     if (v.type() == QVariant::Time)
-        return "'" + v.toTime().toString("HH:mm:ss") + "'";
+        return v.toTime().toString(QStringLiteral("'HH:mm:ss'"));
 
     if (v.type() == QVariant::Date)
-        return "'" + v.toDate().toString("yyyy-MM-dd") + "'";
+        return v.toDate().toString(QStringLiteral("'yyyy-MM-dd'"));
 
     if (v.type() == QVariant::DateTime)
-        return "'" + v.toDateTime().toString("yyyy-MM-dd HH:mm:ss") + "'";
+        return v.toDateTime().toString(QStringLiteral("'yyyy-MM-dd HH:mm:ss'"));
 
 //#ifdef QT_GUI_LIB
 //    if (v.type() == QVariant::Polygon) {
@@ -316,7 +316,7 @@ QString MySqlGenerator::createConditionalPhrase(const PhraseData *d) const
         case PhraseData::AddMinutesDateTime:
         case PhraseData::AddSeconds:
         case PhraseData::AddSecondsDateTime:
-            return QString("DATE_ADD(%1, INTERVAL %2 %3)")
+            return QString::fromUtf8("DATE_ADD(%1, INTERVAL %2 %3)")
                     .arg(createConditionalPhrase(d->left),
                          d->operand.toString(),
                          SqlGeneratorBase::dateTimePartName(op));
@@ -333,7 +333,7 @@ QString MySqlGenerator::createConditionalPhrase(const PhraseData *d) const
         case PhraseData::DatePartHour:
         case PhraseData::DatePartMinute:
         case PhraseData::DatePartSecond:
-            return QString("%2(%1)")
+            return QString::fromUtf8("%2(%1)")
                     .arg(createConditionalPhrase(d->left),
                          SqlGeneratorBase::dateTimePartName(op));
 
@@ -348,11 +348,11 @@ QString MySqlGenerator::createConditionalPhrase(const PhraseData *d) const
 void MySqlGenerator::appendSkipTake(QString &sql, int skip, int take)
 {
     if (take > 0 && skip > 0) {
-        sql.append(QString(" LIMIT %1 OFFSET %2")
+        sql.append(QString::fromUtf8(" LIMIT %1 OFFSET %2")
                    .arg(take)
                    .arg(skip));
     } else if (take > 0) {
-        sql.append(QString(" LIMIT %1").arg(take));
+        sql.append(QString::fromUtf8(" LIMIT %1").arg(take));
     }
 }
 

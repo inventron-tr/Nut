@@ -172,7 +172,7 @@ Q_OUTOFLINE_TEMPLATE RowList<T> Query<T>::toList(int count)
 {
     Q_D(Query);
     RowList<T> returnList;
-    d->select = "*";
+    d->select = QStringLiteral("*");
 
     d->sql = d->database->sqlGenerator()->selectCommand(
                 d->tableName, d->fieldPhrase, d->wherePhrase, d->orderPhrase,
@@ -629,8 +629,10 @@ Q_OUTOFLINE_TEMPLATE void Query<T>::toModel(QSqlQueryModel *model)
 
     if (d->fieldPhrase.data.count()) {
         foreach (const PhraseData *pd, d->fieldPhrase.data) {
-            QString displayName = dbModel.tableByClassName(pd->className)
-                    ->field(pd->fieldName)->displayName;
+            QString displayName = dbModel
+                                      .tableByClassName(QString::fromUtf8(pd->className))
+                                      ->field(QString::fromUtf8(pd->fieldName))
+                                      ->displayName;
 
             model->setHeaderData(fieldIndex++,
                                  Qt::Horizontal,

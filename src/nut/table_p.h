@@ -4,7 +4,7 @@
 #include "defines.h"
 
 #include <QtCore/QSet>
-#include <QSharedData>
+#include <QtCore/QSharedData>
 
 NUT_BEGIN_NAMESPACE
 

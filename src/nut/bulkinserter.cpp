@@ -4,7 +4,7 @@
 #include "generators/sqlgeneratorbase_p.h"
 #include "databasemodel.h"
 
-#include <QDebug>
+#include <QtCore/QDebug>
 
 Nut::BulkInserter::BulkInserter(Nut::Database *db, QString &className)
     : _database(db), _fieldCount(0)

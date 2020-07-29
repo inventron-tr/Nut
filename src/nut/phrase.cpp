@@ -20,7 +20,7 @@
 
 #include "phrase.h"
 
-#include <QDebug>
+#include <QtCore/QDebug>
 
 NUT_BEGIN_NAMESPACE
 

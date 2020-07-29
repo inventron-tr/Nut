@@ -22,7 +22,7 @@
 #define DATEPHRASE_H
 
 #include "fieldphrase.h"
-#include <QDateTime>
+#include <QtCore/QDateTime>
 #include <type_traits>
 
 NUT_BEGIN_NAMESPACE

@@ -18,13 +18,12 @@
 **
 **************************************************************************/
 
-#include <QDate>
-#include <QDebug>
-#include <QDateTime>
-#include <QPointF>
-#include <QTime>
-#include <QUuid>
-#include <QVariant>
+#include <QtCore/QDateTime>
+#include <QtCore/QPointF>
+#include <QtCore/QTime>
+#include <QtCore/QUuid>
+#include <QtCore/QVariant>
+#include <QtCore/QDebug>
 
 #include "sqlgeneratorbase_p.h"
 #include "../database.h"
@@ -201,12 +200,12 @@ QString SqlGeneratorBase::diff(FieldModel *oldField, FieldModel *newField)
             return sql;
 
     if (!newField) {
-        sql = "DROP COLUMN " + oldField->name;
+        sql = QStringLiteral("DROP COLUMN ") + oldField->name;
     } else {
         if (oldField)
-            sql = "MODIFY COLUMN ";
+            sql = QStringLiteral("MODIFY COLUMN ");
         else
-            sql = "ADD COLUMN ";
+            sql = QStringLiteral("ADD COLUMN ");
         sql.append(fieldDeclare(newField));
     }
     return sql;
@@ -273,8 +272,8 @@ QStringList SqlGeneratorBase::diff(TableModel *oldTable, TableModel *newTable)
 //    }
     QString sql;
     if (oldTable) {
-        sql = QString("ALTER TABLE %1 \n%2")
-                .arg(newTable->name(), columnSql.join(",\n"));
+        sql = QString::fromUtf8("ALTER TABLE %1 \n%2")
+                  .arg(newTable->name(), columnSql.join(QStringLiteral(",\n")));
     } else {
         if (!newTable->primaryKey().isNull()) {
             QString pkCon = primaryKeyConstraint(newTable);
@@ -283,8 +282,8 @@ QStringList SqlGeneratorBase::diff(TableModel *oldTable, TableModel *newTable)
             columnSql << constraints(newTable);
         }
 
-        sql = QString("CREATE TABLE %1 \n(%2)")
-                .arg(newTable->name(), columnSql.join(",\n"));
+        sql = QString::fromUtf8("CREATE TABLE %1 \n(%2)")
+                  .arg(newTable->name(), columnSql.join(QStringLiteral(",\n")));
 
     }
     return QStringList() << sql;
@@ -298,10 +297,11 @@ QStringList SqlGeneratorBase::diffRelation(TableModel *oldTable, TableModel *new
 
     QList<QString> relations;
 
-    if (oldTable)
+    if (oldTable) {
         foreach (RelationModel *r, oldTable->foreignKeys())
             if (!relations.contains(r->localColumn))
                 relations.append(r->localColumn);
+    }
 
     foreach (RelationModel *r, newTable->foreignKeys())
         if (!relations.contains(r->localColumn))
@@ -320,8 +320,9 @@ QStringList SqlGeneratorBase::diffRelation(TableModel *oldTable, TableModel *new
     }
 
     if (columnSql.count())
-        ret.append("ALTER TABLE " + newTable->name() + "\n"
-                + columnSql.join(",\n"));
+        ret.append(QStringLiteral("ALTER TABLE ") + newTable->name()
+                   + QStringLiteral("\n")
+                   + columnSql.join(QStringLiteral(",\n")));
 
     return ret;
 }
@@ -900,7 +901,10 @@ QString SqlGeneratorBase::phrase(const PhraseData *d) const
         break;
 
     case PhraseData::WithVariant:
-        ret = phrase(d->left) + " " + operatorString(d->operatorCond) + " "
+        ret = phrase(d->left)
+              + QStringLiteral(" ")
+              + operatorString(d->operatorCond)
+              + QStringLiteral(" ")
               + escapeValue(d->operand);
         break;
 

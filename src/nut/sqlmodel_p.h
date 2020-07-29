@@ -1,8 +1,8 @@
 #ifndef SQLMODEL_P_H
 #define SQLMODEL_P_H
 
-#include <QSharedPointer>
-#include <QString>
+#include <QtCore/QSharedPointer>
+#include <QtCore/QString>
 #include "defines.h"
 
 NUT_BEGIN_NAMESPACE

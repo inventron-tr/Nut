@@ -25,8 +25,9 @@
 #include <QtCore/QMetaMethod>
 #include <QtCore/QMetaType>
 #include <QtCore/QVariant>
+#include <QtCore/QSharedPointer>
+
 #include <QtSql/QSqlQuery>
-#include <QSharedPointer>
 
 #include "tablesetbase_p.h"
 #include "table.h"

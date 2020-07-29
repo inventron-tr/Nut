@@ -23,8 +23,8 @@
 
 #include <QtCore/qglobal.h>
 #include <QtCore/QList>
+#include <QtCore/QSharedDataPointer>
 #include <QtSql/QSqlDatabase>
-#include <QSharedDataPointer>
 
 #include "defines.h"
 #include "tableset.h"

@@ -1,9 +1,6 @@
-QT       += sql gui
-
 TARGET = QtNut
-#TARGET = nut
-#TEMPLATE = lib
-#CONFIG += c++11
+
+QT = core sql gui
 
 DEFINES += QT_DEPRECATED_WARNINGS NUT_SHARED NUT_BUILD_LIB
 

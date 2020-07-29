@@ -24,8 +24,8 @@
 #include "database.h"
 #include "databasemodel.h"
 
-#include <QDebug>
-#include <QSharedData>
+#include <QtCore/QDebug>
+#include <QtCore/QSharedData>
 
 NUT_BEGIN_NAMESPACE
 

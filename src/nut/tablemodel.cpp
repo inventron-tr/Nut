@@ -21,9 +21,8 @@
 #include <QtCore/QMetaObject>
 #include <QtCore/QMetaProperty>
 #include <QtCore/QDebug>
-
-#include <QJsonArray>
-#include <QJsonObject>
+#include <QtCore/QJsonArray>
+#include <QtCore/QJsonObject>
 
 #include "tablemodel.h"
 #include "defines.h"

@@ -24,7 +24,7 @@
 #include <QtCore/QObject>
 #include <QtCore/qglobal.h>
 #include <QtCore/QSet>
-#include <QExplicitlySharedDataPointer>
+#include <QtCore/QExplicitlySharedDataPointer>
 
 #include "defines.h"
 

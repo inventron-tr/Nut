@@ -18,14 +18,15 @@
 **
 **************************************************************************/
 
-#include <QDateTime>
-#include <QPoint>
+#include <QtCore/QDateTime>
+#include <QtCore/QPoint>
+
 #ifdef QT_GUI_LIB
-#include <QPolygon>
-#include <QPolygonF>
+#   include <QtGui/QPolygon>
+#   include <QtGui/QPolygonF>
 #endif
-#include <QVariant>
-#include <QJsonDocument>
+#include <QtCore/QVariant>
+#include <QtCore/QJsonDocument>
 
 #include "postgresqlgenerator.h"
 #include "../table.h"
@@ -83,44 +84,44 @@ QString PostgreSqlGenerator::fieldType(FieldModel *field)
 
     switch (field->type) {
     case QMetaType::Bool:
-        dbType = "BOOLEAN";
+        dbType = QStringLiteral("BOOLEAN");
         break;
 
     case QMetaType::QBitArray:
     case QMetaType::QByteArray:
-        dbType = "BYTEA";
+        dbType = QStringLiteral("BYTEA");
         break;
     case QMetaType::QDate:
-        dbType = "DATE";
+        dbType = QStringLiteral("DATE");
         break;
     case QMetaType::QDateTime:
-        dbType = "TIMESTAMP";
+        dbType = QStringLiteral("TIMESTAMP");
         break;
     case QMetaType::QTime:
-        dbType = "TIME";
+        dbType = QStringLiteral("TIME");
         break;
 
     case QMetaType::SChar:
     case QMetaType::UChar:
     case QMetaType::Short:
     case QMetaType::UShort:
-        dbType = "SMALLINT";
+        dbType = QStringLiteral("SMALLINT");
         break;
 
     case QMetaType::Float:
-        dbType = "FLOAT";
+        dbType = QStringLiteral("FLOAT");
         break;
 
     case QMetaType::Double:
-        dbType = "REAL";
+        dbType = QStringLiteral("REAL");
         break;
 
     case QMetaType::Int:
     case QMetaType::UInt:
         if(field->isAutoIncrement)
-            dbType = "SERIAL";
+            dbType = QStringLiteral("SERIAL");
         else
-            dbType = "INTEGER";
+            dbType = QStringLiteral("INTEGER");
         break;
 
     case QMetaType::Long:
@@ -128,58 +129,58 @@ QString PostgreSqlGenerator::fieldType(FieldModel *field)
     case QMetaType::LongLong:
     case QMetaType::ULongLong:
         if(field->isAutoIncrement)
-            dbType = "BIGSERIAL";
+            dbType = QStringLiteral("BIGSERIAL");
         else
-            dbType = "BIGINT";
+            dbType = QStringLiteral("BIGINT");
         break;
 
     case QMetaType::Char:
     case QMetaType::QChar:
-        return "CHAR(1)";
+        return QStringLiteral("CHAR(1)");
 
     case QMetaType::QString:
         if(field->length)
             dbType = QString("VARCHAR(%1)").arg(field->length);
         else
-            dbType = "TEXT";
+            dbType = QStringLiteral("TEXT");
         break;
 
     case QMetaType::QPoint:
     case QMetaType::QPointF:
-        dbType="POINT";
+        dbType = QStringLiteral("POINT");
         break;
 
     case QMetaType::QUuid:
-        dbType = "UUID";
+        dbType = QStringLiteral("UUID");
         break;
 
     case QMetaType::QPolygon:
     case QMetaType::QPolygonF:
-        dbType = "POLYGON";
+        dbType = QStringLiteral("POLYGON");
         break;
 
     case QMetaType::QLine:
     case QMetaType::QLineF:
-        return "LINE";
+        return QStringLiteral("LINE");
 
     case QMetaType::QRect:
     case QMetaType::QRectF:
-        return "BOX";
+        return QStringLiteral("BOX");
 
     case QMetaType::QJsonArray:
     case QMetaType::QJsonValue:
     case QMetaType::QJsonObject:
     case QMetaType::QJsonDocument:
-        return "JSONB";
+        return QStringLiteral("JSONB");
 
     case QMetaType::QStringList:
-        return "TEXT[]";
+        return QStringLiteral("TEXT[]");
 
     case QMetaType::QSize:
     case QMetaType::QSizeF:
     case QMetaType::QUrl:
     case QMetaType::QColor:
-        return "TEXT";
+        return QStringLiteral("TEXT");
 
     default:
         dbType = QString();
@@ -196,13 +197,13 @@ QString PostgreSqlGenerator::diff(FieldModel *oldField, FieldModel *newField)
             return QString();
 
     if(!newField){
-        sql = "DROP COLUMN " + oldField->name;
+        sql = QStringLiteral("DROP COLUMN ") + oldField->name;
     }else{
         if(oldField){
-            sql = "ALTER COLUMN ";
-            sql.append(newField->name + " TYPE " + fieldType(newField));
+            sql = QStringLiteral("ALTER COLUMN ");
+            sql.append(newField->name + QStringLiteral(" TYPE ") + fieldType(newField));
         } else {
-            sql = "ADD COLUMN ";
+            sql = QStringLiteral("ADD COLUMN ");
             sql.append(fieldDeclare(newField));
         }
     }
@@ -212,27 +213,31 @@ QString PostgreSqlGenerator::diff(FieldModel *oldField, FieldModel *newField)
 QString PostgreSqlGenerator::escapeValue(const QVariant &v) const
 {
     if (v.type() == QVariant::Time)
-        return "'" + v.toTime().toString("HH:mm:ss") + "'";
+        return v.toTime().toString(QStringLiteral("'HH:mm:ss'"));
 
     if (v.type() == QVariant::Date)
-        return "'" + v.toDate().toString("yyyy-MM-dd") + "'";
+        return v.toDate().toString(QStringLiteral("'yyyy-MM-dd'"));
 
     if (v.type() == QVariant::DateTime)
-        return "'" + v.toDateTime().toString("yyyy-MM-dd HH:mm:ss") + "'";
+        return v.toDateTime().toString(QStringLiteral("'yyyy-MM-dd HH:mm:ss'"));
 
     if (v.type() == QVariant::StringList)
-        return "'{" + v.toStringList().join(",") + "}'";
+        return QStringLiteral("'{")
+                                       + v.toStringList().join(QStringLiteral(","))
+                                       + QStringLiteral("}'");
 
     if (v.type() == QVariant::Point) {
         QPoint pt = v.toPoint();
-        return QString("point(%1, %2)").arg(pt.x()).arg(pt.y());
+        return QString::fromUtf8("point(%1, %2)").arg(pt.x()).arg(pt.y());
     }
     if (v.type() == QVariant::PointF) {
         QPointF pt = v.toPointF();
-        return QString("point(%1, %2)").arg(pt.x()).arg(pt.y());
+        return QString::fromUtf8("point(%1, %2)").arg(pt.x()).arg(pt.y());
     }
     if (v.userType() == QMetaType::QJsonDocument) {
-        return "'" + QString(v.toJsonDocument().toJson(QJsonDocument::Compact)) + "'";
+        return QStringLiteral("'")
+            + QString::fromUtf8(v.toJsonDocument().toJson(QJsonDocument::Compact))
+            + QStringLiteral("'");
     }
 
 #ifdef QT_GUI_LIB
@@ -243,7 +248,7 @@ QString PostgreSqlGenerator::escapeValue(const QVariant &v) const
         for (int i = 0; i < pol.size(); ++i) {
             pt = pol.at(i);
             if (!ret.isEmpty())
-                ret.append("),(");
+                ret.append(QStringLiteral("),("));
             ret.append(QString::number(pt.x()) + ", " + QString::number(pt.y()));
         }
         return "'((" + ret + "))'";
@@ -255,7 +260,7 @@ QString PostgreSqlGenerator::escapeValue(const QVariant &v) const
         for (int i = 0; i < pol.size(); ++i) {
             pt = pol.at(i);
             if (!ret.isEmpty())
-                ret.append("),(");
+                ret.append(QStringLiteral("),("));
             ret.append(QString::number(pt.x()) + ", " + QString::number(pt.y()));
         }
         return "'((" + ret + "))'";
@@ -277,14 +282,24 @@ QVariant PostgreSqlGenerator::unescapeValue(const QMetaType::Type &type, const Q
         return dbValue.toDate();
 
     if (type == QMetaType::QPoint)
-        return SqlGeneratorBase::unescapeValue(QMetaType::QPoint, dbValue.toString()
-                                           .replace("(", "").replace(")", ""));
+        return SqlGeneratorBase::unescapeValue(QMetaType::QPoint,
+                                               dbValue.toString()
+                                                   .replace(QStringLiteral("("),
+                                                            QStringLiteral(""))
+                                                   .replace(QStringLiteral(")"),
+                                                            QStringLiteral("")));
     if (type == QMetaType::QPointF)
-        return SqlGeneratorBase::unescapeValue(QMetaType::QPointF, dbValue.toString()
-                                           .replace("(", "").replace(")", ""));
+        return SqlGeneratorBase::unescapeValue(QMetaType::QPointF,
+                                               dbValue.toString()
+                                                   .replace(QStringLiteral("("),
+                                                            QStringLiteral(""))
+                                                   .replace(QStringLiteral(")"),
+                                                            QStringLiteral("")));
     if (type == QMetaType::QStringList)
-        return dbValue.toString().replace("{", "").replace("}", "")
-                .split(",");
+        return dbValue.toString()
+            .replace(QStringLiteral("{"), QStringLiteral(""))
+            .replace(QStringLiteral("}"), QStringLiteral(""))
+            .split(QStringLiteral(","));
 
 #ifdef QT_GUI_LIB
     if (type == QMetaType::QPolygon) {
@@ -337,7 +352,7 @@ QString PostgreSqlGenerator::createConditionalPhrase(const PhraseData *d) const
 
     if (d->type == PhraseData::WithVariant) {
         if (isPostGisType(d->operand.type()) && d->operatorCond == PhraseData::Equal) {
-            return QString("%1 ~= %2")
+            return QString::fromUtf8("%1 ~= %2")
                     .arg(SqlGeneratorBase::createConditionalPhrase(d->left),
                          escapeValue(d->operand));
         }
@@ -354,7 +369,7 @@ QString PostgreSqlGenerator::createConditionalPhrase(const PhraseData *d) const
         case PhraseData::AddMinutesDateTime:
         case PhraseData::AddSeconds:
         case PhraseData::AddSecondsDateTime:
-            return QString("%1 + interval '%2 %3'")
+            return QString::fromUtf8("%1 + interval '%2 %3'")
                     .arg(createConditionalPhrase(d->left),
                          d->operand.toString(),
                          SqlGeneratorBase::dateTimePartName(op));
@@ -372,7 +387,7 @@ QString PostgreSqlGenerator::createConditionalPhrase(const PhraseData *d) const
         case PhraseData::DatePartHour:
         case PhraseData::DatePartMinute:
         case PhraseData::DatePartSecond:
-            return QString("date_part('%2', %1)")
+            return QString::fromUtf8("date_part('%2', %1)")
                     .arg(createConditionalPhrase(d->left),
                          SqlGeneratorBase::dateTimePartName(op));
 

@@ -21,7 +21,7 @@
 #ifndef TABLESETBASEDATA_H
 #define TABLESETBASEDATA_H
 
-#include <QSharedData>
+#include <QtCore/QSharedData>
 #include "defines.h"
 
 NUT_BEGIN_NAMESPACE

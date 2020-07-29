@@ -21,8 +21,8 @@
 #include "databasemodel.h"
 #include "tablemodel.h"
 
-#include <QJsonArray>
-#include <QJsonObject>
+#include <QtCore/QJsonArray>
+#include <QtCore/QJsonObject>
 
 NUT_BEGIN_NAMESPACE
 

@@ -22,10 +22,10 @@
 #define SQLMODEL_H
 
 #include <QtCore/QAbstractTableModel>
+#include <QtCore/QExplicitlySharedDataPointer>
+#include <QtCore/QList>
 #include "defines.h"
 #include "sqlmodel_p.h"
-#include <QExplicitlySharedDataPointer>
-#include <QList>
 #include <functional>
 
 NUT_BEGIN_NAMESPACE

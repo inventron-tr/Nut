@@ -1,7 +1,7 @@
 #ifndef SERIALIZABLEOBJECT_H
 #define SERIALIZABLEOBJECT_H
 
-#include <QVariant>
+#include <QtCore/QVariant>
 
 class SerializableObject
 {

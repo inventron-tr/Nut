@@ -193,8 +193,8 @@ bool DatabasePrivate::getCurrectSchema()
     Q_Q(Database);
 
     //is not first instanicate of this class
-    if (allTableMaps.contains(q->metaObject()->className())) {
-        currentModel = allTableMaps[q->metaObject()->className()];
+    if (allTableMaps.contains(QString::fromUtf8(q->metaObject()->className()))) {
+        currentModel = allTableMaps[QString::fromUtf8(q->metaObject()->className())];
         return false;
     }
 
@@ -205,9 +205,9 @@ bool DatabasePrivate::getCurrectSchema()
     int changeLogTypeId = qRegisterMetaType<ChangeLogTable*>();
 
     currentModel.append(
-        new TableModel(changeLogTypeId, __CHANGE_LOG_TABLE_NAME));
-    tables.insert(ChangeLogTable::staticMetaObject.className(),
-                  __CHANGE_LOG_TABLE_NAME);
+        new TableModel(changeLogTypeId, QStringLiteral(__CHANGE_LOG_TABLE_NAME)));
+    tables.insert(QStringLiteral(ChangeLogTable::staticMetaObject.className()),
+                  QStringLiteral(__CHANGE_LOG_TABLE_NAME));
 
     changeLogs = new TableSet<ChangeLogTable>(q);
 
@@ -219,11 +219,11 @@ bool DatabasePrivate::getCurrectSchema()
         if (!nutClassInfoString(q->metaObject()->classInfo(i),
                                 type, name, value)) {
 
-            errorMessage = QString("No valid table in %1")
+            errorMessage = QString::fromUtf8("No valid table in %1")
                     .arg(q->metaObject()->classInfo(i).value());
             continue;
         }
-        if (type == __nut_TABLE) {
+        if (type == QStringLiteral(__nut_TABLE)) {
             //name: table class name
             //value: table variable name (table name in db)
             tables.insert(name, value);
@@ -237,7 +237,7 @@ bool DatabasePrivate::getCurrectSchema()
             currentModel.append(sch);
         }
 
-        if (type == __nut_DB_VERSION) {
+        if (type == QStringLiteral(__nut_DB_VERSION)) {
             bool ok;
             int version = value.toInt(&ok);
             if (!ok)
@@ -250,9 +250,9 @@ bool DatabasePrivate::getCurrectSchema()
         QMetaProperty tableProperty = q->metaObject()->property(i);
         int typeId = QMetaType::type(tableProperty.typeName());
 
-        if (tables.values().contains(tableProperty.name())
+        if (tables.values().contains(QString::fromUtf8(tableProperty.name()))
             && (unsigned)typeId >= QVariant::UserType) {
-            TableModel *sch = new TableModel(typeId, tableProperty.name());
+            TableModel *sch = new TableModel(typeId, QString::fromUtf8(tableProperty.name()));
             currentModel.append(sch);
         }
     }
@@ -272,7 +272,7 @@ bool DatabasePrivate::getCurrectSchema()
             fk->masterTable = currentModel.tableByClassName(fk->masterClassName);
     }
 
-    allTableMaps.insert(q->metaObject()->className(), currentModel);
+    allTableMaps.insert(QString::fromUtf8(q->metaObject()->className()), currentModel);
     return true;
 }
 
@@ -286,8 +286,12 @@ DatabaseModel DatabasePrivate::getLastSchema()
 
     if (u) {
         QJsonParseError e;
-        QJsonObject json
-            = QJsonDocument::fromJson(u->data().replace("\\\"", "\"").toUtf8(), &e).object();
+        QJsonObject json = QJsonDocument::fromJson(u->data()
+                                                       .replace(QStringLiteral("\\\""),
+                                                                QStringLiteral("\""))
+                                                       .toUtf8(),
+                                                   &e)
+                               .object();
 
         DatabaseModel ret = json;
         return ret;
@@ -322,7 +326,7 @@ bool DatabasePrivate::putModelToDatabase()
     /*current.remove(__CHANGE_LOG_TABLE_NAME)*/;
 
     auto changeLog = create<ChangeLogTable>();
-    changeLog->setData(QJsonDocument(current.toJson()).toJson(QJsonDocument::Compact));
+    changeLog->setData(QString(QJsonDocument(current.toJson()).toJson(QJsonDocument::Compact)));
     changeLog->setVersion(current.version());
     changeLogs->append(changeLog);
     q->saveChanges(true);
@@ -344,7 +348,7 @@ bool DatabasePrivate::putModelToDatabase()
 void DatabasePrivate::createChangeLogs()
 {
     //    currentModel.model("change_log")
-    QStringList diff = sqlGenerator->diff(nullptr, currentModel.tableByName("__change_log"));
+    QStringList diff = sqlGenerator->diff(nullptr, currentModel.tableByName(QStringLiteral("__change_log")));
 
     foreach (QString s, diff)
         db.exec(s);
@@ -545,17 +549,17 @@ bool Database::open(bool updateDatabase)
 {
     Q_D(Database);
 
-    if (d->driver == "QPSQL" || d->driver == "QPSQL7")
+    if (d->driver == QStringLiteral("QPSQL") || d->driver == QStringLiteral("QPSQL7"))
         d->sqlGenerator = new PostgreSqlGenerator(this);
-    else if (d->driver == "QMYSQL" || d->driver == "QMYSQL3")
+    else if (d->driver == QStringLiteral("QMYSQL") || d->driver == QStringLiteral("QMYSQL3"))
         d->sqlGenerator = new MySqlGenerator(this);
-    else if (d->driver == "QSQLITE" || d->driver == "QSQLITE3")
+    else if (d->driver == QStringLiteral("QSQLITE") || d->driver == QStringLiteral("QSQLITE3"))
         d->sqlGenerator = new SqliteGenerator(this);
-    else if (d->driver == "QODBC" || d->driver == "QODBC3") {
+    else if (d->driver == QStringLiteral("QODBC") || d->driver == QStringLiteral("QODBC3")) {
         QString driverName = QString();
         QStringList parts = d->databaseName.toLower().split(';');
         foreach (QString p, parts)
-            if (p.trimmed().startsWith("driver="))
+            if (p.trimmed().startsWith(QStringLiteral("driver=")))
                 driverName = p.split('=').at(1).toLower().trimmed();
 
 //        if (driverName == "{sql server}")

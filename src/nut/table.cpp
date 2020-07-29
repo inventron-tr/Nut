@@ -18,9 +18,9 @@
 **
 **************************************************************************/
 
-#include <QMetaMethod>
-#include <QVariant>
-#include <QSqlQuery>
+#include <QtCore/QMetaMethod>
+#include <QtCore/QVariant>
+#include <QtSql/QSqlQuery>
 
 #include "table.h"
 #include "table_p.h"
