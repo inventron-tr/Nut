@@ -1,8 +1,8 @@
 #ifndef USER_H
 #define USER_H
 
-#include "table.h"
-#include "tableset.h"
+#include <QtNut/table.h>
+#include <QtNut/tableset.h>
 
 #include <QtCore/QUuid>
 #include <QtCore/QString>

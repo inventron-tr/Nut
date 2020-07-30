@@ -23,7 +23,7 @@
 
 #define NUT_NAMESPACE Nut
 
-#include "defines_p.h"
+#include "defines_consts.h"
 #include <QtCore/QtGlobal>
 
 #include <QtCore/QString>
@@ -126,7 +126,7 @@ public slots: \
 #define NUT_FOREIGN_KEY_IMPLEMENT(class, type, keytype, name, read, write)     \
     Nut::Row<type> class::read() const { return m_##name ; }                   \
     void class::write(Nut::Row<type> name){                                    \
-        propertyChanged(QT_STRINGIFY2(name##Id));                              \
+        propertyChanged(QStringLiteral(QT_STRINGIFY2(name##Id)));              \
         m_##name = name;                                                       \
         m_##name##Id = name->primaryValue().value<keytype>();                  \
     }                                                                          \
@@ -136,10 +136,9 @@ public slots: \
         return m_##name##Id;                                                   \
     }                                                                          \
     void class::write##Id(keytype name##Id){                                   \
-        propertyChanged(QT_STRINGIFY2(name##Id));                              \
         m_##name##Id = name##Id;                                               \
         m_##name = nullptr;                                                    \
-        propertyChanged(QT_STRINGIFY2(name##Id));                              \
+        propertyChanged(QStringLiteral(QT_STRINGIFY2(name##Id)));              \
     }
 
 

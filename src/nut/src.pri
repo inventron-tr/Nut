@@ -9,7 +9,7 @@ HEADERS += \
     $$PWD/tablesetbasedata.h \
     $$PWD/types/dbgeography.h \
     $$PWD/tableset.h \
-    $$PWD/defines_p.h \
+    $$PWD/defines_consts.h \
     $$PWD/defines.h \
     $$PWD/query.h \
     $$PWD/databasemodel.h \

@@ -3,7 +3,7 @@
 
 #include <QtCore/qglobal.h>
 #include <QtCore/QDateTime>
-#include "table.h"
+#include <QtNut/table.h>
 
 #ifdef NUT_NAMESPACE
 using namespace NUT_NAMESPACE;
