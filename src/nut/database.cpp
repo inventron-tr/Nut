@@ -206,7 +206,7 @@ bool DatabasePrivate::getCurrectSchema()
 
     currentModel.append(
         new TableModel(changeLogTypeId, QStringLiteral(__CHANGE_LOG_TABLE_NAME)));
-    tables.insert(QStringLiteral(ChangeLogTable::staticMetaObject.className()),
+    tables.insert(QString::fromUtf8(ChangeLogTable::staticMetaObject.className()),
                   QStringLiteral(__CHANGE_LOG_TABLE_NAME));
 
     changeLogs = new TableSet<ChangeLogTable>(q);

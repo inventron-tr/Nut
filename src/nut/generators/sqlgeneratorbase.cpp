@@ -343,13 +343,13 @@ QStringList SqlGeneratorBase::diff(RelationModel *oldRel, RelationModel *newRel)
                          .arg(newRelation->foreignColumn);
     */
     if (!oldRel)
-        ret.append(QString("ADD CONSTRAINT FK_%1 FOREIGN KEY (%1) "
+        ret.append(QString::fromUtf8("ADD CONSTRAINT FK_%1 FOREIGN KEY (%1) "
                        "REFERENCES %2(%3)")
                 .arg(newRel->localColumn, newRel->masterTable->name(),
                      newRel->foreignColumn));
 
     if (!newRel)
-        ret.append(QString("ADD CONSTRAINT FK_%1 FOREIGN KEY (%1) "
+        ret.append(QString::fromUtf8("ADD CONSTRAINT FK_%1 FOREIGN KEY (%1) "
                        "REFERENCES %2(%3)")
                 .arg(oldRel->localColumn, oldRel->masterTable->name(),
                      oldRel->foreignColumn));
