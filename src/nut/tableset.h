@@ -70,13 +70,13 @@ public:
 template<class T>
 Q_OUTOFLINE_TEMPLATE TableSet<T>::TableSet(Database *parent) : TableSetBase(parent)
 {
-    data->childClassName = T::staticMetaObject.className();
+    data->childClassName = QString::fromUtf8(T::staticMetaObject.className());
 }
 
 template<class T>
 Q_OUTOFLINE_TEMPLATE TableSet<T>::TableSet(Table *parent) : TableSetBase(parent)
 {
-    data->childClassName = T::staticMetaObject.className();
+    data->childClassName = QString::fromUtf8(T::staticMetaObject.className());
 }
 
 template<class T>

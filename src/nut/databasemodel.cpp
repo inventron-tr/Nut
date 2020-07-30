@@ -28,8 +28,8 @@ NUT_BEGIN_NAMESPACE
 
 QMap<QString, DatabaseModel*> DatabaseModel::_models;
 
-#define NODE_VERSION "version"
-#define NODE_TABLES  "tables"
+#define NODE_VERSION QStringLiteral("version")
+#define NODE_TABLES  QStringLiteral("tables")
 DatabaseModel::DatabaseModel(const QString &name) :
     QList<TableModel*>(), _databaseClassName(name), _version(0)
 {

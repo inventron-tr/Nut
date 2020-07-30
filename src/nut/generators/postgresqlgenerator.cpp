@@ -262,7 +262,8 @@ QString PostgreSqlGenerator::escapeValue(const QVariant &v) const
             pt = pol.at(i);
             if (!ret.isEmpty())
                 ret.append(QStringLiteral("),("));
-            ret.append(QString::number(pt.x()) + ", " + QString::number(pt.y()));
+            ret.append(QString::number(pt.x())
+                       + QStringLiteral(", ") + QString::number(pt.y()));
         }
         return QStringLiteral("'((") + ret + QStringLiteral("))'");
     }

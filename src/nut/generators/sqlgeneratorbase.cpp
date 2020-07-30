@@ -383,7 +383,8 @@ QString SqlGeneratorBase::join(const QString &mainTable,
                             (*i)->masterTable->primaryKey()));
 
             if (order != Q_NULLPTR)
-                order->append((*i)->masterTable->name() + "." + (*i)->masterTable->primaryKey());
+                order->append((*i)->masterTable->name() + QStringLiteral(".")
+                              + (*i)->masterTable->primaryKey());
         }
     }
     return ret;
@@ -426,7 +427,8 @@ QString SqlGeneratorBase::join(const QStringList &list, QStringList *order)
                             rel->localColumn, mainTable));
 
             if (order != Q_NULLPTR)
-                order->append(mainTable + "." + rel->masterTable->primaryKey());
+                order->append(mainTable + QStringLiteral(".")
+                              + rel->masterTable->primaryKey());
 
         } else{
             rel = model.relationByClassNames(clone.first(), mainTable);
@@ -437,7 +439,8 @@ QString SqlGeneratorBase::join(const QStringList &list, QStringList *order)
                            rel->masterTable->primaryKey(), mainTable));
 
                 if (order != Q_NULLPTR)
-                    order->append(mainTable + "." + rel->localColumn);
+                    order->append(mainTable + QStringLiteral(".")
+                                  + rel->localColumn);
 
             } else {
 //                qInfo("Relation for %s and %s not exists",
@@ -552,7 +555,7 @@ QString SqlGeneratorBase::fromTableText(const QString &tableName,
             tableNameText = QStringLiteral("%1 INNER JOIN %2 ON (%1.%3 = %2.%4)")
                                 .arg(tableName, joinTableName,
                                      pk, rel->localColumn);
-            orderBy = tableName + "." + pk;
+            orderBy = tableName + QStringLiteral(".") + pk;
         } else {
             qWarning("Relation between table %s and class %s (%s) not exists!",
                      qPrintable(tableName),
@@ -927,7 +930,7 @@ QString SqlGeneratorBase::phrase(const PhraseData *d) const
         break;
 
     case PhraseData::WithoutOperand:
-        ret = phrase(d->left) + " " + operatorString(d->operatorCond);
+        ret = phrase(d->left) + QStringLiteral(" ") + operatorString(d->operatorCond);
         break;
     }
 

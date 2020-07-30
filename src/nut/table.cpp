@@ -127,7 +127,7 @@ bool Table::setParentTable(Table *master, TableModel *masterModel, TableModel *m
     //Q_D(Table);
     d.detach();
 
-    QString masterClassName = master->metaObject()->className();
+    QString masterClassName = QString::fromUtf8(master->metaObject()->className());
     d->refreshModel();
 
 //    if (!d->model)
@@ -173,9 +173,9 @@ int Table::save(Database *db)
 {
     //Q_D(Table);
 
-    QSqlQuery q = db->exec(db->sqlGenerator()->saveRecord(this, db->tableName(metaObject()->className())));
+    QSqlQuery q = db->exec(db->sqlGenerator()->saveRecord(this, db->tableName(QString::fromUtf8(metaObject()->className()))));
 
-    auto model = db->model().tableByClassName(metaObject()->className());
+    auto model = db->model().tableByClassName(QString::fromUtf8(metaObject()->className()));
     if(status() == Added && model->isPrimaryKeyAutoIncrement())
         setProperty(model->primaryKey().toLatin1().data(), q.lastInsertId());
 

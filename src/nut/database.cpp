@@ -66,7 +66,7 @@ bool DatabasePrivate::open(bool update)
         return true;
     Q_Q(Database);
 //    if (update)
-    connectionName = q->metaObject()->className()
+    connectionName = QString::fromUtf8(q->metaObject()->className())
                      + QString::number(DatabasePrivate::lastId);
 
     db = QSqlDatabase::addDatabase(driver, connectionName);
@@ -77,7 +77,7 @@ bool DatabasePrivate::open(bool update)
     db.setUserName(userName);
     db.setPassword(password);
 
-    if (driver.startsWith("qsqlite", Qt::CaseInsensitive)
+    if (driver.startsWith(QStringLiteral("qsqlite"), Qt::CaseInsensitive)
             && !QFile::exists(databaseName)) {
         //Force to execute update database
         isDatabaseNew = true;
@@ -89,18 +89,20 @@ bool DatabasePrivate::open(bool update)
         qWarning("Could not connect to database, error = %s",
                  db.lastError().text().toLocal8Bit().data());
 
-        if (db.lastError().text().contains("database \"" + databaseName
-                                           + "\" does not exist")
-            || db.lastError().text().contains("Cannot open database")
-            || db.lastError().text().contains("Unknown database '"
-                                              + databaseName + "'")) {
+        if (db.lastError().text().contains(QStringLiteral("database \"")
+                                           + databaseName
+                                           + QStringLiteral("\" does not exist"))
+            || db.lastError().text().contains(QStringLiteral("Cannot open database"))
+            || db.lastError().text().contains(QStringLiteral("Unknown database '")
+                                              + databaseName
+                                              + QStringLiteral("'"))) {
 
             db.close();
             db.setDatabaseName(sqlGenerator->masterDatabaseName(databaseName));
             ok = db.open();
             qDebug("Creating database");
             if (ok) {
-                db.exec("CREATE DATABASE " + databaseName);
+                db.exec(QStringLiteral("CREATE DATABASE ") + databaseName);
                 db.close();
 
                 if (db.lastError().type() != QSqlError::NoError) {
@@ -219,8 +221,8 @@ bool DatabasePrivate::getCurrectSchema()
         if (!nutClassInfoString(q->metaObject()->classInfo(i),
                                 type, name, value)) {
 
-            errorMessage = QStringLiteral("No valid table in %1")
-                    .arg(q->metaObject()->classInfo(i).value());
+            errorMessage = QStringLiteral("No valid table in ")
+                               + QString::fromUtf8(q->metaObject()->classInfo(i).value());
             continue;
         }
         if (type == QStringLiteral(__nut_TABLE)) {
@@ -326,7 +328,7 @@ bool DatabasePrivate::putModelToDatabase()
     /*current.remove(__CHANGE_LOG_TABLE_NAME)*/;
 
     auto changeLog = create<ChangeLogTable>();
-    changeLog->setData(QString(QJsonDocument(current.toJson()).toJson(QJsonDocument::Compact)));
+    changeLog->setData(QString::fromUtf8(QJsonDocument(current.toJson()).toJson(QJsonDocument::Compact)));
     changeLog->setVersion(current.version());
     changeLogs->append(changeLog);
     q->saveChanges(true);
