@@ -117,7 +117,7 @@ QString SqlGeneratorBase::recordsPhrase(TableModel *table)
     foreach (FieldModel *f, table->fields()) {
         if (!ret.isEmpty())
             ret.append(QLatin1String(", "));
-        ret.append(QString::fromUtf8("%1.%2 AS \"%1.%2\"").arg(table->name(), f->name));
+        ret.append(QStringLiteral("%1.%2 AS \"%1.%2\"").arg(table->name(), f->name));
     }
     return ret;
 }
@@ -134,7 +134,7 @@ QString SqlGeneratorBase::insertBulk(const QString &tableName, const PhraseList 
             sql.append(QLatin1String(", "));
         sql.append(QLatin1String("(") + values.join(QLatin1String(", ")) + QLatin1String(")"));
     }
-    sql = QString::fromUtf8("INSERT INTO %1 (%2) VALUES %3")
+    sql = QStringLiteral("INSERT INTO %1 (%2) VALUES %3")
               .arg(tableName, createFieldPhrase(ph), sql);
 
     removeTableNames(sql);
@@ -165,7 +165,7 @@ QStringList SqlGeneratorBase::constraints(TableModel *table)
 
 QString SqlGeneratorBase::relationDeclare(const RelationModel *relation)
 {
-    return QString::fromUtf8("FOREIGN KEY (FK_%1) REFERENCES %2(%1)")
+    return QStringLiteral("FOREIGN KEY (FK_%1) REFERENCES %2(%1)")
             .arg(relation->localColumn, relation->slaveTable->name());
 }
 
@@ -221,7 +221,7 @@ QStringList SqlGeneratorBase::diff(TableModel *oldTable, TableModel *newTable)
             return QStringList();
 
     if (!newTable)
-        return QStringList() << ("DROP TABLE " + oldTable->name());
+        return QStringList() << (QStringLiteral("DROP TABLE ") + oldTable->name());
 
     QList<QString> fieldNames;
     QList<QString> relations;
@@ -272,7 +272,7 @@ QStringList SqlGeneratorBase::diff(TableModel *oldTable, TableModel *newTable)
 //    }
     QString sql;
     if (oldTable) {
-        sql = QString::fromUtf8("ALTER TABLE %1 \n%2")
+        sql = QStringLiteral("ALTER TABLE %1 \n%2")
                   .arg(newTable->name(), columnSql.join(QStringLiteral(",\n")));
     } else {
         if (!newTable->primaryKey().isNull()) {
@@ -282,7 +282,7 @@ QStringList SqlGeneratorBase::diff(TableModel *oldTable, TableModel *newTable)
             columnSql << constraints(newTable);
         }
 
-        sql = QString::fromUtf8("CREATE TABLE %1 \n(%2)")
+        sql = QStringLiteral("CREATE TABLE %1 \n(%2)")
                   .arg(newTable->name(), columnSql.join(QStringLiteral(",\n")));
 
     }
@@ -343,13 +343,13 @@ QStringList SqlGeneratorBase::diff(RelationModel *oldRel, RelationModel *newRel)
                          .arg(newRelation->foreignColumn);
     */
     if (!oldRel)
-        ret.append(QString::fromUtf8("ADD CONSTRAINT FK_%1 FOREIGN KEY (%1) "
+        ret.append(QStringLiteral("ADD CONSTRAINT FK_%1 FOREIGN KEY (%1) "
                        "REFERENCES %2(%3)")
                 .arg(newRel->localColumn, newRel->masterTable->name(),
                      newRel->foreignColumn));
 
     if (!newRel)
-        ret.append(QString::fromUtf8("ADD CONSTRAINT FK_%1 FOREIGN KEY (%1) "
+        ret.append(QStringLiteral("ADD CONSTRAINT FK_%1 FOREIGN KEY (%1) "
                        "REFERENCES %2(%3)")
                 .arg(oldRel->localColumn, oldRel->masterTable->name(),
                      oldRel->foreignColumn));
@@ -366,16 +366,17 @@ QString SqlGeneratorBase::join(const QString &mainTable,
     QList<RelationModel*>::const_iterator i;
     for (i = list.begin(); i != list.end(); ++i) {
         if ((*i)->masterTable->name() == mainTable) {
-            ret.append(QString(" INNER JOIN %3 ON %1.%2 = %3.%4")
+            ret.append(QStringLiteral(" INNER JOIN %3 ON %1.%2 = %3.%4")
                        .arg((*i)->masterTable->name(),
                             (*i)->masterTable->primaryKey(),
                             (*i)->slaveTable->name(),
                             (*i)->localColumn));
 
             if (order != Q_NULLPTR)
-                order->append((*i)->slaveTable->name() + "." + (*i)->slaveTable->primaryKey());
+                order->append((*i)->slaveTable->name() + QStringLiteral(".")
+                              + (*i)->slaveTable->primaryKey());
         } else {
-            ret.append(QString(" INNER JOIN %3 ON %1.%2 = %3.%4")
+            ret.append(QStringLiteral(" INNER JOIN %3 ON %1.%2 = %3.%4")
                        .arg(mainTable,
                             (*i)->localColumn,
                             (*i)->masterTable->name(),
@@ -401,12 +402,16 @@ QString SqlGeneratorBase::join(const QStringList &list, QStringList *order)
         return QString();
 
     if (list.count() == 1)
-        return "[" + list.first() + "]";
+        return QStringLiteral("[")
+               + list.first()
+               + QStringLiteral("]");
 
     DatabaseModel model = _database->model();
     QStringList clone = list;
     QString mainTable = clone.takeFirst();
-    QString ret = "[" + mainTable + "]";
+    QString ret = QStringLiteral("[")
+                  + mainTable
+                  + QStringLiteral("]");
 
     do {
         if (!clone.count())
@@ -416,7 +421,7 @@ QString SqlGeneratorBase::join(const QStringList &list, QStringList *order)
         RelationModel *rel = model.relationByClassNames(mainTable, clone.first());
         if (rel) {
             //mainTable is master of table
-            ret.append(QString(" INNER JOIN [%1] ON %4.%2 = %1.%3")
+            ret.append(QStringLiteral(" INNER JOIN [%1] ON %4.%2 = %1.%3")
                        .arg(table, rel->masterTable->primaryKey(),
                             rel->localColumn, mainTable));
 
@@ -427,7 +432,7 @@ QString SqlGeneratorBase::join(const QStringList &list, QStringList *order)
             rel = model.relationByClassNames(clone.first(), mainTable);
             if (rel) {
                 // table is master of mainTable
-                ret.append(QString(" INNER JOIN [%1] ON %4.%2 = %1.%3")
+                ret.append(QStringLiteral(" INNER JOIN [%1] ON %4.%2 = %1.%3")
                            .arg(table, rel->localColumn,
                            rel->masterTable->primaryKey(), mainTable));
 
@@ -463,12 +468,12 @@ QString SqlGeneratorBase::insertRecord(Table *t, QString tableName)
 
         values.append(escapeValue(t->property(f.toLatin1().data())));
 
-        if (changedPropertiesText != "")
-            changedPropertiesText.append(", ");
+        if (changedPropertiesText != QStringLiteral(""))
+            changedPropertiesText.append(QStringLiteral(", "));
         changedPropertiesText.append(f);
     }
-    sql = QString("INSERT INTO %1 (%2) VALUES (%3)")
-              .arg(tableName, changedPropertiesText, values.join(", "));
+    sql = QStringLiteral("INSERT INTO %1 (%2) VALUES (%3)")
+              .arg(tableName, changedPropertiesText, values.join(QStringLiteral(", ")));
 
     removeTableNames(sql);
 
@@ -484,11 +489,14 @@ QString SqlGeneratorBase::updateRecord(Table *t, QString tableName)
 
     foreach (QString f, t->changedProperties())
         if (f != key)
-            values.append(f + "='" + t->property(f.toLatin1().data()).toString()
-                          + "'");
-    sql = QString("UPDATE %1 SET %2 WHERE %3=%4")
-              .arg(tableName, values.join(", "),
-                   key, t->property(key.toUtf8().data()).toString());
+            values.append(f + QStringLiteral("='")
+                          + t->property(f.toLatin1().data()).toString()
+                          + QStringLiteral("'"));
+    sql = QStringLiteral("UPDATE %1 SET %2 WHERE %3=%4")
+              .arg(tableName,
+                   values.join(QStringLiteral(", ")),
+                   key,
+                   t->property(key.toUtf8().data()).toString());
 
     removeTableNames(sql);
 
@@ -499,7 +507,7 @@ QString SqlGeneratorBase::deleteRecord(Table *t, QString tableName)
 {
     auto model = _database->model().tableByName(tableName);
     QString key = model->primaryKey();
-    QString sql = QString("DELETE FROM %1 WHERE %2='%3'")
+    QString sql = QStringLiteral("DELETE FROM %1 WHERE %2='%3'")
         .arg(tableName, key, t->property(key.toUtf8().data()).toString());
     replaceTableNames(sql);
     return sql;
@@ -510,19 +518,19 @@ QString SqlGeneratorBase::agregateText(const AgregateType &t,
 {
     switch (t) {
     case Min:
-        return "MIN(" + arg + ")";
+        return QStringLiteral("MIN(") + arg + QStringLiteral(")");
 
     case Max:
-        return "MAX(" + arg + ")";
+        return QStringLiteral("MAX(") + arg + QStringLiteral(")");
 
     case Average:
-        return "AVG(" + arg + ")";
+        return QStringLiteral("AVG(") + arg + QStringLiteral(")");
 
     case Count:
-        return "COUNT(" + arg + ")";
+        return QStringLiteral("COUNT(") + arg + QStringLiteral(")");
 
     case Sum:
-        return "SUM(" + arg + ")";
+        return QStringLiteral("SUM(") + arg + QStringLiteral(")");
 
     case SingleField:
         return arg;
@@ -541,7 +549,7 @@ QString SqlGeneratorBase::fromTableText(const QString &tableName,
             = _database->model().relationByTableNames(tableName, joinTableName);
         if (rel) {
             QString pk = _database->model().tableByName(tableName)->primaryKey();
-            tableNameText = QString("%1 INNER JOIN %2 ON (%1.%3 = %2.%4)")
+            tableNameText = QStringLiteral("%1 INNER JOIN %2 ON (%1.%3 = %2.%4)")
                                 .arg(tableName, joinTableName,
                                      pk, rel->localColumn);
             orderBy = tableName + "." + pk;
@@ -549,7 +557,7 @@ QString SqlGeneratorBase::fromTableText(const QString &tableName,
             qWarning("Relation between table %s and class %s (%s) not exists!",
                      qPrintable(tableName),
                      qPrintable(joinClassName),
-                     qPrintable(joinTableName.isNull() ? "NULL" : joinTableName));
+                     qPrintable(joinTableName.isNull() ? QStringLiteral("NULL") : joinTableName));
             joinClassName = QString();
         }
     }
@@ -559,11 +567,10 @@ QString SqlGeneratorBase::fromTableText(const QString &tableName,
 
 QString SqlGeneratorBase::deleteRecords(const QString &tableName, const QString &where)
 {
-    QString sql = QString();
-    if (where.isEmpty() || where.isNull())
-        sql = "DELETE FROM " + tableName;
-    else
-        sql = "DELETE FROM " + tableName + " WHERE " + where;
+    QString sql = QStringLiteral("DELETE FROM ") + tableName;
+
+    if (!where.isEmpty())
+        sql.append(QStringLiteral(" WHERE ") + where);
 
     replaceTableNames(sql);
 
@@ -591,7 +598,7 @@ QString SqlGeneratorBase::selectCommand(const QString &tableName,
         selectText = QString();
         foreach (TableModel *t, tables) {
             if (!selectText.isEmpty())
-                selectText.append(", ");
+                selectText.append(QStringLiteral(", "));
             selectText.append(recordsPhrase(t));
         }
     } else {
@@ -603,13 +610,14 @@ QString SqlGeneratorBase::selectCommand(const QString &tableName,
     QString whereText = createConditionalPhrase(where.data);
     QString fromText = join(tableName, joins, &joinedOrders);
 
-    QString sql = "SELECT " + selectText + " FROM " + fromText;
+    QString sql = QStringLiteral("SELECT ") + selectText
+                  + QStringLiteral(" FROM ") + fromText;
 
-    if (whereText != "")
-        sql.append(" WHERE " + whereText);
+    if (whereText != QStringLiteral(""))
+        sql.append(QStringLiteral(" WHERE ") + whereText);
 
-    if (orderText != "")
-        sql.append(" ORDER BY " + orderText);
+    if (orderText != QStringLiteral(""))
+        sql.append(QStringLiteral(" ORDER BY ") + orderText);
 
 //    for (int i = 0; i < _database->model().count(); i++)
 //        sql = sql.replace(_database->model().at(i)->className() + ".",
@@ -618,7 +626,7 @@ QString SqlGeneratorBase::selectCommand(const QString &tableName,
     appendSkipTake(sql, skip, take);
     replaceTableNames(sql);
 
-    return sql + " ";
+    return sql + QStringLiteral(" ");
 }
 
 QString SqlGeneratorBase::selectCommand(const QString &tableName,
@@ -634,33 +642,34 @@ QString SqlGeneratorBase::selectCommand(const QString &tableName,
     QString whereText = createConditionalPhrase(where.data);
     QString fromText = join(tableName, joins, &joinedOrders);
 
-    QString sql = "SELECT " + selectText + " FROM " + fromText;
+    QString sql = QStringLiteral("SELECT ") + selectText
+                  + QStringLiteral(" FROM ") + fromText;
 
-    if (whereText != "")
-        sql.append(" WHERE " + whereText);
+    if (whereText != QStringLiteral(""))
+        sql.append(QStringLiteral(" WHERE ") + whereText);
 
     for (int i = 0; i < _database->model().count(); i++)
-        sql = sql.replace(_database->model().at(i)->className() + ".",
-                          _database->model().at(i)->name() + ".");
+        sql = sql.replace(_database->model().at(i)->className() + QStringLiteral("."),
+                          _database->model().at(i)->name() + QStringLiteral("."));
 
     appendSkipTake(sql, skip, take);
     replaceTableNames(sql);
 
-    return sql + " ";
+    return sql + QStringLiteral(" ");
 }
 
 QString SqlGeneratorBase::deleteCommand(const QString &tableName,
                                         const ConditionalPhrase &where)
 {
-    QString command = "DELETE FROM " + tableName;
+    QString command = QStringLiteral("DELETE FROM ") + tableName;
     QString whereText = createConditionalPhrase(where.data);
 
-    if (whereText != "")
-        command.append(" WHERE " + whereText);
+    if (!whereText.isEmpty())
+        command.append(QStringLiteral(" WHERE ") + whereText);
 
     for (int i = 0; i < _database->model().count(); i++)
-        command = command.replace(_database->model().at(i)->className() + ".",
-                                  _database->model().at(i)->name() + ".");
+        command = command.replace(_database->model().at(i)->className() + QStringLiteral("."),
+                                  _database->model().at(i)->name() + QStringLiteral("."));
 
     replaceTableNames(command);
 
@@ -673,21 +682,22 @@ QString SqlGeneratorBase::updateCommand(const QString &tableName,
 {
     QString assigmentTexts = QString();
     foreach (PhraseData *d, assigments.data) {
-        if (assigmentTexts != "")
-            assigmentTexts.append(", ");
+        if (assigmentTexts != QStringLiteral(""))
+            assigmentTexts.append(QStringLiteral(", "));
 
         assigmentTexts.append(createConditionalPhrase(d));
     }
     QString whereText = createConditionalPhrase(where.data);
 
-    QString sql = "UPDATE " + tableName + " SET " + assigmentTexts;
+    QString sql = QStringLiteral("UPDATE ") + tableName
+                  + QStringLiteral(" SET ") + assigmentTexts;
 
-    if (whereText != "")
-        sql.append(" WHERE " + whereText);
+    if (!whereText.isEmpty())
+        sql.append(QStringLiteral(" WHERE ") + whereText);
 
     for (int i = 0; i < _database->model().count(); i++)
-        sql = sql.replace(_database->model().at(i)->className() + ".",
-                          _database->model().at(i)->name() + ".");
+        sql = sql.replace(_database->model().at(i)->className() + QStringLiteral("."),
+                          _database->model().at(i)->name() + QStringLiteral("."));
 
     removeTableNames(sql);
 
@@ -700,16 +710,16 @@ QString SqlGeneratorBase::insertCommand(const QString &tableName, const Assignme
     QString fieldNames;
     QString values;
     foreach (PhraseData *d, assigments.data) {
-        if (fieldNames != "")
-            fieldNames.append(", ");
+        if (!fieldNames.isEmpty())
+            fieldNames.append(QStringLiteral(", "));
 
-        if (values != "")
-            values.append(", ");
+        if (!values.isEmpty())
+            values.append(QStringLiteral(", "));
 
-        fieldNames.append(d->left->fieldName);
+        fieldNames.append(QString::fromUtf8(d->left->fieldName));
         values.append(escapeValue(d->operand));
     }
-    return QString("INSERT INTO %1 (%2) VALUES (%3);")
+    return QStringLiteral("INSERT INTO %1 (%2) VALUES (%3);")
               .arg(tableName, fieldNames, values);
 }
 
@@ -786,13 +796,16 @@ void SqlGeneratorBase::replaceTableNames(QString &command)
 {
     foreach (TableModel *m, _database->model())
         command = command
-                .replace("[" + m->className() + "]", m->name());
+                      .replace(QStringLiteral("[") + m->className()
+                                   + QStringLiteral("]"), m->name());
 }
 
 void SqlGeneratorBase::removeTableNames(QString &command)
 {
     foreach (TableModel *m, _database->model())
-        command = command.replace("[" + m->className() + "].", "");
+        command = command.replace(QStringLiteral("[")
+                                      + m->className()
+                                      + QStringLiteral("]."), QStringLiteral(""));
 }
 
 QString SqlGeneratorBase::dateTimePartName(const PhraseData::Condition &op) const
@@ -801,27 +814,27 @@ QString SqlGeneratorBase::dateTimePartName(const PhraseData::Condition &op) cons
     case PhraseData::DatePartYear:
     case PhraseData::AddYears:
     case PhraseData::AddYearsDateTime:
-        return "YEAR";
+        return QStringLiteral("YEAR");
     case PhraseData::DatePartMonth:
     case PhraseData::AddMonths:
     case PhraseData::AddMonthsDateTime:
-        return "MONTH";
+        return QStringLiteral("MONTH");
     case PhraseData::DatePartDay:
     case PhraseData::AddDays:
     case PhraseData::AddDaysDateTime:
-        return "DAY";
+        return QStringLiteral("DAY");
     case PhraseData::DatePartHour:
     case PhraseData::AddHours:
     case PhraseData::AddHoursDateTime:
-        return "HOUR";
+        return QStringLiteral("HOUR");
     case PhraseData::DatePartMinute:
     case PhraseData::AddMinutes:
     case PhraseData::AddMinutesDateTime:
-        return "MINUTE";
+        return QStringLiteral("MINUTE");
     case PhraseData::DatePartSecond:
     case PhraseData::AddSeconds:
     case PhraseData::AddSecondsDateTime:
-        return "SECOND";
+        return QStringLiteral("SECOND");
 
     default:
         break;
@@ -871,7 +884,7 @@ QString SqlGeneratorBase::dateTimePartName(const PhraseData::Condition &op) cons
 QString SqlGeneratorBase::escapeValue(const QVariant &v) const
 {
     if (v.type() == QVariant::String && v.toString().isEmpty())
-        return "''";
+        return QStringLiteral("''");
 
     QString serialized = _serializer->serialize(v);
     if (serialized.isEmpty()) {
@@ -882,7 +895,7 @@ QString SqlGeneratorBase::escapeValue(const QVariant &v) const
     if (v.type() == QVariant::List)
         return serialized;
 
-    return "'" + serialized + "'";
+    return QStringLiteral("'") + serialized + QStringLiteral("'");
 }
 
 QVariant SqlGeneratorBase::unescapeValue(const QMetaType::Type &type,
@@ -909,7 +922,7 @@ QString SqlGeneratorBase::phrase(const PhraseData *d) const
         break;
 
     case PhraseData::WithOther:
-        ret = phrase(d->left) + " " + operatorString(d->operatorCond) + " "
+        ret = phrase(d->left) + QStringLiteral(" ") + operatorString(d->operatorCond) + QStringLiteral(" ")
               + phrase(d->right);
         break;
 
@@ -919,7 +932,7 @@ QString SqlGeneratorBase::phrase(const PhraseData *d) const
     }
 
     if (d->operatorCond == PhraseData::And || d->operatorCond == PhraseData::Or)
-        ret = "(" + ret + ")";
+        ret = QStringLiteral("(") + ret + QStringLiteral(")");
 
     return ret;
 }
@@ -929,63 +942,63 @@ SqlGeneratorBase::operatorString(const PhraseData::Condition &cond) const
 {
     switch (cond) {
     case PhraseData::Equal:
-        return "=";
+        return QStringLiteral("=");
     case PhraseData::NotEqual:
-        return "<>";
+        return QStringLiteral("<>");
     case PhraseData::Less:
-        return "<";
+        return QStringLiteral("<");
     case PhraseData::Greater:
-        return ">";
+        return QStringLiteral(">");
     case PhraseData::LessEqual:
-        return "<=";
+        return QStringLiteral("<=");
     case PhraseData::GreaterEqual:
-        return ">=";
+        return QStringLiteral(">=");
     case PhraseData::Null:
-        return "IS NULL";
+        return QStringLiteral("IS NULL");
 
     case PhraseData::NotNull:
-        return "IS NOT NULL";
+        return QStringLiteral("IS NOT NULL");
 
     case PhraseData::In:
-        return "IN";
+        return QStringLiteral("IN");
 
     case PhraseData::NotIn:
-        return "NOT IN";
+        return QStringLiteral("NOT IN");
 
     case PhraseData::And:
-        return "AND";
+        return QStringLiteral("AND");
     case PhraseData::Or:
-        return "OR";
+        return QStringLiteral("OR");
 
     case PhraseData::Like:
-        return "LIKE";
+        return QStringLiteral("LIKE");
     case PhraseData::NotLike:
-        return "NOT LIKE";
+        return QStringLiteral("NOT LIKE");
 
     case PhraseData::Add:
-        return "+";
+        return QStringLiteral("+");
     case PhraseData::Minus:
-        return "-";
+        return QStringLiteral("-");
     case PhraseData::Multiple:
-        return "*";
+        return QStringLiteral("*");
     case PhraseData::Divide:
-        return "/";
+        return QStringLiteral("/");
 
 //    case PhraseData::Set:
-//        return "=";
+//        return QStringLiteral("=");
 
 //    case PhraseData::Append:
-//        return ",";
+//        return QStringLiteral(",");
 
     case PhraseData::Between:
-        return "BETWEEN";
+        return QStringLiteral("BETWEEN");
 
     case PhraseData::Mod:
-        return "MOD";
+        return QStringLiteral("MOD");
 
     default:
         qDebug() << "Unsupported" << cond;
-        return QString("<FAIL cond> %1").arg(cond);
+        return QStringLiteral("<FAIL cond> %1").arg(cond);
     }
 }
 
@@ -998,7 +1011,7 @@ void SqlGeneratorBase::appendSkipTake(QString &sql, int skip, int take)
 
 QString SqlGeneratorBase::primaryKeyConstraint(const TableModel *table) const
 {
-    return  QString("CONSTRAINT pk_%1 PRIMARY KEY (%2)")
+    return  QStringLiteral("CONSTRAINT pk_%1 PRIMARY KEY (%2)")
             .arg(table->name(), table->primaryKey());
 }
 
@@ -1041,44 +1054,47 @@ QString SqlGeneratorBase::createConditionalPhrase(const PhraseData *d) const
                     .arg(d->operand.toString(), createConditionalPhrase(d->left));
         else */if (op == PhraseData::Between) {
             QVariantList list = d->operand.toList();
-            ret = QString("%1 BETWEEN %2 AND %3")
+            ret = QStringLiteral("%1 BETWEEN %2 AND %3")
                     .arg(createConditionalPhrase(d->left), escapeValue(list.at(0)), escapeValue(list.at(1)));
 
         } else if (op == PhraseData::DatePartYear)
-            ret = QString("DATEPART(year, %1)")
+            ret = QStringLiteral("DATEPART(year, %1)")
                     .arg(d->operand.toString());
         else if (op == PhraseData::DatePartMonth)
-            ret = QString("DATEPART(month, %1)")
+            ret = QStringLiteral("DATEPART(month, %1)")
                     .arg(d->operand.toString());
         else if (op == PhraseData::DatePartDay)
-            ret = QString("DATEPART(day, %1)")
+            ret = QStringLiteral("DATEPART(day, %1)")
                     .arg(d->operand.toString());
         else if (op == PhraseData::DatePartHour)
-            ret = QString("DATEPART(hour, %1)")
+            ret = QStringLiteral("DATEPART(hour, %1)")
                     .arg(d->operand.toString());
         else if (op == PhraseData::DatePartMinute)
-            ret = QString("DATEPART(minute, %1)")
+            ret = QStringLiteral("DATEPART(minute, %1)")
                     .arg(d->operand.toString());
         else if (op == PhraseData::DatePartMilisecond)
-            ret = QString("DATEPART(milisecond, %1)")
+            ret = QStringLiteral("DATEPART(milisecond, %1)")
                     .arg(d->operand.toString());
         else
-            ret = createConditionalPhrase(d->left) + " " + operatorString(op) + " "
-              + escapeValue(d->operand);
+            ret = createConditionalPhrase(d->left) + QStringLiteral(" ")
+                  + operatorString(op) + QStringLiteral(" ")
+                  + escapeValue(d->operand);
         break;
 
     case PhraseData::WithOther:
-        ret = createConditionalPhrase(d->left) + " " + operatorString(op) + " "
+        ret = createConditionalPhrase(d->left) + QStringLiteral(" ")
+              + operatorString(op) + QStringLiteral(" ")
               + createConditionalPhrase(d->right);
         break;
 
     case PhraseData::WithoutOperand:
-        ret = createConditionalPhrase(d->left) + " " + operatorString(op);
+        ret = createConditionalPhrase(d->left) + QStringLiteral(" ")
+              + operatorString(op);
         break;
     }
 
     if (d->operatorCond == PhraseData::And || d->operatorCond == PhraseData::Or)
-        ret = "(" + ret + ")";
+        ret = QStringLiteral("(") + ret + QStringLiteral(")");
 
     return ret;
 }
@@ -1087,11 +1103,11 @@ QString SqlGeneratorBase::createOrderPhrase(const PhraseList &ph)
 {
     QString ret = QString();
     foreach (const PhraseData *d, ph.data) {
-        if (ret != "")
-            ret.append(", ");
+        if (!ret.isEmpty())
+            ret.append(QStringLiteral(", "));
         ret.append(d->toString());
         if (d->isNot)
-            ret.append(" DESC");
+            ret.append(QStringLiteral(" DESC"));
     }
 
     return ret;
@@ -1101,8 +1117,8 @@ QString SqlGeneratorBase::createFieldPhrase(const PhraseList &ph)
 {
     QString ret = QString();
     foreach (const PhraseData *d, ph.data) {
-        if (ret != "")
-            ret.append(", ");
+        if (!ret.isEmpty())
+            ret.append(QStringLiteral(", "));
         ret.append(d->toString());
         if (d->isNot)
             qDebug() << "Operator ! is ignored in fields phrase";
@@ -1113,11 +1129,11 @@ QString SqlGeneratorBase::createFieldPhrase(const PhraseList &ph)
 void SqlGeneratorBase::createInsertPhrase(const AssignmentPhraseList &ph, QString &fields, QString &values)
 {
     foreach (PhraseData *d, ph.data) {
-        if (fields != "")
-            fields.append(", ");
+        if (!fields.isEmpty())
+            fields.append(QStringLiteral(", "));
 
-        if (values != "")
-            values.append(", ");
+        if (!values.isEmpty())
+            values.append(QStringLiteral(", "));
 
         switch (d->type) {
         case PhraseData::WithVariant:

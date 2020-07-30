@@ -78,7 +78,7 @@ QString MySqlGenerator::fieldType(FieldModel *field)
 
     case QMetaType::QString:
         if(field->length)
-            dbType = QString::fromUtf8("VARCHAR(%1)").arg(field->length);
+            dbType = QStringLiteral("VARCHAR(%1)").arg(field->length);
         else
             dbType = QStringLiteral("TEXT");
         break;
@@ -316,7 +316,7 @@ QString MySqlGenerator::createConditionalPhrase(const PhraseData *d) const
         case PhraseData::AddMinutesDateTime:
         case PhraseData::AddSeconds:
         case PhraseData::AddSecondsDateTime:
-            return QString::fromUtf8("DATE_ADD(%1, INTERVAL %2 %3)")
+            return QStringLiteral("DATE_ADD(%1, INTERVAL %2 %3)")
                     .arg(createConditionalPhrase(d->left),
                          d->operand.toString(),
                          SqlGeneratorBase::dateTimePartName(op));
@@ -333,7 +333,7 @@ QString MySqlGenerator::createConditionalPhrase(const PhraseData *d) const
         case PhraseData::DatePartHour:
         case PhraseData::DatePartMinute:
         case PhraseData::DatePartSecond:
-            return QString::fromUtf8("%2(%1)")
+            return QStringLiteral("%2(%1)")
                     .arg(createConditionalPhrase(d->left),
                          SqlGeneratorBase::dateTimePartName(op));
 
@@ -348,11 +348,11 @@ QString MySqlGenerator::createConditionalPhrase(const PhraseData *d) const
 void MySqlGenerator::appendSkipTake(QString &sql, int skip, int take)
 {
     if (take > 0 && skip > 0) {
-        sql.append(QString::fromUtf8(" LIMIT %1 OFFSET %2")
+        sql.append(QStringLiteral(" LIMIT %1 OFFSET %2")
                    .arg(take)
                    .arg(skip));
     } else if (take > 0) {
-        sql.append(QString::fromUtf8(" LIMIT %1").arg(take));
+        sql.append(QStringLiteral(" LIMIT %1").arg(take));
     }
 }
 

@@ -35,86 +35,77 @@ SqlServerGenerator::SqlServerGenerator(Database *parent)
 QString SqlServerGenerator::masterDatabaseName(QString databaseName)
 {
     return databaseName.replace(
-        QRegularExpression("DATABASE\\=(\\w+)",
+        QRegularExpression(QStringLiteral("DATABASE\\=(\\w+)"),
                            QRegularExpression::CaseInsensitiveOption),
-        "DATABASE=");
+        QStringLiteral("DATABASE="));
 }
 
 QString SqlServerGenerator::fieldType(FieldModel *field)
 {
-    QString dbType;
-
     switch (field->type) {
     case QMetaType::Bool:
-        dbType = "BIT";
-        break;
+        return QStringLiteral("BIT");
 
     case QMetaType::Char:
     case QMetaType::QChar:
-        dbType = "CHAR(1)";
-        break;
+        return QStringLiteral("CHAR(1)");
 
     case QMetaType::SChar:
     case QMetaType::UChar:
-        return "tinyint";
+        return QStringLiteral("tinyint");
 
     case QMetaType::Short:
     case QMetaType::UShort:
-        return "smallint";
+        return QStringLiteral("smallint");
 
     case QMetaType::UInt:
     case QMetaType::Int:
-        dbType = "INT";
         if (field->isAutoIncrement)
-            dbType += " IDENTITY(1,1)";
-        break;
+            return QStringLiteral("INT IDENTITY(1,1)");
+        else
+            return QStringLiteral("INT");
 
     case QMetaType::Long:
     case QMetaType::ULong:
     case QMetaType::LongLong:
     case QMetaType::ULongLong:
-        return "bigint";
+        return QStringLiteral("bigint");
 
     case QMetaType::Float:
-        return "FLOAT(24)";
+        return QStringLiteral("FLOAT(24)");
 
     case QMetaType::Double:
-        return "REAL";
+        return QStringLiteral("REAL");
 
     case QMetaType::QBitArray:
     case QMetaType::QByteArray:
-        dbType = "VARBINARY";
-
         if (field->length)
-            dbType.append(" (" + QString::number(field->length) + ")");
+            return QStringLiteral("VARBINARY (") + QString::number(field->length) + QStringLiteral(")");
         else
-            dbType.append(" (MAX)");
+            return QStringLiteral("VARBINARY (MAX)");
         break;
+
     case QMetaType::QDate:
-        dbType = "DATE";
-        break;
+        return QStringLiteral("DATE");
+
     case QMetaType::QDateTime:
-        dbType = "DATETIME";
-        break;
+        return QStringLiteral("DATETIME");
+
     case QMetaType::QTime:
-        dbType = "TIME";
-        break;
+        return QStringLiteral("TIME");
 
     case QMetaType::QPoint:
     case QMetaType::QPointF:
-        dbType = "TEXT";
-        break;
+        return QStringLiteral("TEXT");
 
     case QMetaType::QString:
         if (field->length)
-            dbType = QString("NVARCHAR(%1)").arg(field->length);
+            return QStringLiteral("NVARCHAR(%1)").arg(field->length);
         else
-            dbType = "NVARCHAR(MAX)";
-        break;
+            return QStringLiteral("NVARCHAR(MAX)");
 
     case QMetaType::QUuid:
-        dbType = "UNIQUEIDENTIFIER";
-        break;
+        return QStringLiteral("UNIQUEIDENTIFIER");
 
     case QMetaType::QPolygon:
     case QMetaType::QPolygonF:
@@ -131,14 +122,12 @@ QString SqlServerGenerator::fieldType(FieldModel *field)
     case QMetaType::QJsonObject:
     case QMetaType::QJsonDocument:
     case QMetaType::QUrl:
-        return "TEXT";
+        return QStringLiteral("TEXT");
 
     default:
 //        Q_UNREACHABLE();
-        dbType = QString();
+        return QString();
     }
-
-    return dbType;
 }
 
 QString SqlServerGenerator::diff(FieldModel *oldField, FieldModel *newField)
@@ -149,12 +138,12 @@ QString SqlServerGenerator::diff(FieldModel *oldField, FieldModel *newField)
             return sql;
 
     if (!newField) {
-        sql = "DROP COLUMN " + oldField->name;
+        sql = QStringLiteral("DROP COLUMN ") + oldField->name;
     } else {
         if (oldField)
-            sql = "MODIFY COLUMN ";
+            sql = QStringLiteral("MODIFY COLUMN ");
         else
-            sql = "ADD ";
+            sql = QStringLiteral("ADD ");
 
         sql.append(fieldDeclare(newField));
     }
@@ -181,7 +170,7 @@ QString SqlServerGenerator::escapeValue(const QVariant &v) const
 //    case QVariant::JsonObject:
 //    case QVariant::JsonDocument:
     case QVariant::Url:
-        return "N" + SqlGeneratorBase::escapeValue(v);
+        return QStringLiteral("N") + SqlGeneratorBase::escapeValue(v);
 
 //    case QVariant::Point: {
 //        QPoint pt = v.toPoint();
@@ -195,18 +184,17 @@ QString SqlServerGenerator::escapeValue(const QVariant &v) const
 //    }
 
     case QVariant::Time:
-        return "'" + v.toTime().toString("HH:mm:ss") + "'";
+        return v.toTime().toString(QStringLiteral("'HH:mm:ss'"));
 
     case QVariant::Date:
-        return "'" + v.toDate().toString("yyyy-MM-dd") + "'";
+        return v.toDate().toString(QStringLiteral("'yyyy-MM-dd'"));
 
     case QVariant::DateTime:
-        return "'" + v.toDateTime().toString("yyyy-MM-dd HH:mm:ss") + "'";
+        return v.toDateTime().toString(QStringLiteral("'yyyy-MM-dd HH:mm:ss'"));
 
     default:
-        break;
+        return SqlGeneratorBase::escapeValue(v);
     }
-    return SqlGeneratorBase::escapeValue(v);
 }
 
 QVariant SqlServerGenerator::unescapeValue(const QMetaType::Type &type, const QVariant &dbValue)
@@ -226,12 +214,12 @@ QVariant SqlServerGenerator::unescapeValue(const QMetaType::Type &type, const QV
 void SqlServerGenerator::appendSkipTake(QString &sql, int skip, int take)
 {
     if (skip != -1)
-        sql.append(QString(" OFFSET %1 ROWS")
+        sql.append(QStringLiteral(" OFFSET %1 ROWS")
                    .arg(skip));
     if (take > 0)
-        sql.append(QString(" FETCH %2 %1 ROWS ONLY")
-                   .arg(take)
-                   .arg(skip > 1 ? "NEXT" : "FIRST"));
+        sql.append(QStringLiteral(" FETCH %2 %1 ROWS ONLY")
+                       .arg(take)
+                       .arg(skip > 1 ? QStringLiteral("NEXT") : QStringLiteral("FIRST")));
 }
 
 QString SqlServerGenerator::createConditionalPhrase(const PhraseData *d) const
@@ -260,7 +248,7 @@ QString SqlServerGenerator::createConditionalPhrase(const PhraseData *d) const
         case PhraseData::AddMinutesDateTime:
         case PhraseData::AddSeconds:
         case PhraseData::AddSecondsDateTime:
-            return QString("DATEADD(%3, %2, %1)")
+            return QStringLiteral("DATEADD(%3, %2, %1)")
                     .arg(createConditionalPhrase(d->left),
                          d->operand.toString(),
                          SqlGeneratorBase::dateTimePartName(op));
@@ -278,7 +266,7 @@ QString SqlServerGenerator::createConditionalPhrase(const PhraseData *d) const
         case PhraseData::DatePartHour:
         case PhraseData::DatePartMinute:
         case PhraseData::DatePartSecond:
-            return QString("DATEPART(%2, %1)")
+            return QStringLiteral("DATEPART(%2, %1)")
                     .arg(createConditionalPhrase(d->left),
                          SqlGeneratorBase::dateTimePartName(op));
 

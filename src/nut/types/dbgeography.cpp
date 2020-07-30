@@ -75,7 +75,7 @@ void DbGeography::setLatitude(qreal latitude)
 }
 DbGeography::operator QVariant()
 {
-    return QVariant::fromValue(QString("%1,%2").arg(longitude()).arg(latitude()));
+    return QVariant::fromValue(QStringLiteral("%1,%2").arg(longitude()).arg(latitude()));
 }
 
 NUT_END_NAMESPACE

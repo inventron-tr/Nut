@@ -135,7 +135,7 @@ void GeneratorsTest::cleanupTestCase()
     QString p = "\n| Type  | Sqlite | MySql  | Postgresql| Ms Sql server |"
                   "\n|--------|--------|--------|--------|--------|";
     for (i = table.constBegin(); i != table.constEnd(); ++i) {
-        p.append(QString("\n|%1|%2|%3|%4|%5|")
+        p.append(QStringLiteral("\n|%1|%2|%3|%4|%5|")
                  .arg(i.key(), i.value().sqlite, i.value().mysql,
                      i.value().psql, i.value().mssql));
     }

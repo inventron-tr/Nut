@@ -73,7 +73,7 @@ PhraseData &PhraseData::operator =(PhraseData &other)
 
 QString PhraseData::toString() const
 {
-    return QString("[%1].%2").arg(className, fieldName);
+    return QString(QStringLiteral("[%1].%2")).arg(className, fieldName);
 }
 
 void PhraseData::cleanUp()

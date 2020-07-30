@@ -140,7 +140,7 @@ QString PostgreSqlGenerator::fieldType(FieldModel *field)
 
     case QMetaType::QString:
         if(field->length)
-            dbType = QString("VARCHAR(%1)").arg(field->length);
+            dbType = QStringLiteral("VARCHAR(%1)").arg(field->length);
         else
             dbType = QStringLiteral("TEXT");
         break;
@@ -228,11 +228,11 @@ QString PostgreSqlGenerator::escapeValue(const QVariant &v) const
 
     if (v.type() == QVariant::Point) {
         QPoint pt = v.toPoint();
-        return QString::fromUtf8("point(%1, %2)").arg(pt.x()).arg(pt.y());
+        return QStringLiteral("point(%1, %2)").arg(pt.x()).arg(pt.y());
     }
     if (v.type() == QVariant::PointF) {
         QPointF pt = v.toPointF();
-        return QString::fromUtf8("point(%1, %2)").arg(pt.x()).arg(pt.y());
+        return QStringLiteral("point(%1, %2)").arg(pt.x()).arg(pt.y());
     }
     if (v.userType() == QMetaType::QJsonDocument) {
         return QStringLiteral("'")
@@ -249,9 +249,10 @@ QString PostgreSqlGenerator::escapeValue(const QVariant &v) const
             pt = pol.at(i);
             if (!ret.isEmpty())
                 ret.append(QStringLiteral("),("));
-            ret.append(QString::number(pt.x()) + ", " + QString::number(pt.y()));
+            ret.append(QString::number(pt.x())
+                       + QStringLiteral(", ") + QString::number(pt.y()));
         }
-        return "'((" + ret + "))'";
+        return QStringLiteral("'((") + ret + QStringLiteral("))'");
     }
     if (v.type() == QVariant::PolygonF) {
         QString ret;
@@ -263,7 +264,7 @@ QString PostgreSqlGenerator::escapeValue(const QVariant &v) const
                 ret.append(QStringLiteral("),("));
             ret.append(QString::number(pt.x()) + ", " + QString::number(pt.y()));
         }
-        return "'((" + ret + "))'";
+        return QStringLiteral("'((") + ret + QStringLiteral("))'");
     }
 #endif
 
@@ -352,7 +353,7 @@ QString PostgreSqlGenerator::createConditionalPhrase(const PhraseData *d) const
 
     if (d->type == PhraseData::WithVariant) {
         if (isPostGisType(d->operand.type()) && d->operatorCond == PhraseData::Equal) {
-            return QString::fromUtf8("%1 ~= %2")
+            return QStringLiteral("%1 ~= %2")
                     .arg(SqlGeneratorBase::createConditionalPhrase(d->left),
                          escapeValue(d->operand));
         }
@@ -369,7 +370,7 @@ QString PostgreSqlGenerator::createConditionalPhrase(const PhraseData *d) const
         case PhraseData::AddMinutesDateTime:
         case PhraseData::AddSeconds:
         case PhraseData::AddSecondsDateTime:
-            return QString::fromUtf8("%1 + interval '%2 %3'")
+            return QStringLiteral("%1 + interval '%2 %3'")
                     .arg(createConditionalPhrase(d->left),
                          d->operand.toString(),
                          SqlGeneratorBase::dateTimePartName(op));
@@ -387,7 +388,7 @@ QString PostgreSqlGenerator::createConditionalPhrase(const PhraseData *d) const
         case PhraseData::DatePartHour:
         case PhraseData::DatePartMinute:
         case PhraseData::DatePartSecond:
-            return QString::fromUtf8("date_part('%2', %1)")
+            return QStringLiteral("date_part('%2', %1)")
                     .arg(createConditionalPhrase(d->left),
                          SqlGeneratorBase::dateTimePartName(op));
 

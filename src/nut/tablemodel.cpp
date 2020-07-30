@@ -335,10 +335,10 @@ QString TableModel::toString() const
 {
     QStringList sl;
     foreach (FieldModel *f, _fields)
-        sl.append(f->name + " " + QVariant::typeToName(f->type));
+        sl.append(f->name + QStringLiteral(" ") + QVariant::typeToName(f->type));
 
-    QString ret = QString("%1 (%2)")
-            .arg(_name, sl.join(", "));
+    QString ret = QStringLiteral("%1 (%2)")
+                      .arg(_name, sl.join(QStringLiteral(", ")));
     return ret;
 }
 

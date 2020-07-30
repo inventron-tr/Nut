@@ -8,7 +8,7 @@
 #define PRINT(x)
 //qDebug() << (#x "=") << (x);
 #define TIC()  QElapsedTimer timer; timer.start()
-#define TOC()  qDebug() << QString("Elapsed time: %1ms for %2") \
+#define TOC()  qDebug() << QStringLiteral("Elapsed time: %1ms for %2") \
     .arg(timer.elapsed() / 1000.) \
     .arg(__func__)
 

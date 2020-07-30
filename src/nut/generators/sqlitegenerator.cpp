@@ -79,7 +79,7 @@ QString SqliteGenerator::fieldType(FieldModel *field)
 
     case QMetaType::QString:
         if(field->length)
-            return QString::fromUtf8("VARCHAR(%1)").arg(field->length);
+            return QStringLiteral("VARCHAR(%1)").arg(field->length);
         else
             return QStringLiteral("TEXT");
     default:
@@ -183,7 +183,7 @@ QStringList SqliteGenerator::diff(TableModel *oldTable, TableModel *newTable)
 
     ret.append(QStringLiteral("ALTER TABLE ") + newTable->name() + QStringLiteral(" RENAME TO sqlitestudio_temp_table;"));
     ret.append(newTableSql);
-    ret.append(QString::fromUtf8("INSERT INTO %1 ( %2 ) SELECT %2 FROM sqlitestudio_temp_table;")
+    ret.append(QStringLiteral("INSERT INTO %1 ( %2 ) SELECT %2 FROM sqlitestudio_temp_table;")
                .arg(newTable->name(), columns));
     ret.append(QStringLiteral("DROP TABLE sqlitestudio_temp_table;"));
     return ret;
@@ -191,11 +191,11 @@ QStringList SqliteGenerator::diff(TableModel *oldTable, TableModel *newTable)
 void SqliteGenerator::appendSkipTake(QString &sql, int skip, int take)
 {
     if (take > 0 && skip > 0) {
-        sql.append(QString::fromUtf8(" LIMIT %1 OFFSET %2")
+        sql.append(QStringLiteral(" LIMIT %1 OFFSET %2")
                    .arg(take)
                    .arg(skip));
     } else if (take > 0) {
-        sql.append(QString::fromUtf8(" LIMIT %1").arg(take));
+        sql.append(QStringLiteral(" LIMIT %1").arg(take));
     }
 }
 
@@ -229,7 +229,7 @@ QString SqliteGenerator::createConditionalPhrase(const PhraseData *d) const
         case PhraseData::AddMonths:
         case PhraseData::AddDays: {
             int i = d->operand.toInt();
-            return QString::fromUtf8("DATE(%1,'%2 %3')")
+            return QStringLiteral("DATE(%1,'%2 %3')")
                 .arg(createConditionalPhrase(d->left),
                      (i < 0 ? QStringLiteral("") : QStringLiteral("+")) + QString::number(i),
                      dateTimePartName(op));
@@ -239,7 +239,7 @@ QString SqliteGenerator::createConditionalPhrase(const PhraseData *d) const
         case PhraseData::AddMinutes:
         case PhraseData::AddSeconds: {
             int i = d->operand.toInt();
-            return QString::fromUtf8("TIME(%1,'%2 %3')")
+            return QStringLiteral("TIME(%1,'%2 %3')")
                 .arg(createConditionalPhrase(d->left),
                      (i < 0 ? QStringLiteral("") : QStringLiteral("+")) + QString::number(i),
                      dateTimePartName(op));
@@ -252,7 +252,7 @@ QString SqliteGenerator::createConditionalPhrase(const PhraseData *d) const
         case PhraseData::AddMinutesDateTime:
         case PhraseData::AddSecondsDateTime: {
             int i = d->operand.toInt();
-            return QString::fromUtf8("DATETIME(%1,'%2 %3')")
+            return QStringLiteral("DATETIME(%1,'%2 %3')")
                     .arg(createConditionalPhrase(d->left),
                      (i < 0 ? QStringLiteral("") : QStringLiteral("+")) + QString::number(i),
                          dateTimePartName(op));
@@ -265,27 +265,27 @@ QString SqliteGenerator::createConditionalPhrase(const PhraseData *d) const
     if (d->type == PhraseData::WithoutOperand) {
         switch (op) {
         case PhraseData::DatePartYear:
-            return QString::fromUtf8("CAST(strftime('%Y', %1) AS INT)")
+            return QStringLiteral("CAST(strftime('%Y', %1) AS INT)")
                     .arg(createConditionalPhrase(d->left));
 
         case PhraseData::DatePartMonth:
-            return QString::fromUtf8("CAST(strftime('%m', %1) AS INT)")
+            return QStringLiteral("CAST(strftime('%m', %1) AS INT)")
                     .arg(createConditionalPhrase(d->left));
 
         case PhraseData::DatePartDay:
-            return QString::fromUtf8("CAST(strftime('%d', %1) AS INT)")
+            return QStringLiteral("CAST(strftime('%d', %1) AS INT)")
                     .arg(createConditionalPhrase(d->left));
 
         case PhraseData::DatePartHour:
-            return QString::fromUtf8("CAST(strftime('%H', %1) AS INT)")
+            return QStringLiteral("CAST(strftime('%H', %1) AS INT)")
                     .arg(createConditionalPhrase(d->left));
 
         case PhraseData::DatePartMinute:
-            return QString::fromUtf8("CAST(strftime('%M', %1) AS INT)")
+            return QStringLiteral("CAST(strftime('%M', %1) AS INT)")
                     .arg(createConditionalPhrase(d->left));
 
         case PhraseData::DatePartSecond:
-            return QString::fromUtf8("CAST(strftime('%S', %1) AS INT)")
+            return QStringLiteral("CAST(strftime('%S', %1) AS INT)")
                     .arg(createConditionalPhrase(d->left));
 
             //        case PhraseData::DatePartMilisecond:

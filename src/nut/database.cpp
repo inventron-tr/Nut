@@ -219,7 +219,7 @@ bool DatabasePrivate::getCurrectSchema()
         if (!nutClassInfoString(q->metaObject()->classInfo(i),
                                 type, name, value)) {
 
-            errorMessage = QString::fromUtf8("No valid table in %1")
+            errorMessage = QStringLiteral("No valid table in %1")
                     .arg(q->metaObject()->classInfo(i).value());
             continue;
         }
