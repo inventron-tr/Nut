@@ -1,4 +1,4 @@
-anme: CI build
+name: CI build
 
 on: [push]
 
