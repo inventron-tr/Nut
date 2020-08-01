@@ -9,8 +9,7 @@ SUBDIRS += \
     tst_generators \
     tst_upgrades \
     tst_json \
-    tst_datetime \
-    tst_sametype
+    tst_datetime
 
 cmake.CONFIG += no_run-tests_target
 prepareRecursiveTarget(run-tests)
