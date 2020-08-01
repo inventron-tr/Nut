@@ -184,13 +184,13 @@ QString SqlServerGenerator::escapeValue(const QVariant &v) const
 //    }
 
     case QVariant::Time:
-        return v.toTime().toString(QStringLiteral("'HH:mm:ss'"));
+        return v.toTime().toString(QStringLiteral("''HH:mm:ss''"));
 
     case QVariant::Date:
-        return v.toDate().toString(QStringLiteral("'yyyy-MM-dd'"));
+        return v.toDate().toString(QStringLiteral("''yyyy-MM-dd''"));
 
     case QVariant::DateTime:
-        return v.toDateTime().toString(QStringLiteral("'yyyy-MM-dd HH:mm:ss'"));
+        return v.toDateTime().toString(QStringLiteral("''yyyy-MM-dd HH:mm:ss''"));
 
     default:
         return SqlGeneratorBase::escapeValue(v);

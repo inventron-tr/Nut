@@ -131,13 +131,13 @@ QString MySqlGenerator::escapeValue(const QVariant &v) const
         return v.toBool() ? QStringLiteral("1") : QStringLiteral("0");
 
     if (v.type() == QVariant::Time)
-        return v.toTime().toString(QStringLiteral("'HH:mm:ss'"));
+        return v.toTime().toString(QStringLiteral("''HH:mm:ss''"));
 
     if (v.type() == QVariant::Date)
-        return v.toDate().toString(QStringLiteral("'yyyy-MM-dd'"));
+        return v.toDate().toString(QStringLiteral("''yyyy-MM-dd''"));
 
     if (v.type() == QVariant::DateTime)
-        return v.toDateTime().toString(QStringLiteral("'yyyy-MM-dd HH:mm:ss'"));
+        return v.toDateTime().toString(QStringLiteral("''yyyy-MM-dd HH:mm:ss''"));
 
 //#ifdef QT_GUI_LIB
 //    if (v.type() == QVariant::Polygon) {

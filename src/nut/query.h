@@ -389,7 +389,7 @@ Q_OUTOFLINE_TEMPLATE int Query<T>::count()
     Q_D(Query);
 
     d->joins.prepend(d->tableName);
-    d->select = "COUNT(*)";
+    d->select = QStringLiteral("COUNT(*)");
     d->sql = d->database->sqlGenerator()->selectCommand(
                 d->tableName,
                 SqlGeneratorBase::Count,

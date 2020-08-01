@@ -170,10 +170,15 @@ void BasicTest::selectPosts()
 
 void BasicTest::selectScoreAverage()
 {
-    auto avg = db.scores()->query()
-            ->join<Post>()
-            ->setWhere(Post::idField() == 1)
-            ->average(Score::scoreField());
+    bool ok;
+    auto avg = db.scores()
+                   ->query()
+                   ->join<Post>()
+                   ->where(Post::idField() == postId)
+                   ->average(Score::scoreField())
+                   .toInt(&ok);
+
+    QTEST_ASSERT(ok);
     QCOMPARE(avg, 2);
 }
 
@@ -210,7 +215,7 @@ void BasicTest::selectPostIds()
 {
     auto q = db.posts()->query();
     auto ids = q->select(Post::idField());
-qDebug() << ids.count();
+
     QTEST_ASSERT(ids.count() == 2);
 }
 
