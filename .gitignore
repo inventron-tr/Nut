@@ -35,6 +35,7 @@ Makefile*
 *.qmlproject.user.*
 
 build
+build2
 
 # KDE show hidden folder marker
 .directory
