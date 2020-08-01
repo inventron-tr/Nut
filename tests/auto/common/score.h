@@ -2,7 +2,7 @@
 #define SCORE_H
 
 #include <QUuid>
-#include "table.h"
+#include <QtNut/table.h>
 
 class User;
 class Post;

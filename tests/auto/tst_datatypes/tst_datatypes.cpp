@@ -13,8 +13,8 @@
 
 #include "sampletable.h"
 
-#include "generators/sqlitegenerator.h"
-#include "generators/sqlservergenerator.h"
+#include <QtNut/sqlitegenerator.h>
+#include <QtNut/sqlservergenerator.h>
 
 DataTypesTest::DataTypesTest(QObject *parent) : QObject(parent)
 {

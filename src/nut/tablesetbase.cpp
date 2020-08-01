@@ -50,13 +50,13 @@ int TableSetBase::save(Database *db, bool cleanUp)
     int rowsAffected = 0;
     TableModel *masterModel = nullptr;
     if (data->table)
-        masterModel = db->model().tableByClassName(data->table->metaObject()->className());
+        masterModel = db->model().tableByClassName(QString::fromUtf8(data->table->metaObject()->className()));
 
     foreach (Row<Table> t, data->childs) {
         if (data->table)
             t->setParentTable(data->table,
                               masterModel,
-                              db->model().tableByClassName(t->metaObject()->className()));
+                              db->model().tableByClassName(QString::fromUtf8(t->metaObject()->className())));
 
         if (t->status() == Table::Added
             || t->status() == Table::Modified

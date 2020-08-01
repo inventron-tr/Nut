@@ -30,13 +30,13 @@ PhraseList::PhraseList() : isValid(false)
 
 PhraseList::PhraseList(const PhraseList &other) : isValid(true)
 {
-    data = qMove(other.data);
-    const_cast<PhraseList&>(other).data.clear();
+    data = other.data;
 }
 
 PhraseList::PhraseList(PhraseList &&other)
 {
-    data = other.data;
+    data = qMove(other.data);
+    const_cast<PhraseList&>(other).data.clear();
 }
 
 PhraseList::PhraseList(const AbstractFieldPhrase &other) : isValid(true)

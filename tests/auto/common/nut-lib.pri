@@ -1,9 +1,9 @@
 win32 {
-    CONFIG(debug,debug|release):   LIBDIR = $$absolute_path($$OUT_PWD/../../src/debug)
-    CONFIG(release,debug|release): LIBDIR = $$absolute_path($$OUT_PWD/../../src/release)
+    CONFIG(debug,debug|release):   LIBDIR = $$absolute_path($$OUT_PWD/../../../src/nut/debug)
+    CONFIG(release,debug|release): LIBDIR = $$absolute_path($$OUT_PWD/../../../src/nut/release)
     LIBS += -L$$LIBDIR -lnut
 } else {
-    LIBDIR = $$absolute_path($$OUT_PWD/../../src)
+    LIBDIR = $$absolute_path($$OUT_PWD/../../../lib)
     android: {
 
            contains(ANDROID_TARGET_ARCH,armeabi-v7a)  {
@@ -19,11 +19,19 @@ win32 {
                LIBS += -L$$LIBDIR -lnut_x86_64
            }
     } else {
-        LIBS += -L$$LIBDIR -lnut
+#        LIBS += -L$$LIBDIR -lnut
     }
 }
 
-INCLUDEPATH += $$PWD/../../src $$PWD/../common
+#INCLUDEPATH += $$PWD/../../../src/nut
+INCLUDEPATH += $$PWD/../common
+
+QT += nut
 
 DEFINES += NUT_SHARED_POINTER
 DEFINES += NUT_PATH=\\\"$$PWD/../../\\\"
+
+runtarget.target = run-tests
+runtarget.CONFIG = recursive
+runtarget.recurse_target = run-tests
+QMAKE_EXTRA_TARGETS += runtarget

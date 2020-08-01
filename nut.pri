@@ -14,7 +14,7 @@ HEADERS += \
     $$PWD/src/generators/sqlservergenerator.h \
     $$PWD/src/types/dbgeography.h \
     $$PWD/src/tableset.h \
-    $$PWD/src/defines_p.h \
+    $$PWD/src/defines_consts.h \
     $$PWD/src/defines.h \
     $$PWD/src/query.h \
     $$PWD/src/databasemodel.h \

@@ -3,9 +3,9 @@
 
 #include <QtCore/qglobal.h>
 #include <QtCore/QDateTime>
-#include "table.h"
-#include "database.h"
-#include "databasemodel.h"
+#include <QtNut/table.h>
+#include <QtNut/database.h>
+#include <QtNut/databasemodel.h>
 
 #ifdef NUT_NAMESPACE
 using namespace NUT_NAMESPACE;

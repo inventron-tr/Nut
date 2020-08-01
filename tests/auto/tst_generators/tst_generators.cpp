@@ -6,10 +6,10 @@
 #include <QObject>
 
 #include "tablemodel.h"
-#include "generators/sqlitegenerator.h"
-#include "generators/sqlservergenerator.h"
-#include "generators/mysqlgenerator.h"
-#include "generators/postgresqlgenerator.h"
+#include <QtNut/sqlitegenerator.h>
+#include <QtNut/sqlservergenerator.h>
+#include <QtNut/mysqlgenerator.h>
+#include <QtNut/postgresqlgenerator.h>
 
 #include "tst_generators.h"
 

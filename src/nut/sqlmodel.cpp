@@ -70,7 +70,7 @@ QVariant SqlModel::data(const QModelIndex &index, int role) const
         return QVariant();
 
     if (index.row() >= d->rows.count() || index.row() < 0)
-        return QVariant("-");
+        return QVariant::fromValue(QStringLiteral("-"));
 
     if (role == Qt::DisplayRole) {
         Row<Table> t = d->rows.at(index.row());

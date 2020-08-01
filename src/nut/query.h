@@ -118,12 +118,13 @@ Q_OUTOFLINE_TEMPLATE QList<O> Query<T>::select(const std::function<O (const QSql
     QList<O> ret;
 
     d->joins.prepend(d->tableName);
-    d->sql = d->database->sqlGenerator()->selectCommand(
-                d->tableName,
-                SqlGeneratorBase::SingleField, "*",
-                d->wherePhrase,
-                d->relations,
-                d->skip, d->take);
+    d->sql = d->database->sqlGenerator()->selectCommand(d->tableName,
+                                                        SqlGeneratorBase::SingleField,
+                                                        QStringLiteral("*"),
+                                                        d->wherePhrase,
+                                                        d->relations,
+                                                        d->skip,
+                                                        d->take);
 
     QSqlQuery q = d->database->exec(d->sql);
 
@@ -153,7 +154,7 @@ Q_OUTOFLINE_TEMPLATE Query<T>::Query(Database *database, TableSetBase *tableSet,
 
     d->database = database;
     d->tableSet = tableSet;
-    d->className = T::staticMetaObject.className();
+    d->className = QString::fromUtf8(T::staticMetaObject.className());
     d->tableName =
             d->database->model()
             .tableByClassName(d->className)
@@ -207,7 +208,9 @@ Q_OUTOFLINE_TEMPLATE RowList<T> Query<T>::toList(int count)
 
         LevelData data;
         data.table = table;
-        data.keyFiledname = data.table->name() + "." + data.table->primaryKey();
+        data.keyFiledname = data.table->name()
+                            + QStringLiteral(".")
+                            + data.table->primaryKey();
         data.lastKeyValue = QVariant();
 
         QHash<QString, QString> masters;
@@ -241,7 +244,7 @@ Q_OUTOFLINE_TEMPLATE RowList<T> Query<T>::toList(int count)
     if (!importedTables.count()) {
         LevelData data;
         data.table = d->database->model().tableByName(d->tableName);
-        data.keyFiledname = d->tableName + "." + data.table->primaryKey();
+        data.keyFiledname = d->tableName + QStringLiteral(".") + data.table->primaryKey();
         data.lastKeyValue = QVariant();
 
         levels.append(data);
@@ -314,8 +317,8 @@ Q_OUTOFLINE_TEMPLATE RowList<T> Query<T>::toList(int count)
             foreach (FieldModel *field, childFields)
                 row->setProperty(field->name.toLatin1().data(),
                                    d->database->sqlGenerator()->unescapeValue(
-                                       field->type,
-                                       q.value(data.table->name() + "." + field->name)));
+                                   field->type,
+                                   q.value(data.table->name() + QStringLiteral(".") + field->name)));
 
             for (int i = 0; i < data.masters.count(); ++i) {
                 int master = data.masters[i];

@@ -1,7 +1,7 @@
 #ifndef TDATABASE_H
 #define TDATABASE_H
 
-#include "database.h"
+#include <QtNut/database.h>
 
 #ifdef NUT_NAMESPACE
 using namespace NUT_NAMESPACE;

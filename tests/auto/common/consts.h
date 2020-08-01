@@ -13,7 +13,7 @@
     .arg(__func__)
 
 #ifdef Q_OS_LINUX
-#define DRIVER "QSQLITE"
+#define DRIVER QStringLiteral("QSQLITE")
 #define DATABASE QStringLiteral("/tmp/testdb.sqlite")
 #define HOST QString()
 #define USERNAME QString()
