@@ -22,11 +22,11 @@
 #define POSTGRESQLGENERATOR_H
 
 #include <QtCore/qglobal.h>
-#include "sqlgeneratorbase_p.h"
+#include "abstractsqlgenerator.h"
 
 NUT_BEGIN_NAMESPACE
 
-class NUT_EXPORT PostgreSqlGenerator : public SqlGeneratorBase
+class NUT_EXPORT PostgreSqlGenerator : public AbstractSqlGenerator
 {
 private:
     bool readInsideParentese(QString &text, QString &out);

@@ -18,14 +18,13 @@
 **
 **************************************************************************/
 
-#ifndef SQLGENERATORBASE_H
-#define SQLGENERATORBASE_H
+#ifndef NUT_ABSTRACTSQLGENERATOR_H
+#define NUT_ABSTRACTSQLGENERATOR_H
 
 #include <QtCore/qglobal.h>
 #include <QtCore/QObject>
 #include <QtCore/QStringList>
-#include "../phrase.h"
-//#include "../wherephrase.h"
+#include "phrase.h"
 
 class SqlSerializer;
 
@@ -37,7 +36,7 @@ class DatabaseModel;
 class TableModel;
 class Database;
 struct RelationModel;
-class NUT_EXPORT SqlGeneratorBase : public QObject
+class NUT_EXPORT AbstractSqlGenerator : public QObject
 {
 //    Q_OBJECT
 
@@ -65,8 +64,8 @@ public:
         Sum
     };
 
-    explicit SqlGeneratorBase(Database *parent);
-    virtual ~SqlGeneratorBase() = default;
+    explicit AbstractSqlGenerator(Database *parent);
+    virtual ~AbstractSqlGenerator() = default;
 
     virtual bool supportPrimaryKey(const QMetaType::Type &type) {
         Q_UNUSED(type)
@@ -168,4 +167,4 @@ protected:
 
 NUT_END_NAMESPACE
 
-#endif // SQLGENERATORBASE_H
+#endif // NUT_ABSTRACTSQLGENERATOR_H

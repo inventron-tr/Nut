@@ -21,16 +21,16 @@
 #ifndef PHRASE_H
 #define PHRASE_H
 
-#include "phrases/conditionalphrase.h"
-#include "phrases/abstractfieldphrase.h"
-#include "phrases/fieldphrase.h"
-#include "phrases/phraselist.h"
-#include "phrases/assignmentphraselist.h"
-#include "phrases/phrasedatalist.h"
-#include "phrases/phrasedata.h"
-#include "phrases/assignmentphrase.h"
-#include "phrases/numericphrase.h"
-#include "phrases/datephrase.h"
+#include "conditionalphrase.h"
+#include "abstractfieldphrase.h"
+#include "fieldphrase.h"
+#include "phraselist.h"
+#include "assignmentphraselist.h"
+#include "phrasedatalist.h"
+#include "phrasedata.h"
+#include "assignmentphrase.h"
+#include "numericphrase.h"
+#include "datephrase.h"
 
 NUT_BEGIN_NAMESPACE
 

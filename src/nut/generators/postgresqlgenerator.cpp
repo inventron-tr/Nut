@@ -29,8 +29,8 @@
 #include <QtCore/QJsonDocument>
 
 #include "postgresqlgenerator.h"
-#include "../table.h"
-#include "../tablemodel.h"
+#include "table.h"
+#include "tablemodel.h"
 #include "sqlserializer.h"
 
 NUT_BEGIN_NAMESPACE
@@ -73,7 +73,7 @@ bool PostgreSqlGenerator::isPostGisType(const QVariant::Type &t) const
             || t == QVariant::PolygonF;
 }
 
-PostgreSqlGenerator::PostgreSqlGenerator(Database *parent) : SqlGeneratorBase (parent)
+PostgreSqlGenerator::PostgreSqlGenerator(Database *parent) : AbstractSqlGenerator (parent)
 {
 
 }
@@ -269,7 +269,7 @@ QString PostgreSqlGenerator::escapeValue(const QVariant &v) const
     }
 #endif
 
-    return SqlGeneratorBase::escapeValue(v);
+    return AbstractSqlGenerator::escapeValue(v);
 }
 
 QVariant PostgreSqlGenerator::unescapeValue(const QMetaType::Type &type, const QVariant &dbValue)
@@ -284,14 +284,14 @@ QVariant PostgreSqlGenerator::unescapeValue(const QMetaType::Type &type, const Q
         return dbValue.toDate();
 
     if (type == QMetaType::QPoint)
-        return SqlGeneratorBase::unescapeValue(QMetaType::QPoint,
+        return AbstractSqlGenerator::unescapeValue(QMetaType::QPoint,
                                                dbValue.toString()
                                                    .replace(QStringLiteral("("),
                                                             QStringLiteral(""))
                                                    .replace(QStringLiteral(")"),
                                                             QStringLiteral("")));
     if (type == QMetaType::QPointF)
-        return SqlGeneratorBase::unescapeValue(QMetaType::QPointF,
+        return AbstractSqlGenerator::unescapeValue(QMetaType::QPointF,
                                                dbValue.toString()
                                                    .replace(QStringLiteral("("),
                                                             QStringLiteral(""))
@@ -337,7 +337,7 @@ QVariant PostgreSqlGenerator::unescapeValue(const QMetaType::Type &type, const Q
         return pol;
     }
 #endif
-    return SqlGeneratorBase::unescapeValue(type, dbValue);
+    return AbstractSqlGenerator::unescapeValue(type, dbValue);
 }
 
 QString PostgreSqlGenerator::createConditionalPhrase(const PhraseData *d) const
@@ -355,7 +355,7 @@ QString PostgreSqlGenerator::createConditionalPhrase(const PhraseData *d) const
     if (d->type == PhraseData::WithVariant) {
         if (isPostGisType(d->operand.type()) && d->operatorCond == PhraseData::Equal) {
             return QStringLiteral("%1 ~= %2")
-                    .arg(SqlGeneratorBase::createConditionalPhrase(d->left),
+                    .arg(AbstractSqlGenerator::createConditionalPhrase(d->left),
                          escapeValue(d->operand));
         }
         switch (op) {
@@ -374,7 +374,7 @@ QString PostgreSqlGenerator::createConditionalPhrase(const PhraseData *d) const
             return QStringLiteral("%1 + interval '%2 %3'")
                     .arg(createConditionalPhrase(d->left),
                          d->operand.toString(),
-                         SqlGeneratorBase::dateTimePartName(op));
+                         AbstractSqlGenerator::dateTimePartName(op));
 
         default:
             break;
@@ -391,14 +391,14 @@ QString PostgreSqlGenerator::createConditionalPhrase(const PhraseData *d) const
         case PhraseData::DatePartSecond:
             return QStringLiteral("date_part('%2', %1)")
                     .arg(createConditionalPhrase(d->left),
-                         SqlGeneratorBase::dateTimePartName(op));
+                         AbstractSqlGenerator::dateTimePartName(op));
 
         default:
             break;
         }
     }
 
-    return SqlGeneratorBase::createConditionalPhrase(d);
+    return AbstractSqlGenerator::createConditionalPhrase(d);
 }
 
 NUT_END_NAMESPACE

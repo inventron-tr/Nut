@@ -56,7 +56,7 @@ public:
     QString connectionName;
     QString driver;
 
-    SqlGeneratorBase *sqlGenerator;
+    AbstractSqlGenerator *sqlGenerator;
     DatabaseModel currentModel;
 
     TableSet<ChangeLogTable> *changeLogs;

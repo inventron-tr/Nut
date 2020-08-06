@@ -25,11 +25,11 @@
 #include <QtCore/QVariant>
 #include <QtCore/QDebug>
 
-#include "sqlgeneratorbase_p.h"
-#include "../database.h"
-#include "../table.h"
-#include "../databasemodel.h"
-#include "../tablemodel.h"
+#include "abstractsqlgenerator.h"
+#include "database.h"
+#include "table.h"
+#include "databasemodel.h"
+#include "tablemodel.h"
 #include "sqlserializer.h"
 
 NUT_BEGIN_NAMESPACE
@@ -51,7 +51,7 @@ NUT_BEGIN_NAMESPACE
  *      INNER JOIN dbo.GiftCards ON dbo.GiftTypes.GiftTypeID = dbo.GiftCards.GiftTypeID
  *      INNER JOIN dbo.Entities ON dbo.GiftCards.GiftCardID = dbo.Entities.GiftCardID
  */
-bool SqlGeneratorBase::isNumeric(const QMetaType::Type &type)
+bool AbstractSqlGenerator::isNumeric(const QMetaType::Type &type)
 {
     return type == QMetaType::SChar
             || type == QMetaType::Char
@@ -66,7 +66,7 @@ bool SqlGeneratorBase::isNumeric(const QMetaType::Type &type)
             || type == QMetaType::ULongLong;
 }
 
-SqlGeneratorBase::SqlGeneratorBase(Database *parent)
+AbstractSqlGenerator::AbstractSqlGenerator(Database *parent)
     : QObject(parent)
 {
     if (parent)
@@ -75,19 +75,19 @@ SqlGeneratorBase::SqlGeneratorBase(Database *parent)
     _serializer = new SqlSerializer;
 }
 
-QString SqlGeneratorBase::masterDatabaseName(QString databaseName)
+QString AbstractSqlGenerator::masterDatabaseName(QString databaseName)
 {
     Q_UNUSED(databaseName)
     return QString();
 }
 
-QString SqlGeneratorBase::createTable(TableModel *table)
+QString AbstractSqlGenerator::createTable(TableModel *table)
 {
     Q_UNUSED(table)
     return QString();
 }
 
-QString SqlGeneratorBase::saveRecord(Table *t, QString tableName)
+QString AbstractSqlGenerator::saveRecord(Table *t, QString tableName)
 {
     Q_ASSERT(!tableName.isEmpty() && !tableName.isNull());
     switch (t->status()) {
@@ -108,7 +108,7 @@ QString SqlGeneratorBase::saveRecord(Table *t, QString tableName)
     return QString();
 }
 
-QString SqlGeneratorBase::recordsPhrase(TableModel *table)
+QString AbstractSqlGenerator::recordsPhrase(TableModel *table)
 {
     if (!table)
         return QString();
@@ -122,7 +122,7 @@ QString SqlGeneratorBase::recordsPhrase(TableModel *table)
     return ret;
 }
 
-QString SqlGeneratorBase::insertBulk(const QString &tableName, const PhraseList &ph, const QList<QVariantList> &vars)
+QString AbstractSqlGenerator::insertBulk(const QString &tableName, const PhraseList &ph, const QList<QVariantList> &vars)
 {
     QString sql;
     foreach (QVariantList list, vars) {
@@ -141,7 +141,7 @@ QString SqlGeneratorBase::insertBulk(const QString &tableName, const PhraseList 
     return sql;
 }
 
-QString SqlGeneratorBase::fieldDeclare(FieldModel *field)
+QString AbstractSqlGenerator::fieldDeclare(FieldModel *field)
 {
     QString type = fieldType(field);
     if (type.isEmpty())
@@ -157,19 +157,19 @@ QString SqlGeneratorBase::fieldDeclare(FieldModel *field)
     return ret;
 }
 
-QStringList SqlGeneratorBase::constraints(TableModel *table)
+QStringList AbstractSqlGenerator::constraints(TableModel *table)
 {
     Q_UNUSED(table)
     return QStringList();
 }
 
-QString SqlGeneratorBase::relationDeclare(const RelationModel *relation)
+QString AbstractSqlGenerator::relationDeclare(const RelationModel *relation)
 {
     return QStringLiteral("FOREIGN KEY (FK_%1) REFERENCES %2(%1)")
             .arg(relation->localColumn, relation->slaveTable->name());
 }
 
-QStringList SqlGeneratorBase::diff(const DatabaseModel &lastModel,
+QStringList AbstractSqlGenerator::diff(const DatabaseModel &lastModel,
                                    const DatabaseModel &newModel)
 {
     QStringList ret;
@@ -192,7 +192,7 @@ QStringList SqlGeneratorBase::diff(const DatabaseModel &lastModel,
     return ret;
 }
 
-QString SqlGeneratorBase::diff(FieldModel *oldField, FieldModel *newField)
+QString AbstractSqlGenerator::diff(FieldModel *oldField, FieldModel *newField)
 {
     QString sql = QString();
     if (oldField && newField)
@@ -211,7 +211,7 @@ QString SqlGeneratorBase::diff(FieldModel *oldField, FieldModel *newField)
     return sql;
 }
 
-QStringList SqlGeneratorBase::diff(TableModel *oldTable, TableModel *newTable)
+QStringList AbstractSqlGenerator::diff(TableModel *oldTable, TableModel *newTable)
 {
     if (!newTable && !oldTable)
         return QStringList();
@@ -289,7 +289,7 @@ QStringList SqlGeneratorBase::diff(TableModel *oldTable, TableModel *newTable)
     return QStringList() << sql;
 }
 
-QStringList SqlGeneratorBase::diffRelation(TableModel *oldTable, TableModel *newTable)
+QStringList AbstractSqlGenerator::diffRelation(TableModel *oldTable, TableModel *newTable)
 {
     QStringList ret;
     if (!newTable)
@@ -327,7 +327,7 @@ QStringList SqlGeneratorBase::diffRelation(TableModel *oldTable, TableModel *new
     return ret;
 }
 
-QStringList SqlGeneratorBase::diff(RelationModel *oldRel, RelationModel *newRel)
+QStringList AbstractSqlGenerator::diff(RelationModel *oldRel, RelationModel *newRel)
 {
     QStringList ret;
     /*
@@ -358,7 +358,7 @@ QStringList SqlGeneratorBase::diff(RelationModel *oldRel, RelationModel *newRel)
     return ret;
 }
 
-QString SqlGeneratorBase::join(const QString &mainTable,
+QString AbstractSqlGenerator::join(const QString &mainTable,
                                const QList<RelationModel*> &list,
                                QStringList *order)
 {
@@ -390,7 +390,7 @@ QString SqlGeneratorBase::join(const QString &mainTable,
     return ret;
 }
 
-QString SqlGeneratorBase::join(const QStringList &list, QStringList *order)
+QString AbstractSqlGenerator::join(const QStringList &list, QStringList *order)
 {
     //TODO: reorder list first!
     //TODO: make this ungly code better and bugless :-)
@@ -454,7 +454,7 @@ QString SqlGeneratorBase::join(const QStringList &list, QStringList *order)
     return ret;
 }
 
-QString SqlGeneratorBase::insertRecord(Table *t, QString tableName)
+QString AbstractSqlGenerator::insertRecord(Table *t, QString tableName)
 {
     QString sql = QString();
     auto model = _database->model().tableByName(tableName);
@@ -483,7 +483,7 @@ QString SqlGeneratorBase::insertRecord(Table *t, QString tableName)
     return sql;
 }
 
-QString SqlGeneratorBase::updateRecord(Table *t, QString tableName)
+QString AbstractSqlGenerator::updateRecord(Table *t, QString tableName)
 {
     QString sql = QString();
     auto model = _database->model().tableByName(tableName);
@@ -506,7 +506,7 @@ QString SqlGeneratorBase::updateRecord(Table *t, QString tableName)
     return sql;
 }
 
-QString SqlGeneratorBase::deleteRecord(Table *t, QString tableName)
+QString AbstractSqlGenerator::deleteRecord(Table *t, QString tableName)
 {
     auto model = _database->model().tableByName(tableName);
     QString key = model->primaryKey();
@@ -516,7 +516,7 @@ QString SqlGeneratorBase::deleteRecord(Table *t, QString tableName)
     return sql;
 }
 
-QString SqlGeneratorBase::agregateText(const AgregateType &t,
+QString AbstractSqlGenerator::agregateText(const AgregateType &t,
                                        const QString &arg) const
 {
     switch (t) {
@@ -541,7 +541,7 @@ QString SqlGeneratorBase::agregateText(const AgregateType &t,
     return QString(); // never reach
 }
 
-QString SqlGeneratorBase::fromTableText(const QString &tableName,
+QString AbstractSqlGenerator::fromTableText(const QString &tableName,
                                         QString &joinClassName,
                                         QString &orderBy) const
 {
@@ -568,7 +568,7 @@ QString SqlGeneratorBase::fromTableText(const QString &tableName,
     return tableNameText;
 }
 
-QString SqlGeneratorBase::deleteRecords(const QString &tableName, const QString &where)
+QString AbstractSqlGenerator::deleteRecords(const QString &tableName, const QString &where)
 {
     QString sql = QStringLiteral("DELETE FROM ") + tableName;
 
@@ -580,7 +580,7 @@ QString SqlGeneratorBase::deleteRecords(const QString &tableName, const QString 
     return sql;
 }
 
-QString SqlGeneratorBase::selectCommand(const QString &tableName,
+QString AbstractSqlGenerator::selectCommand(const QString &tableName,
                                         const PhraseList &fields,
                                         const ConditionalPhrase &where,
                                         const PhraseList &order,
@@ -632,8 +632,8 @@ QString SqlGeneratorBase::selectCommand(const QString &tableName,
     return sql + QStringLiteral(" ");
 }
 
-QString SqlGeneratorBase::selectCommand(const QString &tableName,
-                                        const SqlGeneratorBase::AgregateType &t,
+QString AbstractSqlGenerator::selectCommand(const QString &tableName,
+                                        const AbstractSqlGenerator::AgregateType &t,
                                         const QString &agregateArg,
                                         const ConditionalPhrase &where,
                                         const QList<RelationModel *> &joins,
@@ -661,7 +661,7 @@ QString SqlGeneratorBase::selectCommand(const QString &tableName,
     return sql + QStringLiteral(" ");
 }
 
-QString SqlGeneratorBase::deleteCommand(const QString &tableName,
+QString AbstractSqlGenerator::deleteCommand(const QString &tableName,
                                         const ConditionalPhrase &where)
 {
     QString command = QStringLiteral("DELETE FROM ") + tableName;
@@ -679,7 +679,7 @@ QString SqlGeneratorBase::deleteCommand(const QString &tableName,
     return command;
 }
 
-QString SqlGeneratorBase::updateCommand(const QString &tableName,
+QString AbstractSqlGenerator::updateCommand(const QString &tableName,
                                         const AssignmentPhraseList &assigments,
                                         const ConditionalPhrase &where)
 {
@@ -707,7 +707,7 @@ QString SqlGeneratorBase::updateCommand(const QString &tableName,
     return sql;
 }
 
-QString SqlGeneratorBase::insertCommand(const QString &tableName, const AssignmentPhraseList &assigments)
+QString AbstractSqlGenerator::insertCommand(const QString &tableName, const AssignmentPhraseList &assigments)
 {
 
     QString fieldNames;
@@ -795,7 +795,7 @@ QString SqlGeneratorBase::insertCommand(const QString &tableName, const Assignme
 //    return whereText;
 //}
 
-void SqlGeneratorBase::replaceTableNames(QString &command)
+void AbstractSqlGenerator::replaceTableNames(QString &command)
 {
     foreach (TableModel *m, _database->model())
         command = command
@@ -803,7 +803,7 @@ void SqlGeneratorBase::replaceTableNames(QString &command)
                                    + QStringLiteral("]"), m->name());
 }
 
-void SqlGeneratorBase::removeTableNames(QString &command)
+void AbstractSqlGenerator::removeTableNames(QString &command)
 {
     foreach (TableModel *m, _database->model())
         command = command.replace(QStringLiteral("[")
@@ -811,7 +811,7 @@ void SqlGeneratorBase::removeTableNames(QString &command)
                                       + QStringLiteral("]."), QStringLiteral(""));
 }
 
-QString SqlGeneratorBase::dateTimePartName(const PhraseData::Condition &op) const
+QString AbstractSqlGenerator::dateTimePartName(const PhraseData::Condition &op) const
 {
     switch (op) {
     case PhraseData::DatePartYear:
@@ -884,7 +884,7 @@ QString SqlGeneratorBase::dateTimePartName(const PhraseData::Condition &op) cons
 //    return sql;
 //}
 
-QString SqlGeneratorBase::escapeValue(const QVariant &v) const
+QString AbstractSqlGenerator::escapeValue(const QVariant &v) const
 {
     if (v.type() == QVariant::String && v.toString().isEmpty())
         return QStringLiteral("''");
@@ -901,13 +901,13 @@ QString SqlGeneratorBase::escapeValue(const QVariant &v) const
     return QStringLiteral("'") + serialized + QStringLiteral("'");
 }
 
-QVariant SqlGeneratorBase::unescapeValue(const QMetaType::Type &type,
+QVariant AbstractSqlGenerator::unescapeValue(const QMetaType::Type &type,
                                      const QVariant &dbValue)
 {
     return _serializer->deserialize(dbValue.toString(), type);
 }
 
-QString SqlGeneratorBase::phrase(const PhraseData *d) const
+QString AbstractSqlGenerator::phrase(const PhraseData *d) const
 {
     QString ret = QString();
 
@@ -941,7 +941,7 @@ QString SqlGeneratorBase::phrase(const PhraseData *d) const
 }
 
 QString
-SqlGeneratorBase::operatorString(const PhraseData::Condition &cond) const
+AbstractSqlGenerator::operatorString(const PhraseData::Condition &cond) const
 {
     switch (cond) {
     case PhraseData::Equal:
@@ -1005,20 +1005,20 @@ SqlGeneratorBase::operatorString(const PhraseData::Condition &cond) const
     }
 }
 
-void SqlGeneratorBase::appendSkipTake(QString &sql, int skip, int take)
+void AbstractSqlGenerator::appendSkipTake(QString &sql, int skip, int take)
 {
     Q_UNUSED(sql)
     Q_UNUSED(skip)
     Q_UNUSED(take)
 }
 
-QString SqlGeneratorBase::primaryKeyConstraint(const TableModel *table) const
+QString AbstractSqlGenerator::primaryKeyConstraint(const TableModel *table) const
 {
     return  QStringLiteral("CONSTRAINT pk_%1 PRIMARY KEY (%2)")
             .arg(table->name(), table->primaryKey());
 }
 
-QString SqlGeneratorBase::createConditionalPhrase(const PhraseData *d) const
+QString AbstractSqlGenerator::createConditionalPhrase(const PhraseData *d) const
 {
     if (!d)
         return QString();
@@ -1102,7 +1102,7 @@ QString SqlGeneratorBase::createConditionalPhrase(const PhraseData *d) const
     return ret;
 }
 
-QString SqlGeneratorBase::createOrderPhrase(const PhraseList &ph)
+QString AbstractSqlGenerator::createOrderPhrase(const PhraseList &ph)
 {
     QString ret = QString();
     foreach (const PhraseData *d, ph.data) {
@@ -1116,7 +1116,7 @@ QString SqlGeneratorBase::createOrderPhrase(const PhraseList &ph)
     return ret;
 }
 
-QString SqlGeneratorBase::createFieldPhrase(const PhraseList &ph)
+QString AbstractSqlGenerator::createFieldPhrase(const PhraseList &ph)
 {
     QString ret = QString();
     foreach (const PhraseData *d, ph.data) {
@@ -1129,7 +1129,7 @@ QString SqlGeneratorBase::createFieldPhrase(const PhraseList &ph)
     return ret;
 }
 
-void SqlGeneratorBase::createInsertPhrase(const AssignmentPhraseList &ph, QString &fields, QString &values)
+void AbstractSqlGenerator::createInsertPhrase(const AssignmentPhraseList &ph, QString &fields, QString &values)
 {
     foreach (PhraseData *d, ph.data) {
         if (!fields.isEmpty())

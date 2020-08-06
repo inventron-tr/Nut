@@ -5,7 +5,7 @@
 #include <QObject>
 
 namespace Nut {
-class SqlGeneratorBase;
+class AbstractSqlGenerator;
 }
 
 class GeneratorsTest : public QObject
@@ -33,7 +33,7 @@ class GeneratorsTest : public QObject
 public:
     explicit GeneratorsTest(QObject *parent = nullptr);
 
-    void types(Nut::SqlGeneratorBase *g, QString name);
+    void types(Nut::AbstractSqlGenerator *g, QString name);
 
 private slots:
     void test_sqlite();

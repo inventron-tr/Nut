@@ -21,7 +21,7 @@
 #ifndef PHRASELIST_H
 #define PHRASELIST_H
 
-#include "../defines.h"
+#include "defines.h"
 
 #include "phrasedatalist.h"
 

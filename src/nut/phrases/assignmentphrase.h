@@ -21,7 +21,7 @@
 #ifndef ASSIGNMENTPHRASE_H
 #define ASSIGNMENTPHRASE_H
 
-#include "../defines.h"
+#include "defines.h"
 
 #include "assignmentphraselist.h"
 

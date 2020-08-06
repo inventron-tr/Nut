@@ -22,11 +22,11 @@
 #define MYSQLGENERATOR_H
 
 #include <QtCore/qglobal.h>
-#include "sqlgeneratorbase_p.h"
+#include "abstractsqlgenerator.h"
 
 NUT_BEGIN_NAMESPACE
 
-class NUT_EXPORT MySqlGenerator : public SqlGeneratorBase
+class NUT_EXPORT MySqlGenerator : public AbstractSqlGenerator
 {
 public:
     explicit MySqlGenerator(Database *parent = nullptr);

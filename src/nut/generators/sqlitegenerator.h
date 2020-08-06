@@ -22,11 +22,11 @@
 #define SQLITEGENERATOR_H
 
 #include <QtCore/qglobal.h>
-#include "sqlgeneratorbase_p.h"
+#include "abstractsqlgenerator.h"
 
 NUT_BEGIN_NAMESPACE
 
-class NUT_EXPORT SqliteGenerator : public SqlGeneratorBase
+class NUT_EXPORT SqliteGenerator : public AbstractSqlGenerator
 {
 public:
     explicit SqliteGenerator(Database *parent = nullptr);

@@ -4,8 +4,8 @@
 #include <initializer_list>
 #include <QtCore/QDebug>
 #include "defines.h"
-#include "phrases/phraselist.h"
-#include "phrases/fieldphrase.h"
+#include "phraselist.h"
+#include "fieldphrase.h"
 
 NUT_BEGIN_NAMESPACE
 

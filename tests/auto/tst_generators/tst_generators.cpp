@@ -19,7 +19,7 @@ GeneratorsTest::GeneratorsTest(QObject *parent) : QObject(parent)
 }
 
 
-void GeneratorsTest::types(Nut::SqlGeneratorBase *g, QString name)
+void GeneratorsTest::types(Nut::AbstractSqlGenerator *g, QString name)
 {
     QList<QMetaType::Type> types;
     types

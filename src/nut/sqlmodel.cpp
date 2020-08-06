@@ -19,7 +19,7 @@
 **************************************************************************/
 
 #include "database.h"
-#include "tablesetbase_p.h"
+#include "tablesetbase.h"
 #include "databasemodel.h"
 #include "tablemodel.h"
 #include "table.h"

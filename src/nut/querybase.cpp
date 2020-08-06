@@ -1,7 +1,7 @@
 #include "querybase_p.h"
 
 #include "table.h"
-#include "tablesetbase_p.h"
+#include "tablesetbase.h"
 
 
 NUT_BEGIN_NAMESPACE

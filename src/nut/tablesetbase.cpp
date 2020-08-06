@@ -20,7 +20,7 @@
 
 #include "table.h"
 #include "database.h"
-#include "tablesetbase_p.h"
+#include "tablesetbase.h"
 #include "databasemodel.h"
 #include "tablesetbasedata.h"
 

@@ -19,12 +19,12 @@
 **************************************************************************/
 
 #include "sqlitegenerator.h"
-#include "../table.h"
-#include "../tablemodel.h"
+#include "table.h"
+#include "tablemodel.h"
 
 NUT_BEGIN_NAMESPACE
 
-SqliteGenerator::SqliteGenerator(Database *parent) : SqlGeneratorBase(parent)
+SqliteGenerator::SqliteGenerator(Database *parent) : AbstractSqlGenerator(parent)
 {
 
 }
@@ -124,7 +124,7 @@ QStringList SqliteGenerator::diff(TableModel *oldTable, TableModel *newTable)
         if (*oldTable == *newTable)
             return ret;
 
-    QStringList newTableSql = SqlGeneratorBase::diff(nullptr, newTable);
+    QStringList newTableSql = AbstractSqlGenerator::diff(nullptr, newTable);
 
     if (!newTable)
         return QStringList() << QStringLiteral("DROP TABLE ") + oldTable->name();
@@ -296,7 +296,7 @@ QString SqliteGenerator::createConditionalPhrase(const PhraseData *d) const
         }
     }
 
-    return SqlGeneratorBase::createConditionalPhrase(d);
+    return AbstractSqlGenerator::createConditionalPhrase(d);
 }
 
 QString SqliteGenerator::escapeValue(const QVariant &v) const
@@ -310,7 +310,7 @@ QString SqliteGenerator::escapeValue(const QVariant &v) const
     if (v.type() == QVariant::DateTime)
         return v.toDateTime().toString(QStringLiteral("''yyyy-MM-dd HH:mm:ss''"));
 
-    return SqlGeneratorBase::escapeValue(v);
+    return AbstractSqlGenerator::escapeValue(v);
 }
 
 QVariant SqliteGenerator::unescapeValue(const QMetaType::Type &type, const QVariant &dbValue)
@@ -324,7 +324,7 @@ QVariant SqliteGenerator::unescapeValue(const QMetaType::Type &type, const QVari
     if (type == QMetaType::QDate)
         return dbValue.toDate();
 
-    return SqlGeneratorBase::unescapeValue(type, dbValue);
+    return AbstractSqlGenerator::unescapeValue(type, dbValue);
 }
 
 NUT_END_NAMESPACE

@@ -21,7 +21,7 @@
 #ifndef DBGEOGRAPHY_H
 #define DBGEOGRAPHY_H
 
-#include "../defines.h"
+#include "defines.h"
 #include <QtCore/QObject>
 #include <QtCore/qglobal.h>
 #include <QtCore/QVariant>

@@ -21,7 +21,7 @@
 #ifndef FIELDPHRASE_H
 #define FIELDPHRASE_H
 
-#include "../defines.h"
+#include "defines.h"
 
 #include "abstractfieldphrase.h"
 

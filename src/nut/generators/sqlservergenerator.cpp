@@ -19,8 +19,8 @@
 **************************************************************************/
 
 #include "sqlservergenerator.h"
-#include "../table.h"
-#include "../tablemodel.h"
+#include "table.h"
+#include "tablemodel.h"
 
 #include <QtCore/QPoint>
 #include <QtCore/QRegularExpression>
@@ -28,7 +28,7 @@
 NUT_BEGIN_NAMESPACE
 
 SqlServerGenerator::SqlServerGenerator(Database *parent)
-    : SqlGeneratorBase(parent)
+    : AbstractSqlGenerator(parent)
 {
 }
 
@@ -170,7 +170,7 @@ QString SqlServerGenerator::escapeValue(const QVariant &v) const
 //    case QVariant::JsonObject:
 //    case QVariant::JsonDocument:
     case QVariant::Url:
-        return QStringLiteral("N") + SqlGeneratorBase::escapeValue(v);
+        return QStringLiteral("N") + AbstractSqlGenerator::escapeValue(v);
 
 //    case QVariant::Point: {
 //        QPoint pt = v.toPoint();
@@ -193,7 +193,7 @@ QString SqlServerGenerator::escapeValue(const QVariant &v) const
         return v.toDateTime().toString(QStringLiteral("''yyyy-MM-dd HH:mm:ss''"));
 
     default:
-        return SqlGeneratorBase::escapeValue(v);
+        return AbstractSqlGenerator::escapeValue(v);
     }
 }
 
@@ -208,7 +208,7 @@ QVariant SqlServerGenerator::unescapeValue(const QMetaType::Type &type, const QV
     if (type == QMetaType::QDate)
         return dbValue.toDate();
 
-    return SqlGeneratorBase::unescapeValue(type, dbValue);
+    return AbstractSqlGenerator::unescapeValue(type, dbValue);
 }
 
 void SqlServerGenerator::appendSkipTake(QString &sql, int skip, int take)
@@ -251,7 +251,7 @@ QString SqlServerGenerator::createConditionalPhrase(const PhraseData *d) const
             return QStringLiteral("DATEADD(%3, %2, %1)")
                     .arg(createConditionalPhrase(d->left),
                          d->operand.toString(),
-                         SqlGeneratorBase::dateTimePartName(op));
+                         AbstractSqlGenerator::dateTimePartName(op));
 
         default:
             break;
@@ -268,14 +268,14 @@ QString SqlServerGenerator::createConditionalPhrase(const PhraseData *d) const
         case PhraseData::DatePartSecond:
             return QStringLiteral("DATEPART(%2, %1)")
                     .arg(createConditionalPhrase(d->left),
-                         SqlGeneratorBase::dateTimePartName(op));
+                         AbstractSqlGenerator::dateTimePartName(op));
 
         default:
             break;
         }
     }
 
-    return SqlGeneratorBase::createConditionalPhrase(d);
+    return AbstractSqlGenerator::createConditionalPhrase(d);
 }
 
 NUT_END_NAMESPACE

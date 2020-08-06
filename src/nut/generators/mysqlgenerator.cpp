@@ -19,7 +19,7 @@
 **************************************************************************/
 
 #include "mysqlgenerator.h"
-#include "../tablemodel.h"
+#include "tablemodel.h"
 
 #include <QtCore/QPoint>
 #include <QtCore/QPointF>
@@ -35,7 +35,7 @@
 
 NUT_BEGIN_NAMESPACE
 
-MySqlGenerator::MySqlGenerator(Database *parent) : SqlGeneratorBase(parent)
+MySqlGenerator::MySqlGenerator(Database *parent) : AbstractSqlGenerator(parent)
 {
 
 }
@@ -178,7 +178,7 @@ QString MySqlGenerator::escapeValue(const QVariant &v) const
 //    }
 
 //    default:
-    return SqlGeneratorBase::escapeValue(v);
+    return AbstractSqlGenerator::escapeValue(v);
 //    }
 }
 
@@ -229,7 +229,7 @@ QVariant MySqlGenerator::unescapeValue(const QMetaType::Type &type, const QVaria
     if (type == QMetaType::QDate)
         return dbValue.toDate();
 
-    return SqlGeneratorBase::unescapeValue(type, dbValue);
+    return AbstractSqlGenerator::unescapeValue(type, dbValue);
 }
 
 bool MySqlGenerator::readInsideParentese(QString &text, QString &out)
@@ -319,7 +319,7 @@ QString MySqlGenerator::createConditionalPhrase(const PhraseData *d) const
             return QStringLiteral("DATE_ADD(%1, INTERVAL %2 %3)")
                     .arg(createConditionalPhrase(d->left),
                          d->operand.toString(),
-                         SqlGeneratorBase::dateTimePartName(op));
+                         AbstractSqlGenerator::dateTimePartName(op));
 
         default:
             break;
@@ -335,14 +335,14 @@ QString MySqlGenerator::createConditionalPhrase(const PhraseData *d) const
         case PhraseData::DatePartSecond:
             return QStringLiteral("%2(%1)")
                     .arg(createConditionalPhrase(d->left),
-                         SqlGeneratorBase::dateTimePartName(op));
+                         AbstractSqlGenerator::dateTimePartName(op));
 
         default:
             break;
         }
     }
 
-    return SqlGeneratorBase::createConditionalPhrase(d);
+    return AbstractSqlGenerator::createConditionalPhrase(d);
 }
 
 void MySqlGenerator::appendSkipTake(QString &sql, int skip, int take)

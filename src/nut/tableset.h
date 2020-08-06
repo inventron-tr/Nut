@@ -29,7 +29,7 @@
 
 #include <QtSql/QSqlQuery>
 
-#include "tablesetbase_p.h"
+#include "tablesetbase.h"
 #include "table.h"
 #include "bulkinserter.h"
 #include "databasemodel.h"

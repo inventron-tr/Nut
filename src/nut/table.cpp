@@ -26,8 +26,8 @@
 #include "table_p.h"
 #include "database.h"
 #include "databasemodel.h"
-#include "generators/sqlgeneratorbase_p.h"
-#include "tablesetbase_p.h"
+#include "abstractsqlgenerator.h"
+#include "tablesetbase.h"
 
 NUT_BEGIN_NAMESPACE
 

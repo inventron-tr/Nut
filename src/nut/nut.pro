@@ -1,3 +1,6 @@
+load(qt_build_config)
+MODULE = nut
+
 TARGET = QtNut
 
 QT = core sql gui
@@ -6,8 +9,13 @@ DEFINES += QT_DEPRECATED_WARNINGS NUT_SHARED NUT_BUILD_LIB
 
 DEFINES += NUT_SHARED_POINTER
 
+INCLUDEPATH +=  \
+        $$PWD/generators \
+        $$PWD/phrases \
+        $$PWD/types
+
 HEADERS += \
-    $$PWD/generators/sqlgeneratorbase_p.h \
+    $$PWD/generators/abstractsqlgenerator.h \
     $$PWD/generators/postgresqlgenerator.h \
     $$PWD/generators/mysqlgenerator.h \
     $$PWD/generators/sqlitegenerator.h \
@@ -18,9 +26,10 @@ HEADERS += \
     $$PWD/defines_consts.h \
     $$PWD/defines.h \
     $$PWD/query.h \
+    $$PWD/bulkinserter.h \
     $$PWD/databasemodel.h \
     $$PWD/changelogtable.h \
-    $$PWD/tablesetbase_p.h \
+    $$PWD/tablesetbase.h \
     $$PWD/querybase_p.h \
     $$PWD/tablemodel.h \
     $$PWD/query_p.h \
@@ -43,7 +52,7 @@ HEADERS += \
     $$PWD/table_p.h
 
 SOURCES += \
-    $$PWD/generators/sqlgeneratorbase.cpp \
+    $$PWD/generators/abstractsqlgenerator.cpp \
     $$PWD/generators/postgresqlgenerator.cpp \
     $$PWD/generators/mysqlgenerator.cpp \
     $$PWD/generators/sqlitegenerator.cpp \
@@ -51,6 +60,7 @@ SOURCES += \
     $$PWD/types/dbgeography.cpp \
     $$PWD/tableset.cpp \
     $$PWD/query.cpp \
+    $$PWD/bulkinserter.cpp \
     $$PWD/databasemodel.cpp \
     $$PWD/tablesetbase.cpp \
     $$PWD/changelogtable.cpp \

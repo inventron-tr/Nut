@@ -35,10 +35,10 @@
 #include "database_p.h"
 #include "defines.h"
 #include "tablemodel.h"
-#include "generators/postgresqlgenerator.h"
-#include "generators/mysqlgenerator.h"
-#include "generators/sqlitegenerator.h"
-#include "generators/sqlservergenerator.h"
+#include "postgresqlgenerator.h"
+#include "mysqlgenerator.h"
+#include "sqlitegenerator.h"
+#include "sqlservergenerator.h"
 #include "query.h"
 #include "changelogtable.h"
 
@@ -512,7 +512,7 @@ void Database::setDriver(QString driver)
     d->driver = driver.toUpper();
 }
 
-SqlGeneratorBase *Database::sqlGenerator() const
+AbstractSqlGenerator *Database::sqlGenerator() const
 {
     Q_D(const Database);
     return d->sqlGenerator;

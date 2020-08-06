@@ -1,7 +1,7 @@
 #include "bulkinserter.h"
 #include "phrases/phraselist.h"
 #include "database.h"
-#include "generators/sqlgeneratorbase_p.h"
+#include "abstractsqlgenerator.h"
 #include "databasemodel.h"
 
 #include <QtCore/QDebug>

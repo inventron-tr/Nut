@@ -34,7 +34,7 @@ NUT_BEGIN_NAMESPACE
 class DatabaseModel;
 class DatabasePrivate;
 class TableSetBase;
-class SqlGeneratorBase;
+class AbstractSqlGenerator;
 class ChangeLogTable;
 class NUT_EXPORT Database : public QObject
 {
@@ -70,7 +70,7 @@ public:
     DatabaseModel model() const;
     QString tableName(QString className);
 
-    SqlGeneratorBase *sqlGenerator() const;
+    AbstractSqlGenerator *sqlGenerator() const;
     QSqlDatabase database();
 
 protected:
