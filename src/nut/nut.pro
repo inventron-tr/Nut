@@ -20,7 +20,6 @@ HEADERS += \
     $$PWD/generators/mysqlgenerator.h \
     $$PWD/generators/sqlitegenerator.h \
     $$PWD/generators/sqlservergenerator.h \
-    $$PWD/tablesetbasedata.h \
     $$PWD/types/dbgeography.h \
     $$PWD/tableset.h \
     $$PWD/defines_consts.h \
@@ -29,7 +28,8 @@ HEADERS += \
     $$PWD/bulkinserter.h \
     $$PWD/databasemodel.h \
     $$PWD/changelogtable.h \
-    $$PWD/tablesetbase.h \
+    $$PWD/abstracttableset.h \
+    $$PWD/abstracttablesetdata.h \
     $$PWD/querybase_p.h \
     $$PWD/tablemodel.h \
     $$PWD/query_p.h \
@@ -62,7 +62,7 @@ SOURCES += \
     $$PWD/query.cpp \
     $$PWD/bulkinserter.cpp \
     $$PWD/databasemodel.cpp \
-    $$PWD/tablesetbase.cpp \
+    $$PWD/abstracttableset.cpp \
     $$PWD/changelogtable.cpp \
     $$PWD/querybase.cpp \
     $$PWD/tablemodel.cpp \

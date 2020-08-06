@@ -595,7 +595,7 @@ QSqlQuery Database::exec(const QString &sql)
     return q;
 }
 
-void Database::add(TableSetBase *t)
+void Database::add(AbstractTableSet *t)
 {
     Q_D(Database);
     d->tableSets.insert(t);
@@ -611,7 +611,7 @@ int Database::saveChanges(bool cleanUp)
     }
 
     int rowsAffected = 0;
-    foreach (TableSetBase *ts, d->tableSets)
+    foreach (AbstractTableSet *ts, d->tableSets)
         rowsAffected += ts->save(this, cleanUp);
 
     return rowsAffected;
@@ -620,7 +620,7 @@ int Database::saveChanges(bool cleanUp)
 void Database::cleanUp()
 {
     Q_D(Database);
-    foreach (TableSetBase *ts, d->tableSets)
+    foreach (AbstractTableSet *ts, d->tableSets)
         ts->clearChilds();
 }
 

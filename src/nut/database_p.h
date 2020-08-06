@@ -64,7 +64,7 @@ public:
     static QMap<QString, DatabaseModel> allTableMaps;
     static qulonglong lastId;
 
-    QSet<TableSetBase *> tableSets;
+    QSet<AbstractTableSet *> tableSets;
 
     bool isDatabaseNew;
 

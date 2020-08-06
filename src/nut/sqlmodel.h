@@ -31,7 +31,7 @@
 NUT_BEGIN_NAMESPACE
 
 class Database;
-class TableSetBase;
+class AbstractTableSet;
 class Table;
 class TableModel;
 
@@ -43,7 +43,7 @@ class NUT_EXPORT SqlModel : public QAbstractTableModel
 
 public:
 //    explicit SqlModel(Query *q);
-    explicit SqlModel(Database *database, TableSetBase *tableSet, QObject *parent = Q_NULLPTR);
+    explicit SqlModel(Database *database, AbstractTableSet *tableSet, QObject *parent = Q_NULLPTR);
 
     int rowCount(const QModelIndex &parent) const;
     int columnCount(const QModelIndex &parent) const;

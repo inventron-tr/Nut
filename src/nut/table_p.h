@@ -10,7 +10,7 @@ NUT_BEGIN_NAMESPACE
 
 class TableModel;
 class Table;
-class TableSetBase;
+class AbstractTableSet;
 class TablePrivate : public QSharedData {
     Table *q_ptr;
     Q_DECLARE_PUBLIC(Table)
@@ -22,8 +22,8 @@ public:
     TableModel *model;
     Table::Status status;
     QSet<QString> changedProperties;
-    TableSetBase *parentTableSet;
-    QSet<TableSetBase*> childTableSets;
+    AbstractTableSet *parentTableSet;
+    QSet<AbstractTableSet*> childTableSets;
 
     void refreshModel();
 };

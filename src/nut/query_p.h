@@ -30,7 +30,7 @@
 NUT_BEGIN_NAMESPACE
 
 class Database;
-class TableSetBase;
+class AbstractTableSet;
 class QueryBase;
 struct RelationModel;
 class NUT_EXPORT QueryPrivate : public QSharedData {
@@ -46,7 +46,7 @@ public:
     QString tableName;
     QString select;
     Database *database;
-    TableSetBase *tableSet;
+    AbstractTableSet *tableSet;
     QStringList joins;
     QList<RelationModel*> relations;
     int skip;

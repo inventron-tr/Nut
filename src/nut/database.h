@@ -33,7 +33,7 @@ NUT_BEGIN_NAMESPACE
 
 class DatabaseModel;
 class DatabasePrivate;
-class TableSetBase;
+class AbstractTableSet;
 class AbstractSqlGenerator;
 class ChangeLogTable;
 class NUT_EXPORT Database : public QObject
@@ -88,9 +88,9 @@ public slots:
     void setDriver(QString driver);
 
 private:
-    void add(TableSetBase *);
+    void add(AbstractTableSet *);
 
-    friend class TableSetBase;
+    friend class AbstractTableSet;
 };
 
 NUT_END_NAMESPACE

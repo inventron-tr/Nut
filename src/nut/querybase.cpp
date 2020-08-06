@@ -1,7 +1,7 @@
 #include "querybase_p.h"
 
 #include "table.h"
-#include "tablesetbase.h"
+#include "abstracttableset.h"
 
 
 NUT_BEGIN_NAMESPACE
@@ -11,7 +11,7 @@ QueryBase::QueryBase(QObject *parent) : QObject(parent)
 
 }
 
-//void QueryBase::addTableToSet(TableSetBase *set, Table *table)
+//void QueryBase::addTableToSet(AbstractTableSet *set, Table *table)
 //{
 //    set->add(table);
 //}

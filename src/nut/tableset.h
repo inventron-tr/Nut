@@ -29,11 +29,11 @@
 
 #include <QtSql/QSqlQuery>
 
-#include "tablesetbase.h"
+#include "abstracttableset.h"
 #include "table.h"
 #include "bulkinserter.h"
 #include "databasemodel.h"
-#include "tablesetbasedata.h"
+#include "abstracttablesetdata.h"
 
 NUT_BEGIN_NAMESPACE
 
@@ -44,7 +44,7 @@ class BulkInserter;
 class Database;
 
 template<class T>
-class TableSet : public TableSetBase
+class TableSet : public AbstractTableSet
 {
 public:
     typedef T value_type;
@@ -68,13 +68,13 @@ public:
 };
 
 template<class T>
-Q_OUTOFLINE_TEMPLATE TableSet<T>::TableSet(Database *parent) : TableSetBase(parent)
+Q_OUTOFLINE_TEMPLATE TableSet<T>::TableSet(Database *parent) : AbstractTableSet(parent)
 {
     data->childClassName = QString::fromUtf8(T::staticMetaObject.className());
 }
 
 template<class T>
-Q_OUTOFLINE_TEMPLATE TableSet<T>::TableSet(Table *parent) : TableSetBase(parent)
+Q_OUTOFLINE_TEMPLATE TableSet<T>::TableSet(Table *parent) : AbstractTableSet(parent)
 {
     data->childClassName = QString::fromUtf8(T::staticMetaObject.className());
 }

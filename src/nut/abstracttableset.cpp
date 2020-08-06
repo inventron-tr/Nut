@@ -20,32 +20,32 @@
 
 #include "table.h"
 #include "database.h"
-#include "tablesetbase.h"
+#include "abstracttableset.h"
 #include "databasemodel.h"
-#include "tablesetbasedata.h"
+#include "abstracttablesetdata.h"
 
 NUT_BEGIN_NAMESPACE
 
-TableSetBase::TableSetBase(Database *parent) : QObject(parent),
-    data(new TableSetBaseData(parent))
+AbstractTableSet::AbstractTableSet(Database *parent) : QObject(parent),
+    data(new AbstractTableSetData(parent))
 {
     parent->add(this);
 }
 
-TableSetBase::TableSetBase(Table *parent) : QObject(parent),
-    data(new TableSetBaseData(parent))
+AbstractTableSet::AbstractTableSet(Table *parent) : QObject(parent),
+    data(new AbstractTableSetData(parent))
 {
     parent->add(this);
 }
 
-TableSetBase::~TableSetBase()
+AbstractTableSet::~AbstractTableSet()
 {
     foreach (Row<Table> t, data->childs)
         if (t)
             t->setParentTableSet(nullptr);
 }
 
-int TableSetBase::save(Database *db, bool cleanUp)
+int AbstractTableSet::save(Database *db, bool cleanUp)
 {
     int rowsAffected = 0;
     TableModel *masterModel = nullptr;
@@ -77,7 +77,7 @@ int TableSetBase::save(Database *db, bool cleanUp)
     return rowsAffected;
 }
 
-void TableSetBase::clearChilds()
+void AbstractTableSet::clearChilds()
 {
 #ifndef NUT_SHARED_POINTER
     foreach (Table *t, data->childs)
@@ -86,30 +86,30 @@ void TableSetBase::clearChilds()
     data->childs.clear();
 }
 
-void TableSetBase::add(Row<Table> t)
+void AbstractTableSet::add(Row<Table> t)
 {
     data.detach();
     data->childs.append(t);
     t->setParentTableSet(this);
 }
 
-void TableSetBase::remove(Row<Table> t)
+void AbstractTableSet::remove(Row<Table> t)
 {
     data.detach();
     data->childs.removeAll(t);
 }
 
-QString TableSetBase::childClassName() const
+QString AbstractTableSet::childClassName() const
 {
     return data->childClassName;
 }
 
-Database *TableSetBase::database() const
+Database *AbstractTableSet::database() const
 {
     return data->database;
 }
 
-void TableSetBase::setDatabase(Database *database)
+void AbstractTableSet::setDatabase(Database *database)
 {
     data.detach();
     data->database = database;

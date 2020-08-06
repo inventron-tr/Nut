@@ -32,7 +32,7 @@ NUT_BEGIN_NAMESPACE
 
 //TODO: remove this class
 class Table;
-class TableSetBase;
+class AbstractTableSet;
 class NUT_EXPORT QueryBase : public QObject
 {
     Q_OBJECT
@@ -44,7 +44,7 @@ public:
     explicit QueryBase(QObject *parent = nullptr);
 
 protected:
-//    void addTableToSet(TableSetBase *set, Table *table);
+//    void addTableToSet(AbstractTableSet *set, Table *table);
 
 public slots:
 };

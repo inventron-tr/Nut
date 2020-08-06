@@ -35,13 +35,13 @@
 #include <QtCore/QSharedPointer>
 #endif
 
-#include "table.h"
-#include "query_p.h"
+#include <QtNut/table.h>
+#include <QtNut/private/query_p.h>
+#include <QtNut/private/querybase_p.h>
 #include "database.h"
 #include "databasemodel.h"
-#include "tablesetbase.h"
+#include "abstracttableset.h"
 #include "abstractsqlgenerator.h"
-#include "querybase_p.h"
 #include "phrase.h"
 #include "tablemodel.h"
 #include "sqlmodel.h"
@@ -57,7 +57,7 @@ class Query : public QueryBase
     bool m_autoDelete;
 
 public:
-    explicit Query(Database *database, TableSetBase *tableSet, bool autoDelete);
+    explicit Query(Database *database, AbstractTableSet *tableSet, bool autoDelete);
     ~Query();
 
     //ddl
@@ -95,11 +95,10 @@ public:
     QVariant sum(const FieldPhrase<int> &f);
     QVariant average(const FieldPhrase<int> &f);
 
-    QVariant insert(const AssignmentPhraseList &p);
 
     //data mailpulation
     int update(const AssignmentPhraseList &ph);
-//    int insert(const AssignmentPhraseList &ph);
+    QVariant insert(const AssignmentPhraseList &p);
     int remove();
 
     QSqlQueryModel *toModel();
@@ -145,7 +144,7 @@ Q_OUTOFLINE_TEMPLATE QList<O> Query<T>::select(const std::function<O (const QSql
 //}
 
 template <class T>
-Q_OUTOFLINE_TEMPLATE Query<T>::Query(Database *database, TableSetBase *tableSet,
+Q_OUTOFLINE_TEMPLATE Query<T>::Query(Database *database, AbstractTableSet *tableSet,
                                      bool autoDelete)
     : QueryBase(database), d_ptr(new QueryPrivate(this)),
       m_autoDelete(autoDelete)

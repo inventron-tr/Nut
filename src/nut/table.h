@@ -32,7 +32,7 @@
 NUT_BEGIN_NAMESPACE
 
 class Database;
-class TableSetBase;
+class AbstractTableSet;
 class TableModel;
 class TablePrivate;
 class NUT_EXPORT Table : public QObject
@@ -61,10 +61,10 @@ public:
     Status status() const;
     void setStatus(const Status &status);
 
-    TableSetBase *parentTableSet() const;
-    void setParentTableSet(TableSetBase *parentTableSet);
+    AbstractTableSet *parentTableSet() const;
+    void setParentTableSet(AbstractTableSet *parentTableSet);
 
-    TableSetBase *childTableSet(const QString &name) const;
+    AbstractTableSet *childTableSet(const QString &name) const;
 
     QSet<QString> changedProperties() const;
 
@@ -82,18 +82,18 @@ private:
 //    Status _status;
 //    QSet<QString> _changedProperties;
     //TODO: is this removable?
-//    TableSetBase *_parentTableSet;
+//    AbstractTableSet *_parentTableSet;
 
-//    QSet<TableSetBase*> childTableSets;
+//    QSet<AbstractTableSet*> childTableSets;
     void clear();
-    void add(TableSetBase *);
+    void add(AbstractTableSet *);
 
     template<class T>
     friend class Query;
 
     template<class T>
     friend class TableSet;
-    friend class TableSetBase;
+    friend class AbstractTableSet;
 };
 
 NUT_END_NAMESPACE

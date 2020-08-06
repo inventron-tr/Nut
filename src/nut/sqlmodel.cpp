@@ -19,7 +19,7 @@
 **************************************************************************/
 
 #include "database.h"
-#include "tablesetbase.h"
+#include "abstracttableset.h"
 #include "databasemodel.h"
 #include "tablemodel.h"
 #include "table.h"
@@ -39,7 +39,7 @@ void SqlModel::setRenderer(const std::function<QVariant (int, QVariant)> &render
     _renderer = renderer;
 }
 
-SqlModel::SqlModel(Database *database, TableSetBase *tableSet, QObject *parent)
+SqlModel::SqlModel(Database *database, AbstractTableSet *tableSet, QObject *parent)
     : QAbstractTableModel(parent)
     , _renderer(nullptr)
     , d(new SqlModelPrivate(this))

@@ -27,7 +27,7 @@
 #include "database.h"
 #include "databasemodel.h"
 #include "abstractsqlgenerator.h"
-#include "tablesetbase.h"
+#include "abstracttableset.h"
 
 NUT_BEGIN_NAMESPACE
 
@@ -55,7 +55,7 @@ Table::~Table()
 //        d->parentTableSet->remove(this);
 }
 
-void Table::add(TableSetBase *t)
+void Table::add(AbstractTableSet *t)
 {
     //Q_D(Table);
     d->childTableSets.insert(t);
@@ -145,13 +145,13 @@ bool Table::setParentTable(Table *master, TableModel *masterModel, TableModel *m
     return false;
 }
 
-TableSetBase *Table::parentTableSet() const
+AbstractTableSet *Table::parentTableSet() const
 {
     //Q_D(const Table);
     return d->parentTableSet;
 }
 
-void Table::setParentTableSet(TableSetBase *parent)
+void Table::setParentTableSet(AbstractTableSet *parent)
 {
     //Q_D(Table);
     d->parentTableSet = parent;
@@ -160,10 +160,10 @@ void Table::setParentTableSet(TableSetBase *parent)
 //        d->parentTableSet->add(this);
 }
 
-TableSetBase *Table::childTableSet(const QString &name) const
+AbstractTableSet *Table::childTableSet(const QString &name) const
 {
     //Q_D(const Table);
-    foreach (TableSetBase *t, d->childTableSets)
+    foreach (AbstractTableSet *t, d->childTableSets)
         if (t->childClassName() == name)
             return t;
     return Q_NULLPTR;
@@ -179,7 +179,7 @@ int Table::save(Database *db)
     if(status() == Added && model->isPrimaryKeyAutoIncrement())
         setProperty(model->primaryKey().toLatin1().data(), q.lastInsertId());
 
-    foreach(TableSetBase *ts, d->childTableSets)
+    foreach(AbstractTableSet *ts, d->childTableSets)
         ts->save(db);
     setStatus(FetchedFromDB);
 
