@@ -21,9 +21,8 @@
 #ifndef FIELDPHRASE_H
 #define FIELDPHRASE_H
 
-#include "defines.h"
-
-#include "abstractfieldphrase.h"
+#include <QtNut/defines.h>
+#include <QtNut/abstractfieldphrase.h>
 
 NUT_BEGIN_NAMESPACE
 

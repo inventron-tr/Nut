@@ -21,7 +21,7 @@
 #ifndef CONDITIONALPHRASE_H
 #define CONDITIONALPHRASE_H
 
-#include "phrasedata.h"
+#include <QtNut/phrasedata.h>
 
 NUT_BEGIN_NAMESPACE
 

@@ -21,16 +21,16 @@
 #ifndef PHRASE_H
 #define PHRASE_H
 
-#include "conditionalphrase.h"
-#include "abstractfieldphrase.h"
-#include "fieldphrase.h"
-#include "phraselist.h"
-#include "assignmentphraselist.h"
-#include "phrasedatalist.h"
-#include "phrasedata.h"
-#include "assignmentphrase.h"
-#include "numericphrase.h"
-#include "datephrase.h"
+#include <QtNut/conditionalphrase.h>
+#include <QtNut/abstractfieldphrase.h>
+#include <QtNut/fieldphrase.h>
+#include <QtNut/phraselist.h>
+#include <QtNut/assignmentphraselist.h>
+#include <QtNut/phrasedatalist.h>
+#include <QtNut/phrasedata.h>
+#include <QtNut/assignmentphrase.h>
+#include <QtNut/numericphrase.h>
+#include <QtNut/datephrase.h>
 
 NUT_BEGIN_NAMESPACE
 

@@ -21,11 +21,10 @@
 #ifndef ABSTRACTFIELDPHRASE_H
 #define ABSTRACTFIELDPHRASE_H
 
-#include "defines.h"
-
-#include "assignmentphrase.h"
-#include "conditionalphrase.h"
-#include "phraselist.h"
+#include <QtNut/defines.h>
+#include <QtNut/assignmentphrase.h>
+#include <QtNut/conditionalphrase.h>
+#include <QtNut/phraselist.h>
 
 NUT_BEGIN_NAMESPACE
 

@@ -24,9 +24,8 @@
 #include <QtCore/QAbstractTableModel>
 #include <QtCore/QExplicitlySharedDataPointer>
 #include <QtCore/QList>
-#include "defines.h"
-#include "sqlmodel_p.h"
-#include <functional>
+
+#include <QtNut/defines.h>
 
 NUT_BEGIN_NAMESPACE
 
@@ -34,12 +33,12 @@ class Database;
 class AbstractTableSet;
 class Table;
 class TableModel;
-
+class SqlModelPrivate;
 class NUT_EXPORT SqlModel : public QAbstractTableModel
 {
     Q_OBJECT
-
-    std::function <QVariant(int, QVariant)> _renderer;
+    SqlModelPrivate *d_ptr;
+    Q_DECLARE_PRIVATE(SqlModel)
 
 public:
 //    explicit SqlModel(Query *q);
@@ -59,9 +58,6 @@ public:
     Row<Nut::Table> at(const int &i) const;
 
     void setRenderer(const std::function<QVariant (int, QVariant)> &renderer);
-
-private:
-    QExplicitlySharedDataPointer<SqlModelPrivate> d;
 
 signals:
     void beforeShowText(int col, QVariant &value);

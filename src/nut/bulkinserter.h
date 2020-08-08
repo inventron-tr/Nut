@@ -3,9 +3,10 @@
 
 #include <initializer_list>
 #include <QtCore/QDebug>
-#include "defines.h"
-#include "phraselist.h"
-#include "fieldphrase.h"
+#include <QtNut/phraselist.h>
+#include <QtNut/fieldphrase.h>
+
+#include <QtNut/defines.h>
 
 NUT_BEGIN_NAMESPACE
 

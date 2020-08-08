@@ -1,10 +1,10 @@
 #ifndef TABLEPRIVATE_H
 #define TABLEPRIVATE_H
 
-#include "defines.h"
-
 #include <QtCore/QSet>
 #include <QtCore/QSharedData>
+
+#include <QtNut/defines.h>
 
 NUT_BEGIN_NAMESPACE
 

@@ -21,7 +21,7 @@
 #ifndef PHRASEDATALIST_H
 #define PHRASEDATALIST_H
 
-#include "phrasedata.h"
+#include <QtNut/phrasedata.h>
 
 NUT_BEGIN_NAMESPACE
 

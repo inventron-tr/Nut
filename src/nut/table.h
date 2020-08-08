@@ -25,9 +25,9 @@
 #include <QtCore/qglobal.h>
 #include <QtCore/QSet>
 
-#include "tablemodel.h"
-#include "defines.h"
-#include "phrase.h"
+#include <QtNut/defines.h>
+#include <QtNut/tablemodel.h>
+#include <QtNut/phrase.h>
 
 NUT_BEGIN_NAMESPACE
 

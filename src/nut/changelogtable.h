@@ -22,7 +22,7 @@
 #define CHANGELOGTABLE_H
 
 #include <QtCore/qglobal.h>
-#include "table.h"
+#include <QtNut/table.h>
 
 NUT_BEGIN_NAMESPACE
 

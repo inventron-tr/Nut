@@ -22,7 +22,8 @@
 #define SQLITEGENERATOR_H
 
 #include <QtCore/qglobal.h>
-#include "abstractsqlgenerator.h"
+
+#include <QtNut/abstractsqlgenerator.h>
 
 NUT_BEGIN_NAMESPACE
 

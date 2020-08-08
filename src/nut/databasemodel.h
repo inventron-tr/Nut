@@ -25,7 +25,7 @@
 #include <QtCore/QMap>
 #include <QtCore/QString>
 
-#include "defines.h"
+#include <QtNut/defines.h>
 
 class QJsonObject;
 

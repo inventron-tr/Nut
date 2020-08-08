@@ -21,9 +21,8 @@
 #ifndef ASSIGNMENTPHRASE_H
 #define ASSIGNMENTPHRASE_H
 
-#include "defines.h"
-
-#include "assignmentphraselist.h"
+#include <QtNut/defines.h>
+#include <QtNut/assignmentphraselist.h>
 
 NUT_BEGIN_NAMESPACE
 

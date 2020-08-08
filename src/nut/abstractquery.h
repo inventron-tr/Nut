@@ -18,43 +18,36 @@
 **
 **************************************************************************/
 
-#ifndef QUERY_P_H
-#define QUERY_P_H
+#ifndef NUT_ABSTRACTQUERY_H
+#define NUT_ABSTRACTQUERY_H
 
-#include "phrase.h"
+#include <QtCore/QObject>
+#include <QtCore/qglobal.h>
+#include <QtCore/QExplicitlySharedDataPointer>
 
-#include <QtCore/QList>
-#include <QtCore/QString>
-#include <QtCore/QSharedData>
+#include "defines.h"
+#include "abstractquery_p.h"
 
 NUT_BEGIN_NAMESPACE
 
-class Database;
-class AbstractTableSet;
-class QueryBase;
-struct RelationModel;
-class NUT_EXPORT QueryPrivate : public QSharedData {
-    QueryBase *q_ptr;
-    Q_DECLARE_PUBLIC(QueryBase)
+class AbstractQueryPrivate;
+class NUT_EXPORT AbstractQuery : public QObject
+{
+    Q_OBJECT
+
+protected:
+    AbstractQueryPrivate *d_ptr;
+    Q_DECLARE_PRIVATE(AbstractQuery)
 
 public:
-    explicit QueryPrivate(QueryBase *parent);
-    ~QueryPrivate();
+    explicit AbstractQuery(QObject *parent = nullptr);
 
-    QString sql;
-    QString className;
-    QString tableName;
-    QString select;
-    Database *database;
-    AbstractTableSet *tableSet;
-    QStringList joins;
-    QList<RelationModel*> relations;
-    int skip;
-    int take;
-    PhraseList orderPhrase, fieldPhrase;
-    ConditionalPhrase wherePhrase;
+protected:
+    //    void addTableToSet(TableSetBase *set, Table *table);
+
+public slots:
 };
 
 NUT_END_NAMESPACE
 
-#endif // QUERY_P_H
+#endif // NUT_ABSTRACTQUERY_H

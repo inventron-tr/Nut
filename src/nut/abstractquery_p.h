@@ -18,37 +18,54 @@
 **
 **************************************************************************/
 
-#ifndef NUT_ABSTRACTTABLESETDATA_H
-#define NUT_ABSTRACTTABLESETDATA_H
+#ifndef NUT_QUERY_P_H
+#define NUT_QUERY_P_H
 
+//
+//  W A R N I N G
+//  -------------
+//
+// This file is not part of the Qt API.  It exists for the convenience
+// of qapplication_*.cpp, qwidget*.cpp and qfiledialog.cpp.  This header
+// file may change from version to version without notice, or even be removed.
+//
+// We mean it.
+//
+
+#include "phrase.h"
+
+#include <QtCore/QList>
+#include <QtCore/QString>
 #include <QtCore/QSharedData>
-
-#include <QtNut/defines.h>
 
 NUT_BEGIN_NAMESPACE
 
-class Table;
 class Database;
-class AbstractTableSetData : public QSharedData
-{
+class AbstractTableSet;
+class AbstractQuery;
+struct RelationModel;
+class NUT_EXPORT AbstractQueryPrivate {
+    AbstractQuery *q_ptr;
+    Q_DECLARE_PUBLIC(AbstractQuery)
+
 public:
-    AbstractTableSetData(Database *parent) :
-        database(parent), table(nullptr)
-    { }
+    explicit AbstractQueryPrivate(AbstractQuery *parent);
+    ~AbstractQueryPrivate();
 
-    AbstractTableSetData(Table *parent) :
-        database(nullptr), table(parent)
-    { }
-
-//    QSet<Table*> tables;
-//    QList<Table*> childRows;
-    RowList<Table> childs;
-
+    QString sql;
+    QString className;
+    QString tableName;
+    QString select;
     Database *database;
-    Table *table;
-    QString childClassName;
+    AbstractTableSet *tableSet;
+    QStringList joins;
+    QList<RelationModel*> relations;
+    int skip;
+    int take;
+    PhraseList orderPhrase, fieldPhrase;
+    ConditionalPhrase wherePhrase;
 };
 
 NUT_END_NAMESPACE
 
-#endif // NUT_ABSTRACTTABLESETDATA_H
+#endif // NUT_QUERY_P_H

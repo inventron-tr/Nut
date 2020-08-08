@@ -22,17 +22,6 @@
 
 NUT_BEGIN_NAMESPACE
 
-QueryPrivate::QueryPrivate(QueryBase *parent) : q_ptr(parent),
-    database(nullptr), tableSet(nullptr), skip(-1), take(-1)
-{
-
-}
-
-QueryPrivate::~QueryPrivate()
-{
-
-}
-
 /*!
   * \class Query
   * \brief This class hold a query. A query can be used for getting database rows, editing or deleting without row fetching.

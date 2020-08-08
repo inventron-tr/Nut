@@ -5,6 +5,7 @@
 #include <QtCore/qglobal.h>
 
 #include "weblogdatabase.h"
+
 class Post;
 class User;
 class BasicTest : public QObject
