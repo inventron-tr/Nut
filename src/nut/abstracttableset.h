@@ -26,7 +26,7 @@
 #include <QtCore/QSet>
 #include <QtCore/QExplicitlySharedDataPointer>
 
-#include "defines.h"
+#include <QtNut/defines.h>
 
 NUT_BEGIN_NAMESPACE
 

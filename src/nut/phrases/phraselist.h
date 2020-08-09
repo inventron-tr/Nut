@@ -21,9 +21,8 @@
 #ifndef PHRASELIST_H
 #define PHRASELIST_H
 
-#include "defines.h"
-
-#include "phrasedatalist.h"
+#include <QtNut/defines.h>
+#include <QtNut/phrasedatalist.h>
 
 NUT_BEGIN_NAMESPACE
 

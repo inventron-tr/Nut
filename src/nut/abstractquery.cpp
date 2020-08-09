@@ -18,37 +18,26 @@
 **
 **************************************************************************/
 
-#ifndef QUERYBASE_H
-#define QUERYBASE_H
-
-#include <QtCore/QObject>
-#include <QtCore/qglobal.h>
-#include <QtCore/QExplicitlySharedDataPointer>
-
-#include "defines.h"
-#include "query_p.h"
+#include "abstractquery.h"
+#include "abstractquery_p.h"
 
 NUT_BEGIN_NAMESPACE
 
-//TODO: remove this class
-class Table;
-class AbstractTableSet;
-class NUT_EXPORT QueryBase : public QObject
+AbstractQuery::AbstractQuery(QObject *parent) : QObject(parent)
+      , d_ptr(new AbstractQueryPrivate(this))
 {
-    Q_OBJECT
 
-protected:
-    QExplicitlySharedDataPointer<QueryPrivate> d;
+}
 
-public:
-    explicit QueryBase(QObject *parent = nullptr);
+Nut::AbstractQueryPrivate::AbstractQueryPrivate(Nut::AbstractQuery *parent) :
+      q_ptr(parent)
+{
 
-protected:
-//    void addTableToSet(AbstractTableSet *set, Table *table);
+}
 
-public slots:
-};
+Nut::AbstractQueryPrivate::~AbstractQueryPrivate()
+{
+
+}
 
 NUT_END_NAMESPACE
-
-#endif // QUERYBASE_H

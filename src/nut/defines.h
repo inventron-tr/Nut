@@ -23,7 +23,7 @@
 
 #define NUT_NAMESPACE Nut
 
-#include "defines_consts.h"
+#include <QtNut/defines_consts.h>
 #include <QtCore/QtGlobal>
 
 #include <QtCore/QString>

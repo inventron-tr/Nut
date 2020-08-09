@@ -30,9 +30,7 @@ HEADERS += \
     $$PWD/changelogtable.h \
     $$PWD/abstracttableset.h \
     $$PWD/abstracttablesetdata.h \
-    $$PWD/querybase_p.h \
     $$PWD/tablemodel.h \
-    $$PWD/query_p.h \
     $$PWD/table.h \
     $$PWD/database.h \
     $$PWD/database_p.h \
@@ -49,7 +47,9 @@ HEADERS += \
     $$PWD/phrases/phrasedatalist.h \
     $$PWD/phrases/phraselist.h \
     $$PWD/phrases/datephrase.h \
-    $$PWD/table_p.h
+    $$PWD/table_p.h \
+    $$PWD/abstractquery.h \
+    $$PWD/abstractquery_p.h
 
 SOURCES += \
     $$PWD/generators/abstractsqlgenerator.cpp \
@@ -64,7 +64,6 @@ SOURCES += \
     $$PWD/databasemodel.cpp \
     $$PWD/abstracttableset.cpp \
     $$PWD/changelogtable.cpp \
-    $$PWD/querybase.cpp \
     $$PWD/tablemodel.cpp \
     $$PWD/table.cpp \
     $$PWD/database.cpp \
@@ -79,7 +78,8 @@ SOURCES += \
     $$PWD/phrases/phrasedata.cpp \
     $$PWD/phrases/phrasedatalist.cpp \
     $$PWD/phrases/phraselist.cpp \
-    $$PWD/phrases/datephrase.cpp
+    $$PWD/phrases/datephrase.cpp \
+    $$PWD/abstractquery.cpp
 
 load(qt_module)
 

@@ -29,11 +29,11 @@
 
 #include <QtSql/QSqlQuery>
 
-#include "abstracttableset.h"
-#include "table.h"
-#include "bulkinserter.h"
-#include "databasemodel.h"
-#include "abstracttablesetdata.h"
+#include <QtNut/abstracttableset.h>
+#include <QtNut/table.h>
+#include <QtNut/bulkinserter.h>
+#include <QtNut/databasemodel.h>
+#include <QtNut/abstracttablesetdata.h>
 
 NUT_BEGIN_NAMESPACE
 

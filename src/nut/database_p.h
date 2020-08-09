@@ -21,11 +21,11 @@
 #ifndef DATABASE_P_H
 #define DATABASE_P_H
 
-#include "database.h"
-#include "databasemodel.h"
-
 #include <QtCore/QDebug>
 #include <QtCore/QSharedData>
+
+#include <QtNut/database.h>
+#include <QtNut/databasemodel.h>
 
 NUT_BEGIN_NAMESPACE
 

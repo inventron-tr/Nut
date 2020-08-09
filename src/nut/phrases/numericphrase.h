@@ -1,8 +1,9 @@
 #ifndef NUMERICPHRASE_H
 #define NUMERICPHRASE_H
 
-#include "fieldphrase.h"
 #include <type_traits>
+
+#include <QtNut/fieldphrase.h>
 
 NUT_BEGIN_NAMESPACE
 

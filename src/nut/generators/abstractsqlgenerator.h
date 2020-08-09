@@ -24,7 +24,8 @@
 #include <QtCore/qglobal.h>
 #include <QtCore/QObject>
 #include <QtCore/QStringList>
-#include "phrase.h"
+
+#include <QtNut/phrase.h>
 
 class SqlSerializer;
 
