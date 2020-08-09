@@ -98,7 +98,7 @@ void BasicTest::createPost2()
 {
     //create post on the fly
     QVariant postIdVar = db.posts()->query()->insert(
-              (Post::titleField() = "This is a sample")
+              (Post::titleField() = QStringLiteral("This is a sample"))
                 & (Post::isPublicField() = true));
 
     QVERIFY(postIdVar.type() == QVariant::LongLong
@@ -108,7 +108,7 @@ void BasicTest::createPost2()
 
     for(int i = 0 ; i < 3; i++){
         auto comment = Nut::create<Comment>();
-        comment->setMessage("comment #" + QString::number(i + 2));
+        comment->setMessage(QStringLiteral("comment #") + QString::number(i + 2));
         comment->setSaveDate(QDateTime::currentDateTime());
         comment->setAuthor(user);
         //join child to master by id
@@ -124,9 +124,17 @@ void BasicTest::updatePostOnTheFly()
 {
     auto c = db.posts()->query()
             ->where(Post::idField() == postId)
-            ->update(Post::titleField() = "New title");
+            ->update(Post::titleField() = QStringLiteral("New title"));
 
     QCOMPARE(c, 1);
+
+    auto titles = db.posts()
+                      ->query()
+                      ->where(Post::idField() == postId)
+                      ->select(Post::titleField());
+
+    QCOMPARE(titles.count(), 1);
+    QCOMPARE(titles.at(0), QStringLiteral("New title"));
 }
 
 void BasicTest::selectPublicts()
@@ -224,7 +232,7 @@ void BasicTest::testDate()
     d.setTime(t);
 
     auto newPost = Nut::create<Post>();
-    newPost->setTitle("post title");
+    newPost->setTitle(QStringLiteral("post title"));
     newPost->setSaveDate(d);
 
     db.posts()->append(newPost);
@@ -241,7 +249,9 @@ void BasicTest::testDate()
 
 void BasicTest::testLimitedQuery()
 {
-    auto comments = db.comments()->query()->toList(2);
+    auto q = db.comments()->query();
+    auto comments = q->toList(2);
+    qDebug() << q->sqlCommand();
     QCOMPARE(comments.length(), 2);
 }
 
