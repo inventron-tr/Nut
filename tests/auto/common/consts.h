@@ -14,7 +14,8 @@
 
 
 #define DRIVER QStringLiteral("QSQLITE")
-#define DATABASE QStringLiteral("nut_test_%1_db").arg(metaObject()->className()).toLower()
+#define DATABASE QStringLiteral("nut_test_%1_db") \
+    .arg(QString::fromUtf8(metaObject()->className())).toLower()
 #define HOST QString()
 #define USERNAME QString()
 #define PASSWORD QString()

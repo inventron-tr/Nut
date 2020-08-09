@@ -118,7 +118,7 @@ void BasicTest::createPost2()
     }
     db.saveChanges();
 
-    QTEST_ASSERT(postId != 0);
+    QVERIFY(postId != 0);
 }
 
 void BasicTest::updatePostOnTheFly()
@@ -127,7 +127,7 @@ void BasicTest::updatePostOnTheFly()
             ->where(Post::idField() == postId)
             ->update(Post::titleField() = "New title");
 
-    QTEST_ASSERT(c == 1);
+    QCOMPARE(c, 1);
 }
 
 void BasicTest::selectPublicts()
@@ -140,8 +140,8 @@ void BasicTest::selectPublicts()
             ->where(!Post::isPublicField())
             ->count();
 
-    QTEST_ASSERT(q == 1);
-    QTEST_ASSERT(q2 == 1);
+    QCOMPARE(q, 1);
+    QCOMPARE(q2, 1);
 }
 
 void BasicTest::selectPosts()
@@ -157,14 +157,13 @@ void BasicTest::selectPosts()
 
     PRINT(posts.length());
     PRINT(posts.at(0)->comments()->length());
-    QTEST_ASSERT(posts.length() == 1);
-    qDebug() << posts.at(0)->comments()->length();
-    QTEST_ASSERT(posts.at(0)->comments()->length() == 3);
-    QTEST_ASSERT(posts.at(0)->title() == "post title");
+    QCOMPARE(posts.length(), 1);
+    QCOMPARE(posts.at(0)->comments()->length(), 3);
+    QCOMPARE(posts.at(0)->title(), "post title");
 
-    QTEST_ASSERT(posts.at(0)->comments()->at(0)->message() == "comment #0");
-    QTEST_ASSERT(posts.at(0)->comments()->at(1)->message() == "comment #1");
-    QTEST_ASSERT(posts.at(0)->comments()->at(2)->message() == "comment #2");
+    QCOMPARE(posts.at(0)->comments()->at(0)->message(), "comment #0");
+    QCOMPARE(posts.at(0)->comments()->at(1)->message(), "comment #1");
+    QCOMPARE(posts.at(0)->comments()->at(2)->message(), "comment #2");
     db.cleanUp();
 }
 
@@ -200,7 +199,7 @@ void BasicTest::selectFirst()
             ->orderBy(Post::idField())
             ->first();
 
-    QTEST_ASSERT(posts != Q_NULLPTR);
+    QCOMPARE(posts, Q_NULLPTR);
 }
 
 void BasicTest::selectPostsWithoutTitle()
@@ -208,7 +207,7 @@ void BasicTest::selectPostsWithoutTitle()
     auto q = db.posts()->query();
     q->setWhere(Post::titleField().isNull());
     auto count = q->count();
-    QTEST_ASSERT(count == 0);
+    QCOMPARE(count, 0);
 }
 
 void BasicTest::selectPostIds()
@@ -216,7 +215,7 @@ void BasicTest::selectPostIds()
     auto q = db.posts()->query();
     auto ids = q->select(Post::idField());
 
-    QTEST_ASSERT(ids.count() == 2);
+    QCOMPARE(ids.count(), 2);
 }
 
 void BasicTest::testDate()
