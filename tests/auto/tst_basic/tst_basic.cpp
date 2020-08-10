@@ -249,9 +249,8 @@ void BasicTest::testDate()
 
 void BasicTest::testLimitedQuery()
 {
-    auto q = db.comments()->query();
-    auto comments = q.toList(2);
-    qDebug() << q.sqlCommand();
+    auto comments = db.comments()->query()
+                        .toList(2);
     QCOMPARE(comments.length(), 2);
 }
 

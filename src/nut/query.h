@@ -196,12 +196,12 @@ Q_OUTOFLINE_TEMPLATE Query<T>::Query(Database *database, AbstractTableSet *table
 }
 
 template<class T>
-Q_OUTOFLINE_TEMPLATE Query<T>::Query(const Query<T> &other) {
+Q_OUTOFLINE_TEMPLATE Query<T>::Query(const Query<T> &other) : AbstractQuery() {
     d = other.d->clone();
 }
 
 template<class T>
-Q_OUTOFLINE_TEMPLATE Query<T>::Query(Query<T> &&other) {
+Q_OUTOFLINE_TEMPLATE Query<T>::Query(Query<T> &&other) : AbstractQuery() {
     d = std::move(other.d);
     other.d = nullptr;
 }
