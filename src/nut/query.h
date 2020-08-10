@@ -48,34 +48,59 @@
 
 NUT_BEGIN_NAMESPACE
 
+struct NUT_EXPORT QueryData {
+    QString sql;
+    QString className;
+    QString tableName;
+    QString select;
+    Database *database;
+    AbstractTableSet *tableSet;
+    QStringList joins;
+    QList<RelationModel*> relations;
+    int skip;
+    int take;
+    PhraseList orderPhrase, fieldPhrase;
+    ConditionalPhrase wherePhrase;
+
+    QueryData *clone() {
+        return new QueryData;
+    }
+};
+
 template <class T>
 class Query : public AbstractQuery
 {
+    QueryData *d;
     bool m_autoDelete;
 
 public:
     explicit Query(Database *database, AbstractTableSet *tableSet, bool autoDelete);
+    Query (const Query<T> &other);
+    Query (Query<T> &&other);
+
     ~Query();
+
+    Query<T>& operator=(const Query<T> &q);
 
     //ddl
 
-    Query<T> *join(const QString &className);
-    Query<T> *join(Table *c);
+    Query<T> &join(const QString &className);
+    Query<T> &join(Table *c);
 
     template<class TABLE>
-    Query<T> *join()
+    Query<T> &join()
     {
         join(TABLE::staticMetaObject.className());
-        return this;
+        return *this;
     }
 
-    //    Query<T> *orderBy(QString fieldName, QString type);
-    Query<T> *skip(int n);
-    Query<T> *take(int n);
-    Query<T> *fields(const PhraseList &ph);
-    Query<T> *orderBy(const PhraseList &ph);
-    Query<T> *where(const ConditionalPhrase &ph);
-    Query<T> *setWhere(const ConditionalPhrase &ph);
+    //    Query<T> &orderBy(QString fieldName, QString type);
+    Query<T> &skip(int n);
+    Query<T> &take(int n);
+    Query<T> &fields(const PhraseList &ph);
+    Query<T> &orderBy(const PhraseList &ph);
+    Query<T> &where(const ConditionalPhrase &ph);
+    Query<T> &setWhere(const ConditionalPhrase &ph);
 
     //data selecting
     Row<T> first();
@@ -110,7 +135,7 @@ template<typename T>
 template<typename O>
 Q_OUTOFLINE_TEMPLATE QList<O> Query<T>::select(const std::function<O (const QSqlQuery &)> allocator)
 {
-    Q_D(AbstractQuery);
+    //Q_D(AbstractQuery);
     QList<O> ret;
 
     d->joins.prepend(d->tableName);
@@ -135,7 +160,7 @@ Q_OUTOFLINE_TEMPLATE QList<O> Query<T>::select(const std::function<O (const QSql
 }
 
 //template <typename T>
-//inline Query<T> *createQuery(TableSet<T> *tableSet)
+//inline Query<T> &createQuery(TableSet<T> *tableSet)
 //{
 //    return tableSet->query();
 //}
@@ -143,9 +168,9 @@ Q_OUTOFLINE_TEMPLATE QList<O> Query<T>::select(const std::function<O (const QSql
 template <class T>
 Q_OUTOFLINE_TEMPLATE Query<T>::Query(Database *database, AbstractTableSet *tableSet,
                                      bool autoDelete)
-    : AbstractQuery(database), m_autoDelete(autoDelete)
+    : AbstractQuery(database), d(new QueryData), m_autoDelete(autoDelete)
 {
-    Q_D(AbstractQuery);
+    //Q_D(AbstractQuery);
 
     d->database = database;
     d->tableSet = tableSet;
@@ -156,17 +181,40 @@ Q_OUTOFLINE_TEMPLATE Query<T>::Query(Database *database, AbstractTableSet *table
             ->name();
 }
 
+template<class T>
+Q_OUTOFLINE_TEMPLATE Query<T>::Query(const Query<T> &other) {
+    d = other.d->clone();
+}
+
+template<class T>
+Q_OUTOFLINE_TEMPLATE Query<T>::Query(Query<T> &&other) {
+    d = std::move(other.d);
+    other._data = nullptr;
+}
+
 template <class T>
 Q_OUTOFLINE_TEMPLATE Query<T>::~Query()
 {
-    Q_D(AbstractQuery);
+    //Q_D(AbstractQuery);
     delete d;
+}
+
+template<class T>
+Q_OUTOFLINE_TEMPLATE Query<T> &Query<T>::operator=(const Query<T> &q)
+{
+    if (this != &q)
+    {
+        T *p = q._data ? q._data->detach() : nullptr;
+        delete d;
+        d = p;
+    }
+    return *this;
 }
 
 template <class T>
 Q_OUTOFLINE_TEMPLATE RowList<T> Query<T>::toList(int count)
 {
-    Q_D(AbstractQuery);
+    //Q_D(AbstractQuery);
     RowList<T> returnList;
     d->select = QStringLiteral("*");
 
@@ -343,7 +391,7 @@ template <typename T>
 template <typename F>
 Q_OUTOFLINE_TEMPLATE QList<F> Query<T>::select(const FieldPhrase<F> f)
 {
-    Q_D(AbstractQuery);
+    //Q_D(AbstractQuery);
     QList<F> ret;
 
     d->joins.prepend(d->tableName);
@@ -381,7 +429,7 @@ Q_OUTOFLINE_TEMPLATE Row<T> Query<T>::first()
 template <class T>
 Q_OUTOFLINE_TEMPLATE int Query<T>::count()
 {
-    Q_D(AbstractQuery);
+    //Q_D(AbstractQuery);
 
     d->joins.prepend(d->tableName);
     d->select = QStringLiteral("COUNT(*)");
@@ -401,7 +449,7 @@ Q_OUTOFLINE_TEMPLATE int Query<T>::count()
 template <class T>
 Q_OUTOFLINE_TEMPLATE QVariant Query<T>::max(const FieldPhrase<int> &f)
 {
-    Q_D(AbstractQuery);
+    //Q_D(AbstractQuery);
 
     d->joins.prepend(d->tableName);
     d->sql = d->database->sqlGenerator()->selectCommand(
@@ -419,7 +467,7 @@ Q_OUTOFLINE_TEMPLATE QVariant Query<T>::max(const FieldPhrase<int> &f)
 template <class T>
 Q_OUTOFLINE_TEMPLATE QVariant Query<T>::min(const FieldPhrase<int> &f)
 {
-    Q_D(AbstractQuery);
+    //Q_D(AbstractQuery);
 
     d->joins.prepend(d->tableName);
     d->sql = d->database->sqlGenerator()->selectCommand(
@@ -437,7 +485,7 @@ Q_OUTOFLINE_TEMPLATE QVariant Query<T>::min(const FieldPhrase<int> &f)
 template <class T>
 Q_OUTOFLINE_TEMPLATE QVariant Query<T>::sum(const FieldPhrase<int> &f)
 {
-    Q_D(AbstractQuery);
+    //Q_D(AbstractQuery);
 
     d->joins.prepend(d->tableName);
     d->sql = d->database->sqlGenerator()->selectCommand(
@@ -455,7 +503,7 @@ Q_OUTOFLINE_TEMPLATE QVariant Query<T>::sum(const FieldPhrase<int> &f)
 template <class T>
 Q_OUTOFLINE_TEMPLATE QVariant Query<T>::average(const FieldPhrase<int> &f)
 {
-    Q_D(AbstractQuery);
+    //Q_D(AbstractQuery);
 
     d->joins.prepend(d->tableName);
     d->sql = d->database->sqlGenerator()->selectCommand(
@@ -473,7 +521,7 @@ Q_OUTOFLINE_TEMPLATE QVariant Query<T>::average(const FieldPhrase<int> &f)
 template<class T>
 Q_OUTOFLINE_TEMPLATE QVariant Query<T>::insert(const AssignmentPhraseList &p)
 {
-    Q_D(AbstractQuery);
+    //Q_D(AbstractQuery);
     d->sql = d->database->sqlGenerator()
             ->insertCommand(d->tableName, p);
     QSqlQuery q = d->database->exec(d->sql);
@@ -482,9 +530,9 @@ Q_OUTOFLINE_TEMPLATE QVariant Query<T>::insert(const AssignmentPhraseList &p)
 }
 
 template <class T>
-Q_OUTOFLINE_TEMPLATE Query<T> *Query<T>::join(const QString &className)
+Q_OUTOFLINE_TEMPLATE Query<T> &Query<T>::join(const QString &className)
 {
-    Q_D(AbstractQuery);
+    //Q_D(AbstractQuery);
 
     RelationModel *rel = d->database->model()
             .relationByClassNames(d->className, className);
@@ -495,85 +543,85 @@ Q_OUTOFLINE_TEMPLATE Query<T> *Query<T>::join(const QString &className)
     if (!rel) {
         qDebug() << "No relation between" << d->className
                 << "and" << className;
-        return this;
+        return *this;
     }
 
     d->relations.append(rel);
     d->joins.append(className);
-    return this;
+    return *this;
 }
 
 template<class T>
-Q_OUTOFLINE_TEMPLATE Query<T> *Query<T>::join(Table *c)
+Q_OUTOFLINE_TEMPLATE Query<T> &Query<T>::join(Table *c)
 {
     join(c->metaObject()->className());
-    return this;
+    return *this;
 }
 
 template <class T>
-Q_OUTOFLINE_TEMPLATE Query<T> *Query<T>::where(const ConditionalPhrase &ph)
+Q_OUTOFLINE_TEMPLATE Query<T> &Query<T>::where(const ConditionalPhrase &ph)
 {
-    Q_D(AbstractQuery);
+    //Q_D(AbstractQuery);
     if (d->wherePhrase.data)
         d->wherePhrase = d->wherePhrase && ph;
     else
         d->wherePhrase = ph;
-    return this;
+    return *this;
 }
 
 template <class T>
-Q_OUTOFLINE_TEMPLATE Query<T> *Query<T>::setWhere(const ConditionalPhrase &ph)
+Q_OUTOFLINE_TEMPLATE Query<T> &Query<T>::setWhere(const ConditionalPhrase &ph)
 {
-    Q_D(AbstractQuery);
+    //Q_D(AbstractQuery);
     d->wherePhrase = ph;
-    return this;
+    return *this;
 }
 
 template<class T>
-Q_OUTOFLINE_TEMPLATE Query<T> *Query<T>::skip(int n)
+Q_OUTOFLINE_TEMPLATE Query<T> &Query<T>::skip(int n)
 {
-    Q_D(AbstractQuery);
+    //Q_D(AbstractQuery);
     d->skip = n;
-    return this;
+    return *this;
 }
 
 template<class T>
-Q_OUTOFLINE_TEMPLATE Query<T> *Query<T>::take(int n)
+Q_OUTOFLINE_TEMPLATE Query<T> &Query<T>::take(int n)
 {
-    Q_D(AbstractQuery);
+    //Q_D(AbstractQuery);
     d->take = n;
-    return this;
+    return *this;
 }
 
 template<class T>
-Q_OUTOFLINE_TEMPLATE Query<T> *Query<T>::fields(const PhraseList &ph)
+Q_OUTOFLINE_TEMPLATE Query<T> &Query<T>::fields(const PhraseList &ph)
 {
-    Q_D(AbstractQuery);
+    //Q_D(AbstractQuery);
     d->fieldPhrase = ph;
-    return this;
+    return *this;
 }
 
 //template <class T>
-//Q_OUTOFLINE_TEMPLATE Query<T> *Query<T>::orderBy(QString fieldName,
+//Q_OUTOFLINE_TEMPLATE Query<T> &Query<T>::orderBy(QString fieldName,
 //                                                 QString type)
 //{
-//    Q_D(AbstractQuery);
+//    //Q_D(AbstractQuery);
 //    d->orderPhrases.append(fieldName, type);
-//    return this;
+//    return *this;
 //}
 
 template <class T>
-Q_OUTOFLINE_TEMPLATE Query<T> *Query<T>::orderBy(const PhraseList &ph)
+Q_OUTOFLINE_TEMPLATE Query<T> &Query<T>::orderBy(const PhraseList &ph)
 {
-    Q_D(AbstractQuery);
+    //Q_D(AbstractQuery);
     d->orderPhrase = ph;
-    return this;
+    return *this;
 }
 
 template <class T>
 Q_OUTOFLINE_TEMPLATE int Query<T>::update(const AssignmentPhraseList &ph)
 {
-    Q_D(AbstractQuery);
+    //Q_D(AbstractQuery);
 
     d->sql = d->database->sqlGenerator()->updateCommand(
                 d->tableName,
@@ -590,7 +638,7 @@ Q_OUTOFLINE_TEMPLATE int Query<T>::update(const AssignmentPhraseList &ph)
 template <class T>
 Q_OUTOFLINE_TEMPLATE int Query<T>::remove()
 {
-    Q_D(AbstractQuery);
+    //Q_D(AbstractQuery);
 
     d->sql = d->database->sqlGenerator()->deleteCommand(
                 d->tableName, d->wherePhrase);
@@ -612,7 +660,7 @@ Q_OUTOFLINE_TEMPLATE QSqlQueryModel *Query<T>::toModel()
 template <class T>
 Q_OUTOFLINE_TEMPLATE void Query<T>::toModel(QSqlQueryModel *model)
 {
-    Q_D(AbstractQuery);
+    //Q_D(AbstractQuery);
 
     d->sql = d->database->sqlGenerator()->selectCommand(
                 d->tableName,
@@ -649,7 +697,7 @@ Q_OUTOFLINE_TEMPLATE void Query<T>::toModel(QSqlQueryModel *model)
 template<class T>
 Q_OUTOFLINE_TEMPLATE void Query<T>::toModel(SqlModel *model)
 {
-    Q_D(AbstractQuery);
+    //Q_D(AbstractQuery);
 
     d->sql = d->database->sqlGenerator()->selectCommand(
                 d->tableName,
@@ -686,7 +734,7 @@ Q_OUTOFLINE_TEMPLATE void Query<T>::toModel(SqlModel *model)
 template <class T>
 Q_OUTOFLINE_TEMPLATE QString Query<T>::sqlCommand() const
 {
-    Q_D(const AbstractQuery);
+    //Q_D(const AbstractQuery);
     return d->sql;
 }
 
