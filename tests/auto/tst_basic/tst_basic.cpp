@@ -36,7 +36,7 @@ void BasicTest::initTestCase()
     db.setPassword(PASSWORD);
 
     bool ok = db.open();
-    QTEST_ASSERT(ok);
+    QVERIFY(ok);
 
     db.comments()->query()->remove();
     db.posts()->query()->remove();
@@ -57,8 +57,8 @@ void BasicTest::dataSchema()
 void BasicTest::createUser()
 {
     user = Nut::create<User>();
-    user->setUsername("admin");
-    user->setPassword("123456");
+    user->setUsername(QStringLiteral("admin"));
+    user->setPassword(QStringLiteral("123456"));
     db.users()->append(user);
     db.saveChanges();
 }
@@ -75,7 +75,7 @@ void BasicTest::createPost()
 
     for(int i = 0 ; i < 3; i++){
         auto comment = Nut::create<Comment>();
-        comment->setMessage("comment #" + QString::number(i));
+        comment->setMessage(QStringLiteral("comment #") + QString::number(i));
         comment->setSaveDate(QDateTime::currentDateTime());
         comment->setAuthorId(user->id());
         newPost->comments()->append(comment);
@@ -92,24 +92,23 @@ void BasicTest::createPost()
 
     QTEST_ASSERT(newPost->id() != 0);
     TOC();
-    qDebug() << "New post inserted with id:" << newPost->id();
 }
 
 void BasicTest::createPost2()
 {
     //create post on the fly
     QVariant postIdVar = db.posts()->query()->insert(
-              (Post::titleField() = "This is a sample")
+              (Post::titleField() = QStringLiteral("This is a sample"))
                 & (Post::isPublicField() = true));
 
-    QTEST_ASSERT(postIdVar.type() == QVariant::LongLong
+    QVERIFY(postIdVar.type() == QVariant::LongLong
                  || postIdVar.type() == QVariant::ULongLong
                  || postIdVar.type() == QVariant::Double);
     int postId = postIdVar.toInt();
 
     for(int i = 0 ; i < 3; i++){
         auto comment = Nut::create<Comment>();
-        comment->setMessage("comment #" + QString::number(i + 2));
+        comment->setMessage(QStringLiteral("comment #") + QString::number(i + 2));
         comment->setSaveDate(QDateTime::currentDateTime());
         comment->setAuthor(user);
         //join child to master by id
@@ -125,9 +124,17 @@ void BasicTest::updatePostOnTheFly()
 {
     auto c = db.posts()->query()
             ->where(Post::idField() == postId)
-            ->update(Post::titleField() = "New title");
+            ->update(Post::titleField() = QStringLiteral("New title"));
 
     QCOMPARE(c, 1);
+
+    auto titles = db.posts()
+                      ->query()
+                      ->where(Post::idField() == postId)
+                      ->select(Post::titleField());
+
+    QCOMPARE(titles.count(), 1);
+    QCOMPARE(titles.at(0), QStringLiteral("New title"));
 }
 
 void BasicTest::selectPublicts()
@@ -153,17 +160,17 @@ void BasicTest::selectPosts()
 
     auto posts = q->toList();
     post = posts.at(0);
-    post->setBody("");
+    post->setBody(QStringLiteral(""));
 
     PRINT(posts.length());
     PRINT(posts.at(0)->comments()->length());
     QCOMPARE(posts.length(), 1);
     QCOMPARE(posts.at(0)->comments()->length(), 3);
-    QCOMPARE(posts.at(0)->title(), "post title");
+    QCOMPARE(posts.at(0)->title(), QStringLiteral("post title"));
 
-    QCOMPARE(posts.at(0)->comments()->at(0)->message(), "comment #0");
-    QCOMPARE(posts.at(0)->comments()->at(1)->message(), "comment #1");
-    QCOMPARE(posts.at(0)->comments()->at(2)->message(), "comment #2");
+    QCOMPARE(posts.at(0)->comments()->at(0)->message(), QStringLiteral("comment #0"));
+    QCOMPARE(posts.at(0)->comments()->at(1)->message(), QStringLiteral("comment #1"));
+    QCOMPARE(posts.at(0)->comments()->at(2)->message(), QStringLiteral("comment #2"));
     db.cleanUp();
 }
 
@@ -177,7 +184,7 @@ void BasicTest::selectScoreAverage()
                    ->average(Score::scoreField())
                    .toInt(&ok);
 
-    QTEST_ASSERT(ok);
+    QVERIFY(ok);
     QCOMPARE(avg, 2);
 }
 
@@ -199,7 +206,7 @@ void BasicTest::selectFirst()
             ->orderBy(Post::idField())
             ->first();
 
-    QCOMPARE(posts, Q_NULLPTR);
+    QVERIFY(posts != Q_NULLPTR);
 }
 
 void BasicTest::selectPostsWithoutTitle()
@@ -225,7 +232,7 @@ void BasicTest::testDate()
     d.setTime(t);
 
     auto newPost = Nut::create<Post>();
-    newPost->setTitle("post title");
+    newPost->setTitle(QStringLiteral("post title"));
     newPost->setSaveDate(d);
 
     db.posts()->append(newPost);
@@ -237,14 +244,15 @@ void BasicTest::testDate()
             ->orderBy(Post::idField())
             ->first();
 
-    qDebug() << q->saveDate() << d;
-    QTEST_ASSERT(q->saveDate() == d);
+    QCOMPARE(q->saveDate(), d);
 }
 
 void BasicTest::testLimitedQuery()
 {
-    auto comments = db.comments()->query()->toList(2);
-    QTEST_ASSERT(comments.length() == 2);
+    auto q = db.comments()->query();
+    auto comments = q->toList(2);
+    qDebug() << q->sqlCommand();
+    QCOMPARE(comments.length(), 2);
 }
 
 void BasicTest::join()
@@ -266,7 +274,7 @@ void BasicTest::join()
 void BasicTest::selectWithInvalidRelation()
 {
     auto q = db.posts()->query();
-    q->join("Invalid_Class_Name");
+    q->join(QStringLiteral("Invalid_Class_Name"));
     q->toList();
 }
 
@@ -280,7 +288,7 @@ void BasicTest::modifyPost()
 
     QTEST_ASSERT(post != nullptr);
 
-    post->setTitle("new name");
+    post->setTitle(QStringLiteral("new name"));
     db.saveChanges();
 
     q = db.posts()->query()
@@ -289,7 +297,7 @@ void BasicTest::modifyPost()
 
     post = q->first();
     PRINT(post->title());
-    QTEST_ASSERT(post->title() == "new name");
+    QCOMPARE(post->title(), "new name");
 }
 
 void BasicTest::emptyDatabase()

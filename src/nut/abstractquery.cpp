@@ -30,7 +30,7 @@ AbstractQuery::AbstractQuery(QObject *parent) : QObject(parent)
 }
 
 Nut::AbstractQueryPrivate::AbstractQueryPrivate(Nut::AbstractQuery *parent) :
-      q_ptr(parent)
+      q_ptr(parent), skip(0), take(0)
 {
 
 }

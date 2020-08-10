@@ -282,7 +282,7 @@ DatabaseModel DatabasePrivate::getLastSchema()
 {
     Row<ChangeLogTable> u = changeLogs->query()
             ->orderBy(!ChangeLogTable::idField())
-            ->first();
+            .first();
 
 //    DatabaseModel ret(q->metaObject()->className());
 
