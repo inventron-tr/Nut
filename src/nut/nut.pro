@@ -47,7 +47,8 @@ HEADERS += \
     $$PWD/phrases/phrasedatalist.h \
     $$PWD/phrases/phraselist.h \
     $$PWD/phrases/datephrase.h \
-    $$PWD/table_p.h
+    $$PWD/table_p.h \
+    bulkinserter_p.h
 
 SOURCES += \
     $$PWD/generators/abstractsqlgenerator.cpp \

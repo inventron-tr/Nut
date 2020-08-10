@@ -64,7 +64,7 @@ public:
     Row<T> operator[](int i) const;
 
     Query<T> query();
-    BulkInserter *bulkInserter();
+    BulkInserter bulkInserter();
 };
 
 template<class T>
@@ -86,10 +86,9 @@ Q_OUTOFLINE_TEMPLATE Query<T> TableSet<T>::query()
 }
 
 template<class T>
-Q_OUTOFLINE_TEMPLATE BulkInserter *TableSet<T>::bulkInserter()
+Q_OUTOFLINE_TEMPLATE BulkInserter TableSet<T>::bulkInserter()
 {
-    BulkInserter *bi = new BulkInserter(data->database, data->childClassName);
-    return bi;
+    return BulkInserter(data->database, data->childClassName);
 }
 
 template<class T>
