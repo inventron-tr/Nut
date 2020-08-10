@@ -78,7 +78,9 @@ struct NUT_EXPORT QueryData {
         return r;
     }
 
-    QueryData() = default;
+    QueryData() : skip(0), take(0)
+    { }
+
     QueryData(Database *db) : database(db)
     { }
 };
