@@ -36,8 +36,6 @@
 #endif
 
 #include <QtNut/table.h>
-#include <QtNut/abstractquery.h>
-
 #include <QtNut/database.h>
 #include <QtNut/databasemodel.h>
 #include <QtNut/abstracttableset.h>
@@ -79,16 +77,19 @@ struct NUT_EXPORT QueryData {
         r->wherePhrase = wherePhrase;
         return r;
     }
+
+    QueryData() = default;
+    QueryData(Database *db) : database(db)
+    { }
 };
 
 template <class T>
-class Query : public AbstractQuery
+class Query
 {
     QueryData *d;
-    bool m_autoDelete;
 
 public:
-    explicit Query(Database *database, AbstractTableSet *tableSet, bool autoDelete);
+    explicit Query(Database *database, AbstractTableSet *tableSet);
     Query (const Query<T> &other);
     Query (Query<T> &&other);
 
@@ -168,8 +169,6 @@ Q_OUTOFLINE_TEMPLATE QList<O> Query<T>::select(const std::function<O (const QSql
         ret.append(obj);
     }
 
-    if (m_autoDelete)
-        deleteLater();
     return ret;
 }
 
@@ -180,9 +179,8 @@ Q_OUTOFLINE_TEMPLATE QList<O> Query<T>::select(const std::function<O (const QSql
 //}
 
 template <class T>
-Q_OUTOFLINE_TEMPLATE Query<T>::Query(Database *database, AbstractTableSet *tableSet,
-                                     bool autoDelete)
-    : AbstractQuery(database), d(new QueryData), m_autoDelete(autoDelete)
+Q_OUTOFLINE_TEMPLATE Query<T>::Query(Database *database, AbstractTableSet *tableSet)
+    : d(new QueryData(database))
 {
     //Q_D(AbstractQuery);
 
@@ -196,12 +194,12 @@ Q_OUTOFLINE_TEMPLATE Query<T>::Query(Database *database, AbstractTableSet *table
 }
 
 template<class T>
-Q_OUTOFLINE_TEMPLATE Query<T>::Query(const Query<T> &other) : AbstractQuery() {
+Q_OUTOFLINE_TEMPLATE Query<T>::Query(const Query<T> &other)  {
     d = other.d->clone();
 }
 
 template<class T>
-Q_OUTOFLINE_TEMPLATE Query<T>::Query(Query<T> &&other) : AbstractQuery() {
+Q_OUTOFLINE_TEMPLATE Query<T>::Query(Query<T> &&other) {
     d = std::move(other.d);
     other.d = nullptr;
 }
@@ -393,10 +391,6 @@ Q_OUTOFLINE_TEMPLATE RowList<T> Query<T>::toList(int count)
         } //while
     } // while
 
-#ifndef NUT_SHARED_POINTER
-    if (m_autoDelete)
-        deleteLater();
-#endif
     return returnList;
 
 }
@@ -423,8 +417,6 @@ Q_OUTOFLINE_TEMPLATE QList<F> Query<T>::select(const FieldPhrase<F> f)
         ret.append(v.value<F>());
     }
 
-    if (m_autoDelete)
-        deleteLater();
     return ret;
 }
 
@@ -644,8 +636,6 @@ Q_OUTOFLINE_TEMPLATE int Query<T>::update(const AssignmentPhraseList &ph)
 
     QSqlQuery q = d->database->exec(d->sql);
 
-    if (m_autoDelete)
-        deleteLater();
     return q.numRowsAffected();
 }
 
@@ -658,8 +648,6 @@ Q_OUTOFLINE_TEMPLATE int Query<T>::remove()
                 d->tableName, d->wherePhrase);
     QSqlQuery q = d->database->exec(d->sql);
 
-    if (m_autoDelete)
-        deleteLater();
     return q.numRowsAffected();
 }
 

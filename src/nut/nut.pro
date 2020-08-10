@@ -47,9 +47,7 @@ HEADERS += \
     $$PWD/phrases/phrasedatalist.h \
     $$PWD/phrases/phraselist.h \
     $$PWD/phrases/datephrase.h \
-    $$PWD/table_p.h \
-    $$PWD/abstractquery.h \
-    $$PWD/abstractquery_p.h
+    $$PWD/table_p.h
 
 SOURCES += \
     $$PWD/generators/abstractsqlgenerator.cpp \
@@ -78,8 +76,7 @@ SOURCES += \
     $$PWD/phrases/phrasedata.cpp \
     $$PWD/phrases/phrasedatalist.cpp \
     $$PWD/phrases/phraselist.cpp \
-    $$PWD/phrases/datephrase.cpp \
-    $$PWD/abstractquery.cpp
+    $$PWD/phrases/datephrase.cpp
 
 load(qt_module)
 
