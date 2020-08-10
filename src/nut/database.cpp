@@ -281,7 +281,7 @@ bool DatabasePrivate::getCurrectSchema()
 DatabaseModel DatabasePrivate::getLastSchema()
 {
     Row<ChangeLogTable> u = changeLogs->query()
-            ->orderBy(!ChangeLogTable::idField())
+            .orderBy(!ChangeLogTable::idField())
             .first();
 
 //    DatabaseModel ret(q->metaObject()->className());

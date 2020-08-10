@@ -38,10 +38,10 @@ void BasicTest::initTestCase()
     bool ok = db.open();
     QVERIFY(ok);
 
-    db.comments()->query()->remove();
-    db.posts()->query()->remove();
-    db.users()->query()->remove();
-    db.scores()->query()->remove();
+    db.comments()->query().remove();
+    db.posts()->query().remove();
+    db.users()->query().remove();
+    db.scores()->query().remove();
 }
 
 void BasicTest::dataSchema()
@@ -97,7 +97,7 @@ void BasicTest::createPost()
 void BasicTest::createPost2()
 {
     //create post on the fly
-    QVariant postIdVar = db.posts()->query()->insert(
+    QVariant postIdVar = db.posts()->query().insert(
               (Post::titleField() = QStringLiteral("This is a sample"))
                 & (Post::isPublicField() = true));
 
@@ -123,15 +123,15 @@ void BasicTest::createPost2()
 void BasicTest::updatePostOnTheFly()
 {
     auto c = db.posts()->query()
-            ->where(Post::idField() == postId)
-            ->update(Post::titleField() = QStringLiteral("New title"));
+            .where(Post::idField() == postId)
+            .update(Post::titleField() = QStringLiteral("New title"));
 
     QCOMPARE(c, 1);
 
     auto titles = db.posts()
                       ->query()
-                      ->where(Post::idField() == postId)
-                      ->select(Post::titleField());
+                      .where(Post::idField() == postId)
+                      .select(Post::titleField());
 
     QCOMPARE(titles.count(), 1);
     QCOMPARE(titles.at(0), QStringLiteral("New title"));
@@ -140,12 +140,12 @@ void BasicTest::updatePostOnTheFly()
 void BasicTest::selectPublicts()
 {
     auto q = db.posts()->query()
-            ->where(Post::isPublicField())
-            ->count();
+            .where(Post::isPublicField())
+            .count();
 
     auto q2 = db.posts()->query()
-            ->where(!Post::isPublicField())
-            ->count();
+            .where(!Post::isPublicField())
+            .count();
 
     QCOMPARE(q, 1);
     QCOMPARE(q2, 1);
@@ -154,11 +154,11 @@ void BasicTest::selectPublicts()
 void BasicTest::selectPosts()
 {
     auto q = db.posts()->query()
-        ->join<Comment>()
-        ->orderBy((!Post::saveDateField()) | Post::bodyField())
-        ->setWhere(Post::idField() == postId);
+        .join<Comment>()
+        .orderBy((!Post::saveDateField()) | Post::bodyField())
+        .where(Post::idField() == postId);
 
-    auto posts = q->toList();
+    auto posts = q.toList();
     post = posts.at(0);
     post->setBody(QStringLiteral(""));
 
@@ -179,9 +179,9 @@ void BasicTest::selectScoreAverage()
     bool ok;
     auto avg = db.scores()
                    ->query()
-                   ->join<Post>()
-                   ->where(Post::idField() == postId)
-                   ->average(Score::scoreField())
+                   .join<Post>()
+                   .where(Post::idField() == postId)
+                   .average(Score::scoreField())
                    .toInt(&ok);
 
     QVERIFY(ok);
@@ -190,21 +190,21 @@ void BasicTest::selectScoreAverage()
 
 void BasicTest::selectScoreSum()
 {
-    auto sum = db.scores()->query()->sum(Score::scoreField());
+    auto sum = db.scores()->query().sum(Score::scoreField());
     QCOMPARE(sum, 20);
 }
 
 void BasicTest::selectScoreCount()
 {
-    auto count = db.scores()->query()->count();
+    auto count = db.scores()->query().count();
     QCOMPARE(count, 10);
 }
 
 void BasicTest::selectFirst()
 {
     auto posts = db.posts()->query()
-            ->orderBy(Post::idField())
-            ->first();
+            .orderBy(Post::idField())
+            .first();
 
     QVERIFY(posts != Q_NULLPTR);
 }
@@ -212,15 +212,15 @@ void BasicTest::selectFirst()
 void BasicTest::selectPostsWithoutTitle()
 {
     auto q = db.posts()->query();
-    q->setWhere(Post::titleField().isNull());
-    auto count = q->count();
+    q.where(Post::titleField().isNull());
+    auto count = q.count();
     QCOMPARE(count, 0);
 }
 
 void BasicTest::selectPostIds()
 {
     auto q = db.posts()->query();
-    auto ids = q->select(Post::idField());
+    auto ids = q.select(Post::idField());
 
     QCOMPARE(ids.count(), 2);
 }
@@ -240,9 +240,9 @@ void BasicTest::testDate()
     db.saveChanges(true);
 
     auto q = db.posts()->query()
-            ->setWhere(Post::idField() == newPost->id())
-            ->orderBy(Post::idField())
-            ->first();
+            .where(Post::idField() == newPost->id())
+            .orderBy(Post::idField())
+            .first();
 
     QCOMPARE(q->saveDate(), d);
 }
@@ -250,8 +250,8 @@ void BasicTest::testDate()
 void BasicTest::testLimitedQuery()
 {
     auto q = db.comments()->query();
-    auto comments = q->toList(2);
-    qDebug() << q->sqlCommand();
+    auto comments = q.toList(2);
+    qDebug() << q.sqlCommand();
     QCOMPARE(comments.length(), 2);
 }
 
@@ -274,17 +274,17 @@ void BasicTest::join()
 void BasicTest::selectWithInvalidRelation()
 {
     auto q = db.posts()->query();
-    q->join(QStringLiteral("Invalid_Class_Name"));
-    q->toList();
+    q.join(QStringLiteral("Invalid_Class_Name"));
+    q.toList();
 }
 
 void BasicTest::modifyPost()
 {
     auto q = db.posts()->query()
-            ->setWhere(Post::idField() == postId)
-            ->orderBy(Post::idField());
+            .where(Post::idField() == postId)
+            .orderBy(Post::idField());
 
-    Nut::Row<Post> post = q->first();
+    Nut::Row<Post> post = q.first();
 
     QTEST_ASSERT(post != nullptr);
 
@@ -292,18 +292,18 @@ void BasicTest::modifyPost()
     db.saveChanges();
 
     q = db.posts()->query()
-            ->setWhere(Post::idField() == postId)
-            ->orderBy(Post::idField());
+            .where(Post::idField() == postId)
+            .orderBy(Post::idField());
 
-    post = q->first();
+    post = q.first();
     PRINT(post->title());
     QCOMPARE(post->title(), "new name");
 }
 
 void BasicTest::emptyDatabase()
 {
-//    auto commentsCount = db.comments()->query()->remove();
-//    auto postsCount = db.posts()->query()->remove();
+//    auto commentsCount = db.comments()->query().remove();
+//    auto postsCount = db.posts()->query().remove();
 //    QTEST_ASSERT(postsCount == 3);
 //    QTEST_ASSERT(commentsCount == 6);
 }

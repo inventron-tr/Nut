@@ -32,7 +32,7 @@ void DateTimeTest::initTestCase()
 
     QTEST_ASSERT(db.open());
 
-    db.sampleTables()->query()->remove();
+    db.sampleTables()->query().remove();
 }
 
 #define TEST_DATE(date, command, n) \
@@ -42,8 +42,8 @@ do { \
     db.sampleTables()->append(s); \
     db.saveChanges(); \
     auto count = db.sampleTables()->query() \
-            ->where(SampleTable::dField().command(n) == date.command(n)) \
-            ->count(); \
+            .where(SampleTable::dField().command(n) == date.command(n)) \
+            .count(); \
     QTEST_ASSERT(count); \
 } while (false)
 
@@ -54,8 +54,8 @@ do { \
     db.sampleTables()->append(s); \
     db.saveChanges(); \
     auto count = db.sampleTables()->query() \
-            ->where(SampleTable::tField().command(n) == time.addSecs(num)) \
-            ->count(); \
+            .where(SampleTable::tField().command(n) == time.addSecs(num)) \
+            .count(); \
     QTEST_ASSERT(count); \
 } while (false)
 
@@ -66,8 +66,8 @@ do { \
     db.sampleTables()->append(s); \
     db.saveChanges(); \
     auto count = db.sampleTables()->query() \
-            ->where(SampleTable::dtField().command(n) == datetime.command(n)) \
-            ->count(); \
+            .where(SampleTable::dtField().command(n) == datetime.command(n)) \
+            .count(); \
     QTEST_ASSERT(count); \
 } while (false)
 
@@ -78,8 +78,8 @@ do { \
     db.sampleTables()->append(s); \
     db.saveChanges(); \
     auto count = db.sampleTables()->query() \
-            ->where(SampleTable::dtField().command(n) == datetime.addSecs(num)) \
-            ->count(); \
+            .where(SampleTable::dtField().command(n) == datetime.addSecs(num)) \
+            .count(); \
     QTEST_ASSERT(count); \
 } while (false)
 
@@ -136,7 +136,7 @@ void DateTimeTest::dateTimeAdd()
 
 void DateTimeTest::datePart()
 {
-    db.sampleTables()->query()->remove();
+    db.sampleTables()->query().remove();
 
     QDate d = QDate::currentDate();
     auto s = Nut::create<SampleTable>();
@@ -146,18 +146,18 @@ void DateTimeTest::datePart()
 
     int count;
 
-    count = db.sampleTables()->query()->where(SampleTable::dField().year() == d.year())->count();
+    count = db.sampleTables()->query().where(SampleTable::dField().year() == d.year()).count();
     QTEST_ASSERT(count);
-    count = db.sampleTables()->query()->where(SampleTable::dField().month() == d.month())->count();
+    count = db.sampleTables()->query().where(SampleTable::dField().month() == d.month()).count();
     QTEST_ASSERT(count);
-    count = db.sampleTables()->query()->where(SampleTable::dField().day() == d.day())->count();
+    count = db.sampleTables()->query().where(SampleTable::dField().day() == d.day()).count();
     QTEST_ASSERT(count);
 
 }
 
 void DateTimeTest::timePart()
 {
-    db.sampleTables()->query()->remove();
+    db.sampleTables()->query().remove();
 
     QTime t = QTime::currentTime();
     auto s = Nut::create<SampleTable>();
@@ -167,17 +167,17 @@ void DateTimeTest::timePart()
 
     int count;
 
-    count = db.sampleTables()->query()->where(SampleTable::tField().hour() == t.hour())->count();
+    count = db.sampleTables()->query().where(SampleTable::tField().hour() == t.hour()).count();
     QTEST_ASSERT(count);
-    count = db.sampleTables()->query()->where(SampleTable::tField().minute() == t.minute())->count();
+    count = db.sampleTables()->query().where(SampleTable::tField().minute() == t.minute()).count();
     QTEST_ASSERT(count);
-    count = db.sampleTables()->query()->where(SampleTable::tField().second() == t.second())->count();
+    count = db.sampleTables()->query().where(SampleTable::tField().second() == t.second()).count();
     QTEST_ASSERT(count);
 }
 
 void DateTimeTest::dateTimePart()
 {
-    db.sampleTables()->query()->remove();
+    db.sampleTables()->query().remove();
 
     QDateTime dt = QDateTime::currentDateTime();
     auto s = Nut::create<SampleTable>();
@@ -187,24 +187,24 @@ void DateTimeTest::dateTimePart()
 
     int count;
 
-    count = db.sampleTables()->query()->where(SampleTable::dtField().year() == dt.date().year())->count();
+    count = db.sampleTables()->query().where(SampleTable::dtField().year() == dt.date().year()).count();
     QTEST_ASSERT(count);
-    count = db.sampleTables()->query()->where(SampleTable::dtField().month() == dt.date().month())->count();
+    count = db.sampleTables()->query().where(SampleTable::dtField().month() == dt.date().month()).count();
     QTEST_ASSERT(count);
-    count = db.sampleTables()->query()->where(SampleTable::dtField().day() == dt.date().day())->count();
+    count = db.sampleTables()->query().where(SampleTable::dtField().day() == dt.date().day()).count();
     QTEST_ASSERT(count);
 
-    count = db.sampleTables()->query()->where(SampleTable::dtField().hour() == dt.time().hour())->count();
+    count = db.sampleTables()->query().where(SampleTable::dtField().hour() == dt.time().hour()).count();
     QTEST_ASSERT(count);
-    count = db.sampleTables()->query()->where(SampleTable::dtField().minute() == dt.time().minute())->count();
+    count = db.sampleTables()->query().where(SampleTable::dtField().minute() == dt.time().minute()).count();
     QTEST_ASSERT(count);
-    count = db.sampleTables()->query()->where(SampleTable::dtField().second() == dt.time().second())->count();
+    count = db.sampleTables()->query().where(SampleTable::dtField().second() == dt.time().second()).count();
     QTEST_ASSERT(count);
 }
 
 void DateTimeTest::cleanupTestCase()
 {
-    db.sampleTables()->query()->remove();
+    db.sampleTables()->query().remove();
     db.close();
 }
 

@@ -63,7 +63,21 @@ struct NUT_EXPORT QueryData {
     ConditionalPhrase wherePhrase;
 
     QueryData *clone() {
-        return new QueryData;
+        auto r = new QueryData;
+        r->sql = sql;
+        r->className = className;
+        r->tableName = tableName;
+        r->select = select;
+        r->database = database;
+        r->tableSet = tableSet;
+        r->joins = joins;
+        r->relations = relations;
+        r->skip = skip;
+        r->take = take;
+        r->orderPhrase = orderPhrase;
+        r->fieldPhrase = fieldPhrase;
+        r->wherePhrase = wherePhrase;
+        return r;
     }
 };
 
@@ -189,7 +203,7 @@ Q_OUTOFLINE_TEMPLATE Query<T>::Query(const Query<T> &other) {
 template<class T>
 Q_OUTOFLINE_TEMPLATE Query<T>::Query(Query<T> &&other) {
     d = std::move(other.d);
-    other._data = nullptr;
+    other.d = nullptr;
 }
 
 template <class T>
@@ -204,7 +218,7 @@ Q_OUTOFLINE_TEMPLATE Query<T> &Query<T>::operator=(const Query<T> &q)
 {
     if (this != &q)
     {
-        T *p = q._data ? q._data->detach() : nullptr;
+        QueryData *p = q.d ? q.d->clone() : nullptr;
         delete d;
         d = p;
     }
@@ -371,7 +385,7 @@ Q_OUTOFLINE_TEMPLATE RowList<T> Query<T>::toList(int count)
             }
 
             row->setStatus(Table::FetchedFromDB);
-            row->setParent(this);
+//            row->setParent(this);
             row->clear();
 
             //set last created row
