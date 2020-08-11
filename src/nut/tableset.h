@@ -63,8 +63,8 @@ public:
     Row<T> at(int i) const;
     Row<T> operator[](int i) const;
 
-    Query<T> *query(bool autoDelete = true);
-    BulkInserter *bulkInserter();
+    Query<T> query();
+    BulkInserter bulkInserter();
 };
 
 template<class T>
@@ -80,18 +80,15 @@ Q_OUTOFLINE_TEMPLATE TableSet<T>::TableSet(Table *parent) : AbstractTableSet(par
 }
 
 template<class T>
-Q_OUTOFLINE_TEMPLATE Query<T> *TableSet<T>::query(bool autoDelete)
+Q_OUTOFLINE_TEMPLATE Query<T> TableSet<T>::query()
 {
-    Query<T> *q = new Query<T>(data->database, this, autoDelete);
-
-    return q;
+    return Query<T>(data->database, this);
 }
 
 template<class T>
-Q_OUTOFLINE_TEMPLATE BulkInserter *TableSet<T>::bulkInserter()
+Q_OUTOFLINE_TEMPLATE BulkInserter TableSet<T>::bulkInserter()
 {
-    BulkInserter *bi = new BulkInserter(data->database, data->childClassName);
-    return bi;
+    return BulkInserter(data->database, data->childClassName);
 }
 
 template<class T>

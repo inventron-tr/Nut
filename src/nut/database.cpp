@@ -281,10 +281,8 @@ bool DatabasePrivate::getCurrectSchema()
 DatabaseModel DatabasePrivate::getLastSchema()
 {
     Row<ChangeLogTable> u = changeLogs->query()
-            ->orderBy(!ChangeLogTable::idField())
-            ->first();
-
-//    DatabaseModel ret(q->metaObject()->className());
+            .orderBy(!ChangeLogTable::idField())
+            .first();
 
     if (u) {
         QJsonParseError e;

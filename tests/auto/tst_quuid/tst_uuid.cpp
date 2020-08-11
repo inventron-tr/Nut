@@ -32,7 +32,7 @@ void UuidTest::initTestCase()
 
     bool ok = db.open();
 
-    db.tests()->query()->remove();
+    db.tests()->query().remove();
     uuid = QUuid::createUuid();
 
     QTEST_ASSERT(ok);
@@ -54,7 +54,7 @@ void UuidTest::save()
 void UuidTest::restore()
 {
     TIC();
-    auto test = db.tests()->query()->first();
+    auto test = db.tests()->query().first();
     TOC();
     QTEST_ASSERT(!test->id().isNull());
     QTEST_ASSERT(test->uuid() == uuid);

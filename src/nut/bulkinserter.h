@@ -12,16 +12,16 @@ NUT_BEGIN_NAMESPACE
 
 class PhraseList;
 class Database;
+class BulkInserterPrivate;
 class NUT_EXPORT BulkInserter
 {
-    Database *_database;
-    QString _className;
-    Nut::PhraseList _fields;
-    QList<QVariantList> variants;
-    size_t _fieldCount;
+    Q_DECLARE_PRIVATE(BulkInserter);
 
 public:
     BulkInserter(Database *db, QString &className);
+    BulkInserter(const BulkInserter &other);
+    BulkInserter(BulkInserter &&other);
+
     void setFields(const PhraseList &ph);
 
     void insert(std::initializer_list<QVariant> vars);
@@ -30,6 +30,9 @@ public:
         insert({args...});
     }
     int apply();
+
+private:
+    BulkInserterPrivate *d_ptr;
 };
 
 NUT_END_NAMESPACE

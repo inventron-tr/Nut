@@ -80,7 +80,7 @@ void DataTypesTest::initTestCase()
 
     QTEST_ASSERT(ok);
 
-    db.sampleTables()->query()->remove();
+    db.sampleTables()->query().remove();
 }
 
 void DataTypesTest::insert()
@@ -130,7 +130,7 @@ void DataTypesTest::insert()
 
 void DataTypesTest::retrive()
 {
-    Nut::RowList<SampleTable> list = db.sampleTables()->query()->toList();
+    Nut::RowList<SampleTable> list = db.sampleTables()->query().toList();
     QTEST_ASSERT(list.count() == 1);
     Nut::Row<SampleTable> t = list.first();
 
@@ -179,8 +179,8 @@ void DataTypesTest::retrive()
 
 #define CHECK(name) \
     c = db.sampleTables()->query()                                             \
-            ->where(SampleTable::f_ ## name ## Field() == f_ ## name)          \
-            ->count();                                                         \
+            .where(SampleTable::f_ ## name ## Field() == f_ ## name)          \
+            .count();                                                         \
     QTEST_ASSERT(c == 1);
 
 void DataTypesTest::check()
@@ -224,7 +224,7 @@ void DataTypesTest::check()
 
 void DataTypesTest::cleanupTestCase()
 {
-    db.sampleTables()->query()->remove();
+    db.sampleTables()->query().remove();
     db.close();
 
     PRINT_FORM(db);

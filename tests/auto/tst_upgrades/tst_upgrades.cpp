@@ -49,7 +49,7 @@ void Upgrades::version1()
     DB1 db;
     initDb(db);
     QTEST_ASSERT(db.open());
-    db.sampleTable()->query()->remove();
+    db.sampleTable()->query().remove();
 }
 
 void Upgrades::version2()
@@ -72,7 +72,7 @@ void Upgrades::version3()
     QTEST_ASSERT(db.open());
 
     auto t = db.sampleTable()->query()
-            ->first();
+            .first();
     QTEST_ASSERT(id == t->id());
 }
 
