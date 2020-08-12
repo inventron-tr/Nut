@@ -18,8 +18,8 @@
 **
 **************************************************************************/
 
-#ifndef DEFINES_P_H
-#define DEFINES_P_H
+#ifndef NUT_CONSTS_H
+#define NUT_CONSTS_H
 
 #define __NAME                  "name"
 #define __TYPE                  "type"
@@ -56,4 +56,4 @@
 #   define NUT_WRAP_NAMESPACE(x)    x
 #endif
 
-#endif // DEFINES_P_H
+#endif // NUT_CONSTS_H

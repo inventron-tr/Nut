@@ -25,7 +25,7 @@
 #include <QtCore/QJsonObject>
 
 #include "tablemodel.h"
-#include "defines.h"
+#include "nut_global.h"
 
 NUT_BEGIN_NAMESPACE
 

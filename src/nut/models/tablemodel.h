@@ -24,7 +24,7 @@
 #include <QtCore/QVariant>
 #include <QtCore/QDebug>
 
-#include <QtNut/defines.h>
+#include <QtNut/nut_global.h>
 
 class QJsonObject;
 

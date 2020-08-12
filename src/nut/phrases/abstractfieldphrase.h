@@ -21,7 +21,7 @@
 #ifndef ABSTRACTFIELDPHRASE_H
 #define ABSTRACTFIELDPHRASE_H
 
-#include <QtNut/defines.h>
+#include <QtNut/nut_global.h>
 #include <QtNut/assignmentphrase.h>
 #include <QtNut/conditionalphrase.h>
 #include <QtNut/phraselist.h>

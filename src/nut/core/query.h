@@ -31,7 +31,7 @@
 #include <QtSql/QSqlQueryModel>
 #include <QtSql/QSqlQuery>
 
-#ifdef NUT_SHARED_POINTER
+#ifndef NUT_RAW_POINTER
 #include <QtCore/QSharedPointer>
 #endif
 
@@ -351,10 +351,10 @@ Q_OUTOFLINE_TEMPLATE RowList<T> Query<T>::toList(int count)
             Row<Table> row;
             if (data.table->className() == d->className) {
                 row = Nut::create<T>();
-#ifdef NUT_SHARED_POINTER
-                returnList.append(row.objectCast<T>());
-#else
+#ifdef NUT_RAW_POINTER
                 returnList.append(dynamic_cast<T*>(table));
+#else
+                returnList.append(row.objectCast<T>());
 #endif
                 d->tableSet->add(row);
 

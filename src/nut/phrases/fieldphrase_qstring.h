@@ -1,7 +1,7 @@
 #ifndef NUT_FIELDPHRASE_QSTRING_H
 #define NUT_FIELDPHRASE_QSTRING_H
 
-#include <QtNut/defines.h>
+#include <QtNut/nut_global.h>
 #include <QtNut/abstractfieldphrase.h>
 #include <QtNut/fieldphrase.h>
 

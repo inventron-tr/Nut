@@ -26,7 +26,7 @@
 #include <QtCore/QSharedDataPointer>
 #include <QtSql/QSqlDatabase>
 
-#include <QtNut/defines.h>
+#include <QtNut/nut_global.h>
 #include <QtNut/tableset.h>
 
 NUT_BEGIN_NAMESPACE

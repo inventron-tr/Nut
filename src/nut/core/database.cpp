@@ -33,7 +33,7 @@
 #include "table.h"
 #include "tableset.h"
 #include "database_p.h"
-#include "defines.h"
+#include "config/nut_global.h"
 #include "tablemodel.h"
 #include "postgresqlgenerator.h"
 #include "mysqlgenerator.h"

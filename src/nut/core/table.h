@@ -25,7 +25,7 @@
 #include <QtCore/qglobal.h>
 #include <QtCore/QSet>
 
-#include <QtNut/defines.h>
+#include <QtNut/nut_global.h>
 #include <QtNut/tablemodel.h>
 #include <QtNut/phrase.h>
 

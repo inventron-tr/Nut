@@ -100,10 +100,10 @@ Q_OUTOFLINE_TEMPLATE int TableSet<T>::length() const
 template<class T>
 Q_OUTOFLINE_TEMPLATE Row<T> TableSet<T>::at(int i) const
 {
-#ifdef NUT_SHARED_POINTER
-    return data->childs.at(i).template objectCast<T>();
-#else
+#ifdef NUT_RAW_POINTER
     return reinterpret_cast<T*>(data->childs.at(i));
+#else
+    return data->childs.at(i).template objectCast<T>();
 #endif
 }
 

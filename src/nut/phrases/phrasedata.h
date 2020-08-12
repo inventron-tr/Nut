@@ -21,7 +21,7 @@
 #ifndef PHRASEDATA_H
 #define PHRASEDATA_H
 
-#include <QtNut/defines.h>
+#include <QtNut/nut_global.h>
 
 NUT_BEGIN_NAMESPACE
 

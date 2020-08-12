@@ -1,7 +1,7 @@
 #ifndef NUT_FIELDPHRASE_BOOL_H
 #define NUT_FIELDPHRASE_BOOL_H
 
-#include <QtNut/defines.h>
+#include <QtNut/nut_global.h>
 #include <QtNut/fieldphrase.h>
 #include <QtNut/fieldphrase.h>
 
