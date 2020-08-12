@@ -97,24 +97,25 @@ public:
 
     QVariant operand;
     bool isNot;
-    quint16 parents;
+//    quint16 parents;
+
+    mutable QAtomicInt ref;
 
     PhraseData();
     PhraseData(const char *className, const char *fieldName);
     PhraseData(PhraseData *l, Condition o);
     PhraseData(PhraseData *l, Condition o, PhraseData *r);
     PhraseData(PhraseData *l, Condition o, QVariant r);
-//    explicit PhraseData(const PhraseData &other);
-//    explicit PhraseData(const PhraseData *other);
+
+    virtual ~PhraseData();
 
     PhraseData *operator =(PhraseData *other);
     PhraseData &operator =(PhraseData &other);
 
     QString toString() const;
 
-    ~PhraseData() = default;
-
     void cleanUp();
+    PhraseData *clone() const;
 private:
     void cleanUp(PhraseData *d);
 };

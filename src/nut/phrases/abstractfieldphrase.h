@@ -80,6 +80,9 @@ public:
     AssignmentPhrase operator =(const QVariant &other);
     AssignmentPhrase operator =(const ConditionalPhrase &other);
     AssignmentPhrase operator <<(const QVariant &other);
+
+protected:
+    void detach();
 };
 
 NUT_END_NAMESPACE

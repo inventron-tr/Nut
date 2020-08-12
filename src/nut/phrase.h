@@ -30,7 +30,9 @@
 #include <QtNut/phrasedata.h>
 #include <QtNut/assignmentphrase.h>
 #include <QtNut/numericphrase.h>
-#include <QtNut/datephrase.h>
+#include <QtNut/fieldphrase_date.h>
+#include <QtNut/fieldphrase_qstring.h>
+#include <QtNut/fieldphrase_bool.h>
 
 NUT_BEGIN_NAMESPACE
 

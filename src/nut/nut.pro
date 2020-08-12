@@ -46,9 +46,11 @@ HEADERS += \
     $$PWD/phrases/phrasedata.h \
     $$PWD/phrases/phrasedatalist.h \
     $$PWD/phrases/phraselist.h \
-    $$PWD/phrases/datephrase.h \
+    $$PWD/phrases/fieldphrase_date.h \
     $$PWD/table_p.h \
-    bulkinserter_p.h
+    $$PWD/bulkinserter_p.h \
+    $$PWD/phrases/fieldphrase_bool.h \
+    $$PWD/phrases/fieldphrase_qstring.h
 
 SOURCES += \
     $$PWD/generators/abstractsqlgenerator.cpp \
@@ -77,7 +79,9 @@ SOURCES += \
     $$PWD/phrases/phrasedata.cpp \
     $$PWD/phrases/phrasedatalist.cpp \
     $$PWD/phrases/phraselist.cpp \
-    $$PWD/phrases/datephrase.cpp
+    $$PWD/phrases/fieldphrase_date.cpp \
+    $$PWD/phrases/fieldphrase_bool.cpp \
+    $$PWD/phrases/fieldphrase_qstring.cpp
 
 load(qt_module)
 

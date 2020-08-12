@@ -3,6 +3,7 @@
 
 #include "tst_phrases.h"
 #include "phrase.h"
+#include "sqlitegenerator.h"
 
 using namespace Nut;
 
@@ -17,11 +18,15 @@ void PhrasesTest::initTestCase()
 
 void PhrasesTest::no1()
 {
-    FieldPhrase<int> id("main", "id");
-    FieldPhrase<QString> name("main", "name");
-    FieldPhrase<QString> last_name("main", "last_name");
-    FieldPhrase<QDate> date("main", "date");
-    auto w = (id == 4 && name == "hi");
+    {
+        FieldPhrase<int> id("main", "id");
+        FieldPhrase<QString> name("main", "name");
+        FieldPhrase<QString> last_name("main", "last_name");
+        FieldPhrase<QDate> date("main", "date");
+        auto w = (id == 4 && name == QStringLiteral("hi"));
+
+        SqliteGenerator g;
+    }
 }
 
 void PhrasesTest::numeric()

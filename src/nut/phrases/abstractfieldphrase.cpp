@@ -19,6 +19,7 @@
 **************************************************************************/
 
 #include "abstractfieldphrase.h"
+#include <QDebug>
 
 NUT_BEGIN_NAMESPACE
 
@@ -34,22 +35,26 @@ AbstractFieldPhrase::AbstractFieldPhrase(const char *className,
 AbstractFieldPhrase::AbstractFieldPhrase(const AbstractFieldPhrase &other)
 {
     data = other.data;
-    data->parents++;
+    data->ref.ref();
 }
 
 AbstractFieldPhrase::AbstractFieldPhrase(AbstractFieldPhrase &&other)
 {
     data = other.data;
-    data->parents++;
     other.data = nullptr;
 }
 
 AbstractFieldPhrase::~AbstractFieldPhrase()
 {
     if (data) {
-        --data->parents;
-        if (data->parents <= 0)
+        if (!data->ref.deref()) {
+            qDebug() << "deleted" << data->className
+                     << data->fieldName;
             delete data;
+        }
+        else
+            qDebug() << "more parents for" << data->className
+                     << data->fieldName;
     }
 }
 
@@ -85,6 +90,14 @@ AssignmentPhrase AbstractFieldPhrase::operator =(const ConditionalPhrase &other)
 AssignmentPhrase AbstractFieldPhrase::operator <<(const QVariant &other)
 {
     return AssignmentPhrase(this, other);
+}
+
+void AbstractFieldPhrase::detach()
+{
+    auto clone = data->clone();
+    if (!data->ref.deref())
+        delete data;
+    data = clone;
 }
 
 #define AbstractFieldPhraseOperatorVariant(class, op, cond) \
