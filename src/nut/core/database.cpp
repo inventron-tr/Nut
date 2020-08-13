@@ -350,7 +350,9 @@ bool DatabasePrivate::putModelToDatabase()
 void DatabasePrivate::createChangeLogs()
 {
     //    currentModel.model("change_log")
-    QStringList diff = sqlGenerator->diff(nullptr, currentModel.tableByName(QStringLiteral("__change_log")));
+    QStringList diff = sqlGenerator->diff(nullptr,
+                                          currentModel.tableByName(
+                                              QStringLiteral("__change_log")));
 
     foreach (QString s, diff)
         db.exec(s);
@@ -364,7 +366,6 @@ void DatabasePrivate::createChangeLogs()
 Database::Database(QObject *parent)
     : QObject(parent), d_ptr(new DatabasePrivate(this))
 {
-//    _d = new QSharedDataPointer<DatabasePrivate>(new DatabasePrivate(this));
     DatabasePrivate::lastId++;
 }
 
@@ -372,7 +373,6 @@ Database::Database(const Database &other)
     : QObject(other.parent()), d_ptr(new DatabasePrivate(this))
 {
     DatabasePrivate::lastId++;
-//    _d = other._d;
 
     setDriver(other.driver());
     setHostName(other.hostName());
@@ -387,13 +387,19 @@ Database::Database(const QSqlDatabase &other)
     //TODO: make a polish here
     DatabasePrivate::lastId++;
 
-//    setDriver(other.driver());
+    setDriver(other.driverName());
     setHostName(other.hostName());
     setPort(other.port());
     setDatabaseName(other.databaseName());
     setUserName(other.userName());
     setPassword(other.password());
     qRegisterMetaType<ChangeLogTable*>();
+}
+
+Database::Database(Database &&other)
+{
+    d_ptr = other.d_ptr;
+    other.d_ptr = nullptr;
 }
 
 Database::~Database()
