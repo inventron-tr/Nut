@@ -48,6 +48,7 @@ public:
     explicit Database(QObject *parent = nullptr);
     explicit Database(const Database &other);
     explicit Database(const QSqlDatabase &other);
+    explicit Database(Database &&other);
     ~Database();
 
     bool open();
