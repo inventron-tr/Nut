@@ -5,6 +5,7 @@
 #include "database.h"
 #include "abstractsqlgenerator.h"
 #include "databasemodel.h"
+#include "tablemodel.h"
 
 #include <QtCore/QDebug>
 
