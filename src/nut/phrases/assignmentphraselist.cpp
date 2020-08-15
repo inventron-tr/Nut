@@ -68,9 +68,9 @@ AssignmentPhraseList AssignmentPhraseList::operator &(const AssignmentPhrase
 
 AssignmentPhraseList::~AssignmentPhraseList()
 {
-    foreach (PhraseData *d, data)
-        if (!--d->parents)
-            delete d;
+//    foreach (PhraseData *d, data)
+//        if (!d->ref.deref())
+//            delete d;
 //    qDeleteAll(data);
     //    data.clear();
 }
@@ -78,7 +78,7 @@ AssignmentPhraseList::~AssignmentPhraseList()
 void AssignmentPhraseList::incAllDataParents()
 {
     foreach (PhraseData *d, data)
-        d->parents++;
+        d->ref.ref();
 }
 
 

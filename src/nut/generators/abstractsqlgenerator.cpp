@@ -616,10 +616,10 @@ QString AbstractSqlGenerator::selectCommand(const QString &tableName,
     QString sql = QStringLiteral("SELECT ") + selectText
                   + QStringLiteral(" FROM ") + fromText;
 
-    if (whereText != QStringLiteral(""))
+    if (!whereText.isEmpty())
         sql.append(QStringLiteral(" WHERE ") + whereText);
 
-    if (orderText != QStringLiteral(""))
+    if (!orderText.isEmpty())
         sql.append(QStringLiteral(" ORDER BY ") + orderText);
 
 //    for (int i = 0; i < _database->model().count(); i++)
@@ -648,7 +648,7 @@ QString AbstractSqlGenerator::selectCommand(const QString &tableName,
     QString sql = QStringLiteral("SELECT ") + selectText
                   + QStringLiteral(" FROM ") + fromText;
 
-    if (whereText != QStringLiteral(""))
+    if (!whereText.isEmpty())
         sql.append(QStringLiteral(" WHERE ") + whereText);
 
     for (int i = 0; i < _database->model().count(); i++)

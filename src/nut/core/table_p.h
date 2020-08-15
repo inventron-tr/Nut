@@ -4,7 +4,8 @@
 #include <QtCore/QSet>
 #include <QtCore/QSharedData>
 
-#include <QtNut/defines.h>
+#include <QtNut/nut_global.h>
+#include <QtNut/table.h>
 
 NUT_BEGIN_NAMESPACE
 

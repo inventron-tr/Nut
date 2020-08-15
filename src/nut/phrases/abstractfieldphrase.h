@@ -21,7 +21,7 @@
 #ifndef ABSTRACTFIELDPHRASE_H
 #define ABSTRACTFIELDPHRASE_H
 
-#include <QtNut/defines.h>
+#include <QtNut/nut_global.h>
 #include <QtNut/assignmentphrase.h>
 #include <QtNut/conditionalphrase.h>
 #include <QtNut/phraselist.h>
@@ -80,6 +80,9 @@ public:
     AssignmentPhrase operator =(const QVariant &other);
     AssignmentPhrase operator =(const ConditionalPhrase &other);
     AssignmentPhrase operator <<(const QVariant &other);
+
+protected:
+    void detach();
 };
 
 NUT_END_NAMESPACE

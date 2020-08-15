@@ -21,7 +21,7 @@
 #ifndef FIELDPHRASE_H
 #define FIELDPHRASE_H
 
-#include <QtNut/defines.h>
+#include <QtNut/nut_global.h>
 #include <QtNut/abstractfieldphrase.h>
 
 NUT_BEGIN_NAMESPACE
@@ -50,29 +50,6 @@ Q_OUTOFLINE_TEMPLATE ConditionalPhrase FieldPhrase<T>::operator ==(const QVarian
     return ConditionalPhrase(this, PhraseData::Equal, other);
 }
 
-
-template<>
-class FieldPhrase<QString> : public AbstractFieldPhrase
-{
-public:
-    FieldPhrase(const char *className, const char *s) :
-        AbstractFieldPhrase(className, s)
-    {}
-
-    ConditionalPhrase like(const QString &term) {
-        return ConditionalPhrase(this, PhraseData::Like, term);
-    }
-
-    ConditionalPhrase contains(const QString &term) {
-        return ConditionalPhrase(this, PhraseData::Like,
-                                 QVariant(QStringLiteral("%") + term + QStringLiteral("%")));
-    }
-
-    AssignmentPhrase operator =(const QVariant &v) {
-        return AssignmentPhrase(this, v);
-    }
-};
-
 //Date and time
 #define CONDITIONAL_VARIANT_METHOD(name, cond) \
     ConditionalPhrase name(int val) \
@@ -80,31 +57,6 @@ public:
         return ConditionalPhrase(this, cond, val); \
     }
 
-template<>
-class FieldPhrase<bool> : public AbstractFieldPhrase
-{
-public:
-    FieldPhrase(const char *className, const char *s) :
-        AbstractFieldPhrase(className, s)
-    {}
-
-    AssignmentPhrase operator =(const bool &other) {
-        return AssignmentPhrase(this, other);
-    }
-
-    FieldPhrase<bool> operator !()
-    {
-        FieldPhrase<bool> f(data->className, data->fieldName);
-//        f.data = new PhraseData(data);
-        f.data->isNot = !data->isNot;
-        return f;
-    }
-
-    operator ConditionalPhrase()
-    {
-        return ConditionalPhrase(this, PhraseData::Equal, !data->isNot);
-    }
-};
 
 NUT_END_NAMESPACE
 

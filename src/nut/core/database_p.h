@@ -30,7 +30,7 @@
 NUT_BEGIN_NAMESPACE
 
 class ChangeLogTable;
-class NUT_EXPORT DatabasePrivate //: public QSharedData
+class NUT_EXPORT DatabasePrivate
 {
     Database *q_ptr;
     Q_DECLARE_PUBLIC(Database)

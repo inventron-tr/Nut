@@ -18,50 +18,37 @@
 **
 **************************************************************************/
 
-#ifndef NUT_ABSTRACTTABLESET_H
-#define NUT_ABSTRACTTABLESET_H
+#ifndef NUT_ABSTRACTTABLESETDATA_H
+#define NUT_ABSTRACTTABLESETDATA_H
 
-#include <QtCore/QObject>
-#include <QtCore/qglobal.h>
-#include <QtCore/QSet>
-#include <QtCore/QExplicitlySharedDataPointer>
+#include <QtCore/QSharedData>
 
-#include <QtNut/defines.h>
+#include <QtNut/nut_global.h>
 
 NUT_BEGIN_NAMESPACE
 
 class Table;
 class Database;
-class AbstractTableSetData;
-class NUT_EXPORT AbstractTableSet : public QObject
+class AbstractTableSetData : public QSharedData
 {
-
 public:
-    explicit AbstractTableSet(Database *parent);
-    explicit AbstractTableSet(Table *parent);
-    virtual ~AbstractTableSet();
+    AbstractTableSetData(Database *parent) :
+        database(parent), table(nullptr)
+    { }
 
-    virtual int save(Database *db, bool cleanUp = false);
-    void clearChilds();
-    QString childClassName() const;
+    AbstractTableSetData(Table *parent) :
+        database(nullptr), table(parent)
+    { }
 
-    Database *database() const;
-    void setDatabase(Database *database);
+//    QSet<Table*> tables;
+//    QList<Table*> childRows;
+    RowList<Table> childs;
 
-protected:
-    QExplicitlySharedDataPointer<AbstractTableSetData> data;
-
-public://TODO: change this to private
-//    void add(Table* t);
-//    void remove(Table *t);
-
-    void add(Row<Table> t);
-    void remove(Row<Table> t);
-
-    friend class Table;
-    friend class QueryBase;
+    Database *database;
+    Table *table;
+    QString childClassName;
 };
 
 NUT_END_NAMESPACE
 
-#endif // NUT_ABSTRACTTABLESET_H
+#endif // NUT_ABSTRACTTABLESETDATA_H

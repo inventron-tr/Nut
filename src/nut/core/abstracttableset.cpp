@@ -63,10 +63,10 @@ int AbstractTableSet::save(Database *db, bool cleanUp)
             || t->status() == Table::Deleted) {
             rowsAffected += t->save(db);
             if (cleanUp)
-#ifdef NUT_SHARED_POINTER
-                remove(t);
-#else
+#ifdef NUT_RAW_POINTER
                 t->deleteLater();
+#else
+                remove(t);
 #endif
         }
     }
@@ -79,7 +79,7 @@ int AbstractTableSet::save(Database *db, bool cleanUp)
 
 void AbstractTableSet::clearChilds()
 {
-#ifndef NUT_SHARED_POINTER
+#ifdef NUT_RAW_POINTER
     foreach (Table *t, data->childs)
         t->deleteLater();
 #endif

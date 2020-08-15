@@ -43,6 +43,10 @@ NUT_BEGIN_NAMESPACE
  *  This should be fixed to v1.2
  */
 
+/*!
+  * \class Table
+  * \brief Base class for all tables
+  */
 Table::Table(QObject *parent) : QObject(parent),
     d(new TablePrivate)
 { }

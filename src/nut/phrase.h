@@ -21,6 +21,7 @@
 #ifndef PHRASE_H
 #define PHRASE_H
 
+#include <QtNut/nut_global.h>
 #include <QtNut/conditionalphrase.h>
 #include <QtNut/abstractfieldphrase.h>
 #include <QtNut/fieldphrase.h>
@@ -30,44 +31,8 @@
 #include <QtNut/phrasedata.h>
 #include <QtNut/assignmentphrase.h>
 #include <QtNut/numericphrase.h>
-#include <QtNut/datephrase.h>
-
-NUT_BEGIN_NAMESPACE
-
-#define SPECIALIZATION_NUMERIC_MEMBER(type, op, cond) \
-ConditionalPhrase operator op(const QVariant &other) \
-{ \
-    return ConditionalPhrase(this, cond, other); \
-}
-
-class AbstractFieldPhrase;
-class AssignmentPhrase;
-class PhraseList;
-
-//AssignmentPhraseList operator &(const AssignmentPhrase &l, const AssignmentPhrase &r);
-//AssignmentPhraseList operator &(const AssignmentPhrase &l, AssignmentPhrase &&r);
-//AssignmentPhraseList operator &(AssignmentPhrase &&l, const AssignmentPhrase &r);
-//AssignmentPhraseList operator &(AssignmentPhrase &&l, AssignmentPhrase &&r);
-
-
-//ConditionalPhrase operator <(AbstractFieldPhrase &l, ConditionalPhrase &&other)
-//{
-//    return ConditionalPhrase(&l, PhraseData::Less, other);
-//}
-
-//template<typename T>
-//class FieldPhrase : public AbstractFieldPhrase
-//{
-//public:
-//    FieldPhrase(const char *className, const char *s) :
-//        AbstractFieldPhrase(className, s)
-//    {}
-
-//    AssignmentPhrase operator =(const QVariant &other) {
-//        return AssignmentPhrase(this, other);
-//    }
-//};
-
-NUT_END_NAMESPACE
+#include <QtNut/fieldphrase_date.h>
+#include <QtNut/fieldphrase_qstring.h>
+#include <QtNut/fieldphrase_bool.h>
 
 #endif // PHRASE_H
