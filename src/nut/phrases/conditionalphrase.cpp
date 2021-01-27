@@ -107,7 +107,7 @@ ConditionalPhrase::~ConditionalPhrase()
     if (data) {
         data->cleanUp();
         if (!data->ref.deref()) {
-            qDebug() << "deleted for cond";
+//            qDebug() << "deleted for cond";
             delete data;
         }
     }

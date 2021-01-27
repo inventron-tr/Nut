@@ -48,13 +48,13 @@ AbstractFieldPhrase::~AbstractFieldPhrase()
 {
     if (data) {
         if (!data->ref.deref()) {
-            qDebug() << "deleted" << data->className
-                     << data->fieldName;
+//            qDebug() << "deleted" << data->className
+//                     << data->fieldName;
             delete data;
         }
-        else
-            qDebug() << "more parents for" << data->className
-                     << data->fieldName;
+//        else
+//            qDebug() << "more parents for" << data->className
+//                     << data->fieldName;
     }
 }
 
