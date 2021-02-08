@@ -82,7 +82,7 @@ public:                                                                        \
     static NUT_WRAP_NAMESPACE(FieldPhrase<keytype>)& name##Id ## Field(){      \
         static NUT_WRAP_NAMESPACE(FieldPhrase<keytype>) f =                    \
                 NUT_WRAP_NAMESPACE(FieldPhrase<keytype>)                       \
-                        (staticMetaObject.className(), #name);                 \
+                        (staticMetaObject.className(), #name "Id");            \
         return f;                                                              \
     }                                                                          \
 public slots: \

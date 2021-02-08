@@ -34,13 +34,14 @@ void PropertiesTest::insert()
     s->setName("hamed");
     s->setLastName("masafi");
     db.items()->append(s);
-    auto c = db.saveChanges();
+    auto c = db.saveChanges(); // returns count of affected rows
     QCOMPARE(c, 1);
 }
 
 void PropertiesTest::select()
 {
     auto item = db.items()->query()
+        .where(SampleTable::nameField() == "hamed" && SampleTable::lastNameField() == "masafi")
         .first();
     QCOMPARE(item->name(), "hamed");
 }
