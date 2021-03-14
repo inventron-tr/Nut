@@ -42,13 +42,13 @@ public:
     QDateTime saveDate() const;
     qreal point() const;
 
-public slots:
+public Q_SLOTS:
     void setId(int id);
     void setMessage(QString message);
     void setSaveDate(QDateTime saveDate);
     void setPoint(qreal point);
 
-signals:
+Q_SIGNALS:
     void idChanged(int id);
     void messageChanged(QString message);
     void saveDateChanged(QDateTime saveDate);

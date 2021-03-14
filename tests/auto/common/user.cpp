@@ -31,7 +31,7 @@ void User::setId(int id)
         return;
 
     m_id = id;
-    emit idChanged(m_id);
+    Q_EMIT idChanged(m_id);
 }
 
 void User::setUsername(QString username)
@@ -40,7 +40,7 @@ void User::setUsername(QString username)
         return;
 
     m_username = username;
-    emit usernameChanged(m_username);
+    Q_EMIT usernameChanged(m_username);
 }
 
 void User::setPassword(QString password)
@@ -49,7 +49,7 @@ void User::setPassword(QString password)
         return;
 
     m_password = password;
-    emit passwordChanged(m_password);
+    Q_EMIT passwordChanged(m_password);
 }
 
 NUT_IMPLEMENT_CHILD_TABLE(User, Comment, comments)

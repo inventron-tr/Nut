@@ -19,9 +19,9 @@ class PhrasesTest : public QObject
 public:
     explicit PhrasesTest(QObject *parent = nullptr);
 
-signals:
+Q_SIGNALS:
 
-private slots:
+private Q_SLOTS:
     void initTestCase();
 
     void condition_numeric_sqlite();

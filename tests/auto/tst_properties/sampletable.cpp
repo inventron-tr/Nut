@@ -26,7 +26,7 @@ void SampleTable::setId(int id)
         return;
 
     m_id = id;
-    emit idChanged(m_id);
+    Q_EMIT idChanged(m_id);
 }
 
 void SampleTable::setName(QString name)
@@ -35,7 +35,7 @@ void SampleTable::setName(QString name)
         return;
 
     m_name = name;
-    emit nameChanged(m_name);
+    Q_EMIT nameChanged(m_name);
 }
 
 void SampleTable::setLastName(QString lastName)
@@ -44,5 +44,5 @@ void SampleTable::setLastName(QString lastName)
         return;
 
     m_lastName = lastName;
-    emit lastNameChanged(m_lastName);
+    Q_EMIT lastNameChanged(m_lastName);
 }

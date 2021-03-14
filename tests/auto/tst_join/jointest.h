@@ -14,9 +14,9 @@ class JoinTest : public QObject
 public:
     explicit JoinTest(QObject *parent = 0);
 
-signals:
+Q_SIGNALS:
 
-private slots:
+private Q_SLOTS:
     void initTestCase();
 
     void join();

@@ -96,7 +96,7 @@ void Table::propertyChanged(const QString &propName)
 //    if (!d->model)
 //        qFatal ("model for class '%s' not found", qPrintable(metaObject()->className()));
 
-//    foreach (FieldModel *f, d->model->fields())
+//    Q_FOREACH (FieldModel *f, d->model->fields())
 //        if(f->isPrimaryKey && propName == f->name && f->isAutoIncrement)
 //            return;
 
@@ -138,7 +138,7 @@ bool Table::setParentTable(Table *master, TableModel *masterModel, TableModel *m
 //    if (!d->model)
 //        d->model = TableModel::findByClassName(metaObject()->className());
 
-    foreach (RelationModel *r, model->foreignKeys())
+    Q_FOREACH (RelationModel *r, model->foreignKeys())
         if(r->masterClassName == masterClassName)
         {
             setProperty(QString(r->localColumn).toLatin1().data(),
@@ -179,7 +179,7 @@ void Table::setParentTableSet(AbstractTableSet *parent)
 AbstractTableSet *Table::childTableSet(const QString &name) const
 {
     //Q_D(const Table);
-    foreach (AbstractTableSet *t, d->childTableSets)
+    Q_FOREACH (AbstractTableSet *t, d->childTableSets)
         if (t->childClassName() == name)
             return t;
     return Q_NULLPTR;

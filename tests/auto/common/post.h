@@ -53,14 +53,14 @@ public:
     QString body() const;
     bool isPublic() const;
 
-signals:
+Q_SIGNALS:
     void idChanged(int id);
     void titleChanged(QString title);
     void saveDateChanged(QDateTime saveDate);
     void bodyChanged(QString body);
     void isPublicChanged(bool isPublic);
 
-public slots:
+public Q_SLOTS:
     void setId(int id);
     void setTitle(QString title);
     void setSaveDate(QDateTime saveDate);

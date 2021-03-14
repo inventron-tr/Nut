@@ -26,9 +26,9 @@ class DateTimeTest : public QObject
 public:
     explicit DateTimeTest(QObject *parent = nullptr);
 
-signals:
+Q_SIGNALS:
 
-private slots:
+private Q_SLOTS:
     void initTestCase();
     void dateAdd();
     void timeAdd();

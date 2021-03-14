@@ -33,7 +33,7 @@ void Comment::setId(int id)
         return;
 
     m_id = id;
-    emit idChanged(m_id);
+    Q_EMIT idChanged(m_id);
 }
 
 void Comment::setMessage(QString message)
@@ -42,7 +42,7 @@ void Comment::setMessage(QString message)
         return;
 
     m_message = message;
-    emit messageChanged(m_message);
+    Q_EMIT messageChanged(m_message);
 }
 
 void Comment::setSaveDate(QDateTime saveDate)
@@ -51,7 +51,7 @@ void Comment::setSaveDate(QDateTime saveDate)
         return;
 
     m_saveDate = saveDate;
-    emit saveDateChanged(m_saveDate);
+    Q_EMIT saveDateChanged(m_saveDate);
 }
 
 void Comment::setPoint(qreal point)
@@ -61,7 +61,7 @@ void Comment::setPoint(qreal point)
         return;
 
     m_point = point;
-    emit pointChanged(m_point);
+    Q_EMIT pointChanged(m_point);
 }
 
 NUT_FOREIGN_KEY_IMPLEMENT(Comment, Post, int, post, post, setPost)

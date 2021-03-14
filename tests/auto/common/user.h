@@ -46,12 +46,12 @@ public:
     QString username() const;
     QString password() const;
 
-public slots:
+public Q_SLOTS:
     void setId(int id);
     void setUsername(QString username);
     void setPassword(QString password);
 
-signals:
+Q_SIGNALS:
     void idChanged(int id);
     void usernameChanged(QString username);
     void passwordChanged(QString password);

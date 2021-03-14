@@ -16,9 +16,9 @@ class BenchmarkTest : public QObject
 public:
     explicit BenchmarkTest(QObject *parent = nullptr);
 
-signals:
+Q_SIGNALS:
 
-private slots:
+private Q_SLOTS:
     void initTestCase();
 
     void insert1kPost();

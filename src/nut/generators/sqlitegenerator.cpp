@@ -135,22 +135,22 @@ QStringList SqliteGenerator::diff(TableModel *oldTable, TableModel *newTable)
     QList<QString> fieldNames;
     QList<QString> relations;
 
-    foreach (FieldModel *f, oldTable->fields())
+    Q_FOREACH (FieldModel *f, oldTable->fields())
         if (!fieldNames.contains(f->name))
             fieldNames.append(f->name);
-    foreach (RelationModel *r, oldTable->foreignKeys())
+    Q_FOREACH (RelationModel *r, oldTable->foreignKeys())
         if (!relations.contains(r->localColumn))
             relations.append(r->localColumn);
 
-    foreach (FieldModel *f, newTable->fields())
+    Q_FOREACH (FieldModel *f, newTable->fields())
         if (!fieldNames.contains(f->name))
             fieldNames.append(f->name);
-    foreach (RelationModel *r, newTable->foreignKeys())
+    Q_FOREACH (RelationModel *r, newTable->foreignKeys())
         if (!relations.contains(r->localColumn))
             relations.append(r->localColumn);
 
     QString columns;
-    foreach (FieldModel *f, oldTable->fields()) {
+    Q_FOREACH (FieldModel *f, oldTable->fields()) {
         if (!newTable->field(f->name))
             continue;
 

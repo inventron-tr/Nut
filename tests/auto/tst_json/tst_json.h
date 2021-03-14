@@ -21,7 +21,7 @@ public:
     TestJson();
     ~TestJson();
 
-private slots:
+private Q_SLOTS:
     void initTestCase();
 
     void store();

@@ -85,7 +85,7 @@ void GeneratorsTest::types(Nut::AbstractSqlGenerator *g, QString name)
                ;
 
     Nut::FieldModel m;
-    foreach (QMetaType::Type t, types) {
+    Q_FOREACH (QMetaType::Type t, types) {
         m.type = t;
         QString fn = g->fieldType(&m);
 

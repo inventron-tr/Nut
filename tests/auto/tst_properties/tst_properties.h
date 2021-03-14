@@ -14,9 +14,9 @@ class PropertiesTest : public QObject
 public:
     explicit PropertiesTest(QObject *parent = nullptr);
 
-signals:
+Q_SIGNALS:
 
-private slots:
+private Q_SLOTS:
     void initTestCase();
     void insert();
     void select();

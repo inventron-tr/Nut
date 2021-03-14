@@ -35,7 +35,7 @@ public:
 
     void types(Nut::AbstractSqlGenerator *g, QString name);
 
-private slots:
+private Q_SLOTS:
     void test_sqlite();
     void test_psql();
     void test_sqlserver();

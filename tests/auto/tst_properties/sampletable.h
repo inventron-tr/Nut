@@ -26,12 +26,12 @@ public:
     QString name() const;
     QString lastName() const;
 
-public slots:
+public Q_SLOTS:
     void setId(int id);
     void setName(QString name);
     void setLastName(QString lastName);
 
-signals:
+Q_SIGNALS:
     void idChanged(int id);
     void nameChanged(QString name);
     void lastNameChanged(QString lastName);

@@ -144,8 +144,8 @@ bool DatabasePrivate::updateDatabase()
         return true;
     }
 
-    foreach (TableModel *tm, current) {
-        foreach (FieldModel *fm, tm->fields()) {
+    Q_FOREACH (TableModel *tm, current) {
+        Q_FOREACH (FieldModel *fm, tm->fields()) {
             if (sqlGenerator->fieldType(fm).isEmpty()) {
                 qWarning("The type (%s) is not supported for field %s::%s",
                          QMetaType::typeName(fm->type),
@@ -163,7 +163,7 @@ bool DatabasePrivate::updateDatabase()
     QStringList sql = sqlGenerator->diff(last, current);
 
     db.transaction();
-    foreach (QString s, sql) {
+    Q_FOREACH (QString s, sql) {
         db.exec(s);
 
         if (db.lastError().type() != QSqlError::NoError) {
@@ -259,8 +259,8 @@ bool DatabasePrivate::getCurrectSchema()
         }
     }
 
-    foreach (TableModel *table, currentModel) {
-        foreach (FieldModel *f, table->fields()) {
+    Q_FOREACH (TableModel *table, currentModel) {
+        Q_FOREACH (FieldModel *f, table->fields()) {
             if (f->isPrimaryKey && ! sqlGenerator->supportPrimaryKey(f->type))
                 qFatal("The field of type %s does not support as primary key",
                        qPrintable(f->typeName));
@@ -270,7 +270,7 @@ bool DatabasePrivate::getCurrectSchema()
                        qPrintable(f->typeName));
         }
 
-        foreach (RelationModel *fk, table->foreignKeys())
+        Q_FOREACH (RelationModel *fk, table->foreignKeys())
             fk->masterTable = currentModel.tableByClassName(fk->masterClassName);
     }
 
@@ -296,7 +296,7 @@ DatabaseModel DatabasePrivate::getLastSchema()
         DatabaseModel ret = json;
         return ret;
         /*
-        foreach (QString key, json.keys()) {
+        Q_FOREACH (QString key, json.keys()) {
             TableModel *sch = new TableModel(json.value(key).toObject(), key);
             ret.append(sch);
         }*/
@@ -310,7 +310,7 @@ DatabaseModel DatabasePrivate::getLastSchema()
     //        QJsonObject json =
     //        QJsonDocument::fromJson(query.value("data").toByteArray()).object();
 
-    //        foreach (QString key, json.keys()) {
+    //        Q_FOREACH (QString key, json.keys()) {
     //            TableModel *sch = new TableModel(json.value(key).toObject(),
     //            key);
     //            ret.append(sch);
@@ -352,7 +352,7 @@ void DatabasePrivate::createChangeLogs()
                                           currentModel.tableByName(
                                               QStringLiteral("__change_log")));
 
-    foreach (QString s, diff)
+    Q_FOREACH (QString s, diff)
         db.exec(s);
 }
 
@@ -564,7 +564,7 @@ bool Database::open(bool updateDatabase)
     else if (d->driver == QStringLiteral("QODBC") || d->driver == QStringLiteral("QODBC3")) {
         QString driverName = QString();
         QStringList parts = d->databaseName.toLower().split(';');
-        foreach (QString p, parts)
+        Q_FOREACH (QString p, parts)
             if (p.trimmed().startsWith(QStringLiteral("driver=")))
                 driverName = p.split('=').at(1).toLower().trimmed();
 
@@ -615,7 +615,7 @@ int Database::saveChanges(bool cleanUp)
     }
 
     int rowsAffected = 0;
-    foreach (AbstractTableSet *ts, d->tableSets)
+    Q_FOREACH (AbstractTableSet *ts, d->tableSets)
         rowsAffected += ts->save(this, cleanUp);
 
     return rowsAffected;
@@ -624,7 +624,7 @@ int Database::saveChanges(bool cleanUp)
 void Database::cleanUp()
 {
     Q_D(Database);
-    foreach (AbstractTableSet *ts, d->tableSets)
+    Q_FOREACH (AbstractTableSet *ts, d->tableSets)
         ts->clearChilds();
 }
 

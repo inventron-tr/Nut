@@ -17,9 +17,9 @@ class UuidTest : public QObject
 public:
     explicit UuidTest(QObject *parent = nullptr);
 
-signals:
+Q_SIGNALS:
 
-private slots:
+private Q_SLOTS:
     void initTestCase();
     void save();
     void restore();

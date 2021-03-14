@@ -83,7 +83,7 @@ PhraseList PhraseList::operator |(const AbstractFieldPhrase &other) {
 
 void PhraseList::incAllDataParents()
 {
-//    foreach (PhraseData *d, data)
+//    Q_FOREACH (PhraseData *d, data)
 //        d->parents++;
 }
 

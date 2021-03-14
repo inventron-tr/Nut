@@ -42,7 +42,7 @@ void Post::setId(int id)
         return;
 
     m_id = id;
-    emit idChanged(m_id);
+    Q_EMIT idChanged(m_id);
 }
 
 void Post::setTitle(QString title)
@@ -51,7 +51,7 @@ void Post::setTitle(QString title)
         return;
 
     m_title = title;
-    emit titleChanged(m_title);
+    Q_EMIT titleChanged(m_title);
 }
 
 void Post::setSaveDate(QDateTime saveDate)
@@ -60,7 +60,7 @@ void Post::setSaveDate(QDateTime saveDate)
         return;
 
     m_saveDate = saveDate;
-    emit saveDateChanged(m_saveDate);
+    Q_EMIT saveDateChanged(m_saveDate);
 }
 
 void Post::setBody(QString body)
@@ -69,7 +69,7 @@ void Post::setBody(QString body)
         return;
 
     m_body = body;
-    emit bodyChanged(m_body);
+    Q_EMIT bodyChanged(m_body);
 }
 
 void Post::setPublic(bool isPublic)
@@ -78,7 +78,7 @@ void Post::setPublic(bool isPublic)
         return;
 
     m_isPublic = isPublic;
-    emit isPublicChanged(m_isPublic);
+    Q_EMIT isPublicChanged(m_isPublic);
 }
 
 NUT_IMPLEMENT_CHILD_TABLE(Post, Comment, comments)

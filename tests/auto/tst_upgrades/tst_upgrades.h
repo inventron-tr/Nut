@@ -17,7 +17,7 @@ public:
     Upgrades();
     ~Upgrades();
 
-private slots:
+private Q_SLOTS:
     void initTestCase();
 
     void version1();
