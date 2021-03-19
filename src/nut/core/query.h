@@ -351,6 +351,7 @@ Q_OUTOFLINE_TEMPLATE RowList<T> Query<T>::toList(int count)
             Row<Table> row;
             if (data.table->className() == d->className) {
                 row = Nut::create<T>();
+                row->init();
 #ifdef NUT_RAW_POINTER
                 returnList.append(dynamic_cast<T*>(table));
 #else
