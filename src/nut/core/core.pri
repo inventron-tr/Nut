@@ -8,6 +8,7 @@ HEADERS += \
     $$PWD/changelogtable.h \
     $$PWD/database.h \
     $$PWD/database_p.h \
+    $$PWD/foreigncontainer.h \
     $$PWD/propertysignalmapper.h \
     $$PWD/query.h \
     $$PWD/table.h \
@@ -19,6 +20,7 @@ SOURCES += \
     $$PWD/bulkinserter.cpp \
     $$PWD/changelogtable.cpp \
     $$PWD/database.cpp \
+    $$PWD/foreigncontainer.cpp \
     $$PWD/propertysignalmapper.cpp \
     $$PWD/query.cpp \
     $$PWD/table.cpp \
