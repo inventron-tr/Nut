@@ -38,6 +38,8 @@ private Q_SLOTS:
     void selectPostsWithoutTitle();
     void selectPostIds();
     void updatePostOnTheFly();
+    void selectPostsWithComments();
+    void selectCommantsWithPost();
     void testDate();
     void testLimitedQuery();
     void selectWithInvalidRelation();

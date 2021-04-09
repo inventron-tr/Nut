@@ -225,6 +225,20 @@ void BasicTest::selectPostIds()
     QCOMPARE(ids.count(), 2);
 }
 
+void BasicTest::selectPostsWithComments()
+{
+    auto posts = db.posts()->query().join<Comment>().toList();
+
+    QCOMPARE(posts.first()->comments()->length(), 3);
+}
+
+void BasicTest::selectCommantsWithPost()
+{
+    auto comments = db.comments()->query().join<Post>().toList();
+    QCOMPARE(comments.length(), 6);
+    QVERIFY(!comments.first()->post().isNull());
+}
+
 void BasicTest::testDate()
 {
     QDateTime d = QDateTime::currentDateTime();

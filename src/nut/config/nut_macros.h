@@ -85,8 +85,9 @@ public:                                                                        \
                         (staticMetaObject.className(), #name "Id");            \
         return f;                                                              \
     }                                                                          \
-public Q_SLOTS: \
-    void write(Nut::Row<type> name); \
+public : \
+    Q_INVOKABLE void write(Nut::Row<type> name); \
+    Q_INVOKABLE void write(Nut::Row<Nut::Table> name); \
     void write##Id(keytype name##Id);
 
 #define NUT_FOREIGN_KEY_IMPLEMENT(class, type, keytype, name, read, write)     \
@@ -96,7 +97,9 @@ public Q_SLOTS: \
         m_##name = name;                                                       \
         m_##name##Id = name->primaryValue().value<keytype>();                  \
     }                                                                          \
-    keytype class::read##Id() const{                                           \
+    void class::write(Nut::Row<Nut::Table> name){                              \
+        write(qSharedPointerObjectCast<type>(name));                           \
+    } keytype class::read##Id() const{                                         \
         if (m_##name)                                                          \
             return m_##name->primaryValue().value<keytype>();                  \
         return m_##name##Id;                                                   \

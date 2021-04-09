@@ -383,6 +383,21 @@ Q_OUTOFLINE_TEMPLATE RowList<T> Query<T>::toList(int count)
                 auto tableset = levels[master].lastRow.data()->childTableSet(
                             data.table->className());
                 tableset->add(row);
+
+                //set key
+                {
+                    QString setterName = data.masterFields[master];
+                    setterName[0] = setterName[0].toUpper();
+                    setterName.prepend(QStringLiteral("set"));
+
+                    bool ok = row->metaObject()->invokeMethod(row.data(),
+                                                              setterName.toStdString().c_str(),
+                                                              Qt::DirectConnection,
+                                                              Q_ARG(Nut::Row<Nut::Table>,
+                                                                    levels[master].lastRow));
+
+                    qDebug() << "data.masterFields[master]=" << setterName << ok;
+                }
             }
 
             row->setStatus(Table::FetchedFromDB);
