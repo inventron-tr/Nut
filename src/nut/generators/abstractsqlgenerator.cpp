@@ -465,7 +465,7 @@ QString AbstractSqlGenerator::insertRecord(Table *t, QString tableName)
 
     QSet<QString> props = t->changedProperties();
     QString changedPropertiesText = QString();
-    Q_FOREACH (QString f, props) {
+    for (auto &f : props) {
         if (f == key)
             continue;
 
@@ -490,11 +490,11 @@ QString AbstractSqlGenerator::updateRecord(Table *t, QString tableName)
     QString key = model->primaryKey();
     QStringList values;
 
-    Q_FOREACH (QString f, t->changedProperties())
+    for (auto &f : t->changedProperties())
         if (f != key)
-            values.append(f + QStringLiteral("='")
-                          + t->property(f.toLatin1().data()).toString()
-                          + QStringLiteral("'"));
+            values.append(f + QStringLiteral("=")
+                          + escapeValue(t->property(f.toLatin1().data())));
+
     sql = QStringLiteral("UPDATE %1 SET %2 WHERE %3=%4")
               .arg(tableName,
                    values.join(QStringLiteral(", ")),

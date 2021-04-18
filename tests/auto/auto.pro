@@ -6,6 +6,7 @@ SUBDIRS += \
     tst_datatypes \
     tst_phrases \
     tst_properties \
+    tst_qttypes \
     tst_quuid \
     tst_generators \
     tst_upgrades \
