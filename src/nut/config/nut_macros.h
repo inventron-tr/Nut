@@ -98,7 +98,7 @@ public : \
         m_##name##Id = name->primaryValue().value<keytype>();                  \
     }                                                                          \
     void class::write(Nut::Row<Nut::Table> name){                              \
-        write(qSharedPointerObjectCast<type>(name));                           \
+        write(qSharedPointerDynamicCast<type>(name));                          \
     } keytype class::read##Id() const{                                         \
         if (m_##name)                                                          \
             return m_##name->primaryValue().value<keytype>();                  \

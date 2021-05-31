@@ -384,7 +384,8 @@ Q_OUTOFLINE_TEMPLATE RowList<T> Query<T>::toList(int count)
                 int master = data.masters[i];
                 auto tableset = levels[master].lastRow.data()->childTableSet(
                             data.table->className());
-                tableset->add(row);
+                if (tableset)
+                    tableset->add(row);
 
                 //set key
                 {
@@ -398,7 +399,6 @@ Q_OUTOFLINE_TEMPLATE RowList<T> Query<T>::toList(int count)
                                                               Q_ARG(Nut::Row<Nut::Table>,
                                                                     levels[master].lastRow));
 
-                    qDebug() << "data.masterFields[master]=" << setterName << ok;
                 }
             }
 
