@@ -48,6 +48,8 @@ public:
     Database *database() const;
     void setDatabase(Database *database);
 
+    int size() const;
+
 protected:
     QExplicitlySharedDataPointer<AbstractTableSetData> data;
 

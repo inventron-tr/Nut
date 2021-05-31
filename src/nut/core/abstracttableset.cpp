@@ -115,4 +115,9 @@ void AbstractTableSet::setDatabase(Database *database)
     data->database = database;
 }
 
+int AbstractTableSet::size() const
+{
+    return data->childs.size();
+}
+
 NUT_END_NAMESPACE

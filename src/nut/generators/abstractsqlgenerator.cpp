@@ -258,14 +258,14 @@ QStringList AbstractSqlGenerator::diff(TableModel *oldTable, TableModel *newTabl
             columnSql << declare;
         }
     }
-//    Q_FOREACH (QString fieldName, relations) {
-//        RelationModel *newRelation = newTable->foregionKeyByField(fieldName);
+//    for (auto &fieldName: relations) {
+//        RelationModel *newRelation = newTable->foreignKeyByField(fieldName);
 //        if (oldTable) {
-//            RelationModel *oldRelation = oldTable->foregionKeyByField(fieldName);
+//            RelationModel *oldRelation = oldTable->foreignKeyByField(fieldName);
 
-//            QString buffer = diff(oldRelation, newRelation);
-//            if (!buffer.isNull())
-//                columnSql << buffer;
+//            auto buffer = diff(oldRelation, newRelation);
+//            if (buffer.size())
+//                columnSql.append(buffer);
 //        } else {
 //            columnSql << relationDeclare(newRelation);
 //        }

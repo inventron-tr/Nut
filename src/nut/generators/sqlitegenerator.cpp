@@ -176,16 +176,23 @@ QStringList SqliteGenerator::diff(TableModel *oldTable, TableModel *newTable)
                             SELECT id,
                                    t,
                                    m
-                              FROM sqlitestudio_temp_table;
+                              FROM nut_orm_temp_table;
 
     DROP TABLE sqlitestudio_temp_table;
     */
 
-    ret.append(QStringLiteral("ALTER TABLE ") + newTable->name() + QStringLiteral(" RENAME TO sqlitestudio_temp_table;"));
+    QString foreignKeys;
+    for (auto &f: newTable->foreignKeys()) {
+        if (!foreignKeys.isEmpty())
+            foreignKeys.append(QStringLiteral(", "));
+        foreignKeys.append(QStringLiteral("FOREIGN KEY(%1) REFERENCES %2(id)")
+                           .arg(f->localColumn, f->masterTable->name()));
+    }
+    ret.append(QStringLiteral("ALTER TABLE ") + newTable->name() + QStringLiteral(" RENAME TO nut_orm_temp_table;"));
     ret.append(newTableSql);
-    ret.append(QStringLiteral("INSERT INTO %1 ( %2 ) SELECT %2 FROM sqlitestudio_temp_table;")
+    ret.append(QStringLiteral("INSERT INTO %1 ( %2 ) SELECT %2 FROM nut_orm_temp_table;")
                .arg(newTable->name(), columns));
-    ret.append(QStringLiteral("DROP TABLE sqlitestudio_temp_table;"));
+    ret.append(QStringLiteral("DROP TABLE nut_orm_temp_table;"));
     return ret;
 }
 void SqliteGenerator::appendSkipTake(QString &sql, int skip, int take)
