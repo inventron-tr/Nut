@@ -356,4 +356,14 @@ void MySqlGenerator::appendSkipTake(QString &sql, int skip, int take)
     }
 }
 
+QString MySqlGenerator::primaryKeyConstraint(const TableModel *table) const
+{
+    return  QStringLiteral("PRIMARY KEY (%1)")
+        .arg(table->primaryKey());
+}
+
+QString MySqlGenerator::escaleFieldName(const QString &fieldName) const
+{
+    return "`" + fieldName + "`";
+}
 NUT_END_NAMESPACE

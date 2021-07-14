@@ -52,3 +52,5 @@ test/tst_json/tst_upgrades*
 test/tst_phrases/tst_phrases*
 test/tst_quuid/tst_uuid*
 test/tst_upgrades/tst_upgrades*
+
+.idea

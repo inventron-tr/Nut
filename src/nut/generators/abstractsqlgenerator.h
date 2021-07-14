@@ -80,6 +80,7 @@ public:
     //fields
     virtual QString fieldType(FieldModel *field) = 0;
     virtual QString fieldDeclare(FieldModel *field);
+    virtual QString escaleFieldName(const QString &fieldName) const;
     virtual QStringList constraints(TableModel *table);
     virtual QString escapeValue(const QVariant &v) const;
     virtual QVariant unescapeValue(const QMetaType::Type &type, const QVariant &dbValue);

@@ -39,6 +39,8 @@ public:
     //    QString selectCommand(AgregateType t, QString agregateArg, QString tableName, QList<WherePhrase> &wheres, QList<WherePhrase> &orders, QList<RelationModel *> joins, int skip, int take);
     QString createConditionalPhrase(const PhraseData *d) const override;
     void appendSkipTake(QString &sql, int skip, int take) override;
+    QString primaryKeyConstraint(const TableModel *table) const override;
+    QString escaleFieldName(const QString &fieldName) const override;
 
 private:
     bool readInsideParentese(QString &text, QString &out);

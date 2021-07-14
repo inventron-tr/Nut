@@ -13,12 +13,18 @@
     .arg(QString::fromUtf8(__func__))
 
 
-#define DRIVER QStringLiteral("QSQLITE")
-#define DATABASE QStringLiteral("nut_test_%1_db") \
-    .arg(QString::fromUtf8(metaObject()->className())).toLower()
+/*#define DRIVER QStringLiteral("QSQLITE")
 #define HOST QString()
 #define USERNAME QString()
 #define PASSWORD QString()
+*/
+#define DRIVER QStringLiteral("QMYSQL")
+#define HOST QStringLiteral("192.168.10.2")
+#define USERNAME QStringLiteral("root")
+#define PASSWORD QStringLiteral("lDexDJGvQwx20sfgtsetDSupmn9")
+
+#define DATABASE QStringLiteral("nut_test_%1_db") \
+    .arg(QString::fromUtf8(metaObject()->className())).toLower()
 
 #ifdef Q_OS_LINUX
 #   define OS "Linux"

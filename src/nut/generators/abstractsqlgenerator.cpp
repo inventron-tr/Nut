@@ -147,7 +147,7 @@ QString AbstractSqlGenerator::fieldDeclare(FieldModel *field)
     if (type.isEmpty())
         return type;
 
-    QString ret = field->name + QStringLiteral(" ") + type;
+    QString ret = escaleFieldName(field->name) + QStringLiteral(" ") + type;
     if (field->notNull)
         ret.append(QStringLiteral(" NOT NULL"));
 
@@ -155,6 +155,11 @@ QString AbstractSqlGenerator::fieldDeclare(FieldModel *field)
         ret.append(QStringLiteral(" UNIQUE"));
 
     return ret;
+}
+
+QString AbstractSqlGenerator::escaleFieldName(const QString &fieldName) const
+{
+    return fieldName;
 }
 
 QStringList AbstractSqlGenerator::constraints(TableModel *table)
