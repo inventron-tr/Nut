@@ -476,9 +476,9 @@ QString AbstractSqlGenerator::insertRecord(Table *t, QString tableName)
 
         values.append(escapeValue(t->property(f.toLatin1().data())));
 
-        if (changedPropertiesText != QStringLiteral(""))
+        if (changedPropertiesText != QLatin1String(""))
             changedPropertiesText.append(QStringLiteral(", "));
-        changedPropertiesText.append(f);
+        changedPropertiesText.append(escaleFieldName(f));
     }
     sql = QStringLiteral("INSERT INTO %1 (%2) VALUES (%3)")
               .arg(tableName, changedPropertiesText, values.join(QStringLiteral(", ")));
@@ -724,7 +724,7 @@ QString AbstractSqlGenerator::insertCommand(const QString &tableName, const Assi
         if (!values.isEmpty())
             values.append(QStringLiteral(", "));
 
-        fieldNames.append(QString::fromUtf8(d->left->fieldName));
+        fieldNames.append(escaleFieldName(QString::fromUtf8(d->left->fieldName)));
         values.append(escapeValue(d->operand));
     }
     return QStringLiteral("INSERT INTO %1 (%2) VALUES (%3);")
