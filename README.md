@@ -20,7 +20,7 @@
 ### Create table
 
 #### sampletable.h
-```
+```cpp
 #ifndef SAMPLETABLE_H
 #define SAMPLETABLE_H
 
@@ -60,7 +60,7 @@ Q_SIGNALS:
 ```
 
 #### sampletable.cpp:
-```
+```cpp
 #include "sampletable.h"
 
 SampleTable::SampleTable(QObject *parent) : Nut::Table(parent)
@@ -104,7 +104,7 @@ void SampleTable::setName(QString name)
 
 ### Create database
 #### sampledatabase.h
-```
+```cpp
 #ifndef SAMPLEDATABASE_H
 #define SAMPLEDATABASE_H
 
@@ -125,7 +125,7 @@ public:
 ```
 
 sampledatabase.cpp
-```
+```cpp
 #include "sampledatabase.h"
 #include "sampletable.h"
 
@@ -138,7 +138,7 @@ SampleDataBase::SampleDataBase() : Nut::Database()
 ```
 
 #### Sample codes:
-```
+```cpp
 qRegisterMetaType<SampleTable*>();
 qRegisterMetaType<SampleDataBase*>();
 
