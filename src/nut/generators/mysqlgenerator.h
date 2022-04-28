@@ -25,6 +25,8 @@
 
 #include <QtNut/abstractsqlgenerator.h>
 
+QT_BEGIN_NAMESPACE
+
 NUT_BEGIN_NAMESPACE
 
 class NUT_EXPORT MySqlGenerator : public AbstractSqlGenerator
@@ -40,12 +42,14 @@ public:
     QString createConditionalPhrase(const PhraseData *d) const override;
     void appendSkipTake(QString &sql, int skip, int take) override;
     QString primaryKeyConstraint(const TableModel *table) const override;
-    QString escaleFieldName(const QString &fieldName) const override;
+    QString escapeFieldName(const QString &fieldName) const override;
 
 private:
     bool readInsideParentese(QString &text, QString &out);
 };
 
 NUT_END_NAMESPACE
+
+QT_END_NAMESPACE
 
 #endif // MYSQLGENERATOR_H

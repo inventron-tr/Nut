@@ -35,6 +35,8 @@ void BasicTest::initTestCase()
     db.setUserName(USERNAME);
     db.setPassword(PASSWORD);
 
+    qDebug().noquote() << "Connecting to" << DATABASE;
+
     bool ok = db.open();
     QVERIFY(ok);
 
@@ -60,14 +62,15 @@ void BasicTest::createUser()
     user->setUsername(QStringLiteral("admin"));
     user->setPassword(QStringLiteral("123456"));
     db.users()->append(user);
-    db.saveChanges();
+    QTEST_ASSERT(db.saveChanges() != 0);
+    QTEST_ASSERT(user->id() != 0);
 }
 
 void BasicTest::createPost()
 {
     TIC();
     auto newPost = Nut::create<Post>();
-    newPost->setTitle("post title");
+    newPost->setTitle(QStringLiteral("post title"));
     newPost->setSaveDate(QDateTime::currentDateTime());
     newPost->setPublic(false);
 
@@ -83,14 +86,16 @@ void BasicTest::createPost()
     for (int i = 0; i < 10; ++i) {
         auto score = Nut::create<Score>();
         score->setScore(i % 5);
+        score->setCondition(1); // test keyword on mysql
         newPost->scores()->append(score);
     }
 
-    db.saveChanges();
+    QTEST_ASSERT(db.saveChanges() != 0);
 
     postId = newPost->id();
 
     QTEST_ASSERT(newPost->id() != 0);
+
     TOC();
 }
 
@@ -115,7 +120,7 @@ void BasicTest::createPost2()
         comment->setPostId(postId);
         db.comments()->append(comment);
     }
-    db.saveChanges();
+    QTEST_ASSERT(db.saveChanges() != 0);
 
     QVERIFY(postId != 0);
 }
@@ -140,11 +145,11 @@ void BasicTest::updatePostOnTheFly()
 void BasicTest::selectPublicts()
 {
     auto publinPostsCount = db.posts()->query()
-            .where(Post::isPublicField())
+            .where(Post::isPublicField() == true)
             .count();
 
     auto nonPublicPostsCount = db.posts()->query()
-            .where(!Post::isPublicField())
+            .where(Post::isPublicField() == false)
             .count();
 
     QCOMPARE(publinPostsCount, 1);
@@ -160,7 +165,7 @@ void BasicTest::selectPosts()
 
     auto posts = q.toList();
     post = posts.at(0);
-    post->setBody(QStringLiteral(""));
+    post->setBody(QLatin1String());
 
     PRINT(posts.length());
     PRINT(posts.at(0)->comments()->length());
@@ -248,6 +253,7 @@ void BasicTest::testDate()
     auto newPost = Nut::create<Post>();
     newPost->setTitle(QStringLiteral("post title"));
     newPost->setSaveDate(d);
+    newPost->setPublic(true);
 
     db.posts()->append(newPost);
 
