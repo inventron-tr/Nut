@@ -93,7 +93,7 @@ jobs:
           cmake --build .
           
       - name: Seutp postgres
-        if: false #contains(matrix.tests, 'posgtresql')
+        if: contains(matrix.tests, 'posgtresql')
         uses: ikalnytskyi/action-setup-postgres@v1
         
       - name: Setup sql server
@@ -105,7 +105,7 @@ jobs:
           show-log: true
        
       - name: Check sql server
-        if: false #contains(matrix.tests, 'mssql')
+        if: contains(matrix.tests, 'mssql')
         run: sqlcmd -S localhost -U sa -P NUT_sa_PASS_1_??? -d tempdb -Q "SELECT @@version;"
         
       - name: Run tests with sqlite
@@ -129,7 +129,7 @@ jobs:
           ${{ matrix.make }} run-tests
           
       - name: Run tests with mysql
-        if: contains(matrix.tests, 'mysql')
+        if: false #contains(matrix.tests, 'mysql')
         #continue-on-error: true
         run: |
           sudo systemctl start mysql.service
@@ -140,7 +140,7 @@ jobs:
           ${{ matrix.make }} run-tests
           
       - name: Run tests with sql server
-        if: contains(matrix.tests, 'mssql')
+        if: false #contains(matrix.tests, 'mssql')
         continue-on-error: true
         run: |
           rm tests/auto/common/test_params.h
