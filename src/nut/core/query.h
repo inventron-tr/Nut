@@ -138,10 +138,10 @@ public:
     QList<O> select(const std::function<O(const QSqlQuery &q)> allocator);
 
     int count();
-    QVariant max(const FieldPhrase<int> &f);
-    QVariant min(const FieldPhrase<int> &f);
-    QVariant sum(const FieldPhrase<int> &f);
-    QVariant average(const FieldPhrase<int> &f);
+    QVariant max(const AbstractFieldPhrase &f);
+    QVariant min(const AbstractFieldPhrase &f);
+    QVariant sum(const AbstractFieldPhrase &f);
+    QVariant average(const AbstractFieldPhrase &f);
 
 
     //data mailpulation
@@ -498,7 +498,7 @@ Q_OUTOFLINE_TEMPLATE int Query<T>::count()
 }
 
 template <class T>
-Q_OUTOFLINE_TEMPLATE QVariant Query<T>::max(const FieldPhrase<int> &f)
+Q_OUTOFLINE_TEMPLATE QVariant Query<T>::max(const AbstractFieldPhrase &f)
 {
     if (!d->hasCustomCommand) {
         d->joins.prepend(d->tableName);
@@ -517,7 +517,7 @@ Q_OUTOFLINE_TEMPLATE QVariant Query<T>::max(const FieldPhrase<int> &f)
 }
 
 template <class T>
-Q_OUTOFLINE_TEMPLATE QVariant Query<T>::min(const FieldPhrase<int> &f)
+Q_OUTOFLINE_TEMPLATE QVariant Query<T>::min(const AbstractFieldPhrase &f)
 {
     if (!d->hasCustomCommand) {
         d->joins.prepend(d->tableName);
@@ -536,7 +536,7 @@ Q_OUTOFLINE_TEMPLATE QVariant Query<T>::min(const FieldPhrase<int> &f)
 }
 
 template <class T>
-Q_OUTOFLINE_TEMPLATE QVariant Query<T>::sum(const FieldPhrase<int> &f)
+Q_OUTOFLINE_TEMPLATE QVariant Query<T>::sum(const AbstractFieldPhrase &f)
 {
     if (!d->hasCustomCommand) {
         d->joins.prepend(d->tableName);
@@ -555,7 +555,7 @@ Q_OUTOFLINE_TEMPLATE QVariant Query<T>::sum(const FieldPhrase<int> &f)
 }
 
 template <class T>
-Q_OUTOFLINE_TEMPLATE QVariant Query<T>::average(const FieldPhrase<int> &f)
+Q_OUTOFLINE_TEMPLATE QVariant Query<T>::average(const AbstractFieldPhrase &f)
 {
     if (!d->hasCustomCommand) {
         d->joins.prepend(d->tableName);
