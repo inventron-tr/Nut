@@ -287,6 +287,10 @@ QString SqliteGenerator::createConditionalPhrase(const PhraseData *d) const
             return QStringLiteral("CAST(strftime('%d', %1) AS INT)")
                     .arg(createConditionalPhrase(d->left));
 
+        case PhraseData::DatePartDayOfWeek:
+            return QStringLiteral("CAST(strftime('%w', %1) AS INT)")
+                    .arg(createConditionalPhrase(d->left));
+
         case PhraseData::DatePartHour:
             return QStringLiteral("CAST(strftime('%H', %1) AS INT)")
                     .arg(createConditionalPhrase(d->left));

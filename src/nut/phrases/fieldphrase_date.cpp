@@ -52,6 +52,10 @@ ConditionalPhrase FieldPhrase<QDate>::day() {
     return ConditionalPhrase(this, PhraseData::DatePartDay);
 }
 
+ConditionalPhrase FieldPhrase<QDate>::dayOfWeek() {
+    return ConditionalPhrase(this, PhraseData::DatePartDayOfWeek);
+}
+
 FieldPhrase<QTime>::FieldPhrase(const char *className, const char *s) :
     AbstractFieldPhrase(className, s)
 {}
@@ -123,6 +127,10 @@ ConditionalPhrase FieldPhrase<QDateTime>::month() {
 
 ConditionalPhrase FieldPhrase<QDateTime>::day() {
     return ConditionalPhrase(this, PhraseData::DatePartDay);
+}
+
+ConditionalPhrase FieldPhrase<QDateTime>::dayOfWeek() {
+    return ConditionalPhrase(this, PhraseData::DatePartDayOfWeek);
 }
 
 ConditionalPhrase FieldPhrase<QDateTime>::hour() {

@@ -75,6 +75,8 @@ public:
     ConditionalPhrase year();
     ConditionalPhrase month();
     ConditionalPhrase day();
+
+    ConditionalPhrase dayOfWeek();
 };
 
 template<>
@@ -114,6 +116,8 @@ public:
     ConditionalPhrase year();
     ConditionalPhrase month();
     ConditionalPhrase day();
+
+    ConditionalPhrase dayOfWeek();
 
     ConditionalPhrase hour();
     ConditionalPhrase minute();

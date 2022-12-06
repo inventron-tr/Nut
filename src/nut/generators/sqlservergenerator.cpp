@@ -266,6 +266,9 @@ QString SqlServerGenerator::createConditionalPhrase(const PhraseData *d) const
 
     if (d->type == PhraseData::WithoutOperand) {
         switch (op) {
+        case PhraseData::DatePartDayOfWeek:
+            return QStringLiteral("DATEPART(WEEKDAY, %1)")
+                    .arg(createConditionalPhrase(d->left));
         case PhraseData::DatePartYear:
         case PhraseData::DatePartMonth:
         case PhraseData::DatePartDay:
