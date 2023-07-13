@@ -22,7 +22,7 @@
 #define FOREIGNCONTAINER_H
 
 #include <QtGlobal>
-#include <QtNut/NutGlobal>
+#include <QtNut/nut_global.h>
 
 QT_BEGIN_NAMESPACE
 

@@ -23,7 +23,6 @@
 
 #include <QtNut/nut_global.h>
 #include <QtNut/assignmentphraselist.h>
-#include <QtNut/NutGlobal>
 
 QT_BEGIN_NAMESPACE
 

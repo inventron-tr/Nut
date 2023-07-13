@@ -42,7 +42,10 @@ qt_internal_add_module(Nut
         phrases/phrasedata.cpp phrases/phrasedata.h
         phrases/phrasedatalist.cpp phrases/phrasedatalist.h
         phrases/phraselist.cpp phrases/phraselist.h
+        phrases/numericphrase.cpp phrases/numericphrase.h
         types/dbgeography.cpp types/dbgeography.h
+
+        NutGlobal
     DEFINES
         NUT_BUILD_LIB
         NUT_SHARED

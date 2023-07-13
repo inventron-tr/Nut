@@ -3,5 +3,6 @@
 );
 %classnames = (
  "nut_global.h" => "NutGlobal"
+ "numericphrase.h" => "NumericFieldPhrase"
 );
 $publicclassregexp = ".+";
