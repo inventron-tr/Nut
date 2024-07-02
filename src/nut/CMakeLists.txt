@@ -5,6 +5,7 @@
 #####################################################################
 
 qt_internal_add_module(Nut
+    STATIC
     SOURCES
         config/nut_config.h
         config/nut_consts.h
