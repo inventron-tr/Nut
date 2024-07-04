@@ -510,6 +510,12 @@ void Database::setConnectionName(QString connectionName)
     d->connectionName = connectionName;
 }
 
+void Database::setConnectOptions(QString options)
+{
+    Q_D(Database);
+    d->db.setConnectOptions(options);
+}
+
 void Database::setDriver(QString driver)
 {
     Q_D(Database);
@@ -559,7 +565,7 @@ bool Database::open(bool updateDatabase)
         d->sqlGenerator = new PostgreSqlGenerator(this);
     else if (d->driver == QStringLiteral("QMYSQL") || d->driver == QStringLiteral("QMYSQL3"))
         d->sqlGenerator = new MySqlGenerator(this);
-    else if (d->driver == QStringLiteral("QSQLITE") || d->driver == QStringLiteral("QSQLITE3"))
+    else if (d->driver == QStringLiteral("QSQLITE") || d->driver == QStringLiteral("QSQLITE3") || d->driver == QStringLiteral("SQLITECIPHER"))
         d->sqlGenerator = new SqliteGenerator(this);
     else if (d->driver == QStringLiteral("QODBC") || d->driver == QStringLiteral("QODBC3")) {
         QString driverName = QString();

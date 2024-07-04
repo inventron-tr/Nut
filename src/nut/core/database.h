@@ -87,6 +87,7 @@ public Q_SLOTS:
     void setUserName(QString userName);
     void setPassword(QString password);
     void setConnectionName(QString connectionName);
+    void setConnectOptions(QString options);
     void setDriver(QString driver);
 
 private:
