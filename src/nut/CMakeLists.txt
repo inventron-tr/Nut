@@ -62,7 +62,6 @@ qt_internal_add_module(Nut
         types
     PUBLIC_LIBRARIES
         Qt::Core
-        Qt::Gui
         Qt::Sql
     GENERATE_CPP_EXPORTS
 )

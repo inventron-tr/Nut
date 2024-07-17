@@ -16,6 +16,6 @@ set(PROJECT_VERSION_MAJOR, 0)
 set(PROJECT_VERSION_MINOR, 7)
 set(PROJECT_VERSION_PATCH, 0)
 
-find_package(Qt6 CONFIG REQUIRED COMPONENTS BuildInternals Core Gui Sql)
+find_package(Qt6 CONFIG REQUIRED COMPONENTS BuildInternals Core Sql)
 
 qt_build_repo()
