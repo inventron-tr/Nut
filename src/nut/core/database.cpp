@@ -602,6 +602,8 @@ QSqlQuery Database::exec(const QString &sql)
         qWarning("Error executing sql command: %s; Command=%s",
                  d->db.lastError().text().toLatin1().data(),
                  sql.toUtf8().constData());
+    else
+        printSql(sql);
     return q;
 }
 
