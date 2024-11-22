@@ -251,7 +251,7 @@ Q_OUTOFLINE_TEMPLATE RowList<T> Query<T>::toList(int count)
                                                             d->skip,
                                                             count);
 
-    printSql(d->sql);
+    //printSql(d->sql);
     QSqlQuery q = d->database->exec(d->sql);
     if (q.lastError().isValid()) {
         qDebug() << q.lastError().text();
