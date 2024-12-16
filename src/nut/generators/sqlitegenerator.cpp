@@ -110,6 +110,9 @@ QString SqliteGenerator::fieldDeclare(FieldModel *field)
     if (field->isUnique)
         type.append(QStringLiteral(" UNIQUE"));
 
+    if(!(field->defaultValue.isEmpty()))
+        type.append(QStringLiteral(" DEFAULT %1").arg(field->defaultValue));
+
     return field->name + QStringLiteral(" ") + type;
 }
 
