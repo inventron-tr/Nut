@@ -376,22 +376,23 @@ QString AbstractSqlGenerator::join(const QString &mainTable,
     QString ret = mainTable;
     QList<RelationModel*>::const_iterator i;
     for (i = list.begin(); i != list.end(); ++i) {
+        QString joinType = (*i)->leftJoin ? "LEFT" : "INNER";
         if ((*i)->masterTable->name() == mainTable) {
-            ret.append(QStringLiteral(" INNER JOIN %3 ON %1.%2 = %3.%4")
+            ret.append(QStringLiteral(" %5 JOIN %3 ON %1.%2 = %3.%4")
                        .arg((*i)->masterTable->name(),
                             (*i)->masterTable->primaryKey(),
                             (*i)->slaveTable->name(),
-                            (*i)->localColumn));
+                            (*i)->localColumn, joinType));
 
             if (order != Q_NULLPTR)
                 order->append((*i)->slaveTable->name() + QStringLiteral(".")
                               + (*i)->slaveTable->primaryKey());
         } else {
-            ret.append(QStringLiteral(" INNER JOIN %3 ON %1.%2 = %3.%4")
+            ret.append(QStringLiteral(" %5 JOIN %3 ON %1.%2 = %3.%4")
                        .arg(mainTable,
                             (*i)->localColumn,
                             (*i)->masterTable->name(),
-                            (*i)->masterTable->primaryKey()));
+                            (*i)->masterTable->primaryKey(), joinType));
 
             if (order != Q_NULLPTR)
                 order->append((*i)->masterTable->name() + QStringLiteral(".")
@@ -433,9 +434,10 @@ QString AbstractSqlGenerator::join(const QStringList &list, QStringList *order)
         RelationModel *rel = model.relationByClassNames(mainTable, clone.first());
         if (rel) {
             //mainTable is master of table
-            ret.append(QStringLiteral(" INNER JOIN [%1] ON %4.%2 = %1.%3")
+            QString joinType = rel->leftJoin ? "LEFT" : "INNER";
+            ret.append(QStringLiteral(" %5 JOIN [%1] ON %4.%2 = %1.%3")
                        .arg(table, rel->masterTable->primaryKey(),
-                            rel->localColumn, mainTable));
+                            rel->localColumn, mainTable, joinType));
 
             if (order != Q_NULLPTR)
                 order->append(mainTable + QStringLiteral(".")
@@ -444,10 +446,11 @@ QString AbstractSqlGenerator::join(const QStringList &list, QStringList *order)
         } else{
             rel = model.relationByClassNames(clone.first(), mainTable);
             if (rel) {
+                QString joinType = rel->leftJoin ? "LEFT" : "INNER";
                 // table is master of mainTable
-                ret.append(QStringLiteral(" INNER JOIN [%1] ON %4.%2 = %1.%3")
+                ret.append(QStringLiteral(" %5 JOIN [%1] ON %4.%2 = %1.%3")
                            .arg(table, rel->localColumn,
-                           rel->masterTable->primaryKey(), mainTable));
+                           rel->masterTable->primaryKey(), mainTable, joinType));
 
                 if (order != Q_NULLPTR)
                     order->append(mainTable + QStringLiteral(".")

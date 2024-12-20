@@ -113,11 +113,18 @@ public:
 
     Query<T> &join(const QString &className);
     Query<T> &join(Table *c);
+    Query<T> &leftJoin(const QString &className);
 
     template<class TABLE>
     Query<T> &join()
     {
         join(TABLE::staticMetaObject.className());
+        return *this;
+    }
+    template<class TABLE>
+    Query<T> &leftJoin()
+    {
+        leftJoin(TABLE::staticMetaObject.className());
         return *this;
     }
 
@@ -598,6 +605,26 @@ Q_OUTOFLINE_TEMPLATE Query<T> &Query<T>::join(const QString &className)
         return *this;
     }
 
+    d->relations.append(rel);
+    d->joins.append(className);
+    return *this;
+}
+
+template <class T>
+Q_OUTOFLINE_TEMPLATE Query<T> &Query<T>::leftJoin(const QString &className)
+{
+    RelationModel *rel = d->database->model()
+    .relationByClassNames(d->className, className);
+    if (!rel)
+        rel = d->database->model()
+                  .relationByClassNames(className, d->className);
+
+    if (!rel) {
+        qDebug() << "No relation between" << d->className
+                 << "and" << className;
+        return *this;
+    }
+    rel->leftJoin = true;
     d->relations.append(rel);
     d->joins.append(className);
     return *this;

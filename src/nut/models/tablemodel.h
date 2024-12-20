@@ -86,6 +86,7 @@ struct RelationModel{
     TableModel *masterTable{nullptr};
 
     QString masterClassName;
+    bool leftJoin = false;
 
     QJsonObject toJson() const;
 };
