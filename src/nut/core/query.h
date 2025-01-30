@@ -69,6 +69,7 @@ struct NUT_EXPORT QueryData {
     int take;
     PhraseList orderPhrase, fieldPhrase;
     ConditionalPhrase wherePhrase;
+    QString nativeSql;
 
     QueryData *clone() {
         auto r = new QueryData;
@@ -85,6 +86,7 @@ struct NUT_EXPORT QueryData {
         r->orderPhrase = orderPhrase;
         r->fieldPhrase = fieldPhrase;
         r->wherePhrase = wherePhrase;
+        r->nativeSql = nativeSql;
         return r;
     }
 
@@ -134,6 +136,7 @@ public:
     Query<T> &fields(const PhraseList &ph);
     Query<T> &orderBy(const PhraseList &ph);
     Query<T> &where(const ConditionalPhrase &ph);
+    Query<T> &native(const QString &sql);
     Query<T> &setWhere(const ConditionalPhrase &ph);
 
     //data selecting
@@ -256,7 +259,8 @@ Q_OUTOFLINE_TEMPLATE RowList<T> Query<T>::toList(int count)
                                                             d->orderPhrase,
                                                             d->relations,
                                                             d->skip,
-                                                            count);
+                                                            count,
+                                                            d->nativeSql);
 
     //printSql(d->sql);
     QSqlQuery q = d->database->exec(d->sql);
@@ -456,7 +460,8 @@ Q_OUTOFLINE_TEMPLATE QList<F> Query<T>::select(const FieldPhrase<F> f)
                                                             d->wherePhrase,
                                                             d->relations,
                                                             d->skip,
-                                                            d->take);
+                                                            d->take,
+                                                            d->nativeSql);
 
         printSql(d->sql);
     }
@@ -644,6 +649,13 @@ Q_OUTOFLINE_TEMPLATE Query<T> &Query<T>::where(const ConditionalPhrase &ph)
         d->wherePhrase = d->wherePhrase && ph;
     else
         d->wherePhrase = ph;
+    return *this;
+}
+
+template <class T>
+Q_OUTOFLINE_TEMPLATE Query<T> &Query<T>::native(const QString &sql)
+{
+    d->nativeSql = sql;
     return *this;
 }
 

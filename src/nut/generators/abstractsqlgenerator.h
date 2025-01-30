@@ -120,7 +120,8 @@ public:
                                   const PhraseList &order,
                                   const QList<RelationModel *> &joins,
                                   const int skip = -1,
-                                  const int take = -1);
+                                  const int take = -1,
+                                  const QString nativeSql = QStringLiteral(""));
 
     virtual QString selectCommand(const QString &tableName,
                                   const AgregateType &t,

@@ -505,7 +505,6 @@ QString AbstractSqlGenerator::updateRecord(Table *t, QString tableName)
     QStringList values;
 
     for (const auto &f : t->changedProperties())
-        if (f != key)
             values.append(escapeFieldName(f) + QStringLiteral("=")
                           + escapeValue(t->property(f.toLatin1().data())));
 
@@ -600,7 +599,8 @@ QString AbstractSqlGenerator::selectCommand(const QString &tableName,
                                         const PhraseList &order,
                                         const QList<RelationModel*> &joins,
                                         const int skip,
-                                        const int take)
+                                        const int take,
+                                        const QString nativeSql)
 {
     Q_UNUSED(skip)
     Q_UNUSED(take)
@@ -624,7 +624,7 @@ QString AbstractSqlGenerator::selectCommand(const QString &tableName,
 
     QStringList joinedOrders;
     QString orderText = createOrderPhrase(order);
-    QString whereText = createConditionalPhrase(where.data);
+    QString whereText = createConditionalPhrase(where.data)+nativeSql;
     QString fromText = join(tableName, joins, &joinedOrders);
 
     QString sql = QStringLiteral("SELECT ") + selectText
@@ -852,7 +852,6 @@ QString AbstractSqlGenerator::escapeValue(const QVariant &v) const
          qWarning("No field escape rule for: %s", v.typeName());
          return QString();
     }
-
 
     return QStringLiteral("'") + serialized + QStringLiteral("'");
 }
