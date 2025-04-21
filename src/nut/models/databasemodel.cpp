@@ -39,7 +39,7 @@ DatabaseModel::DatabaseModel(const QString &name) :
 }
 
 DatabaseModel::DatabaseModel(const DatabaseModel &other) :
-    QList<TableModel*>(other), _version(0)
+    QList<TableModel*>(other), _version(other.version())
 {
 
 }

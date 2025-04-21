@@ -18,7 +18,7 @@ QT_BEGIN_NAMESPACE
 
 // Database
 #define NUT_DB_VERSION(version)  \
-    NUT_INFO(__nut_DB_VERSION, version, 0)
+    NUT_INFO(__nut_DB_VERSION, __nut_DB_VERSION, version)
 
 #define NUT_DECLARE_TABLE(type, name)                                                              \
     NUT_INFO(__nut_TABLE, type, name)                                                              \

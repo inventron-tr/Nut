@@ -174,6 +174,7 @@ bool DatabasePrivate::updateDatabase()
 
     db.transaction();
     for (auto &s: sql) {
+        qDebug() << "UpdateDB:" << s;
         db.exec(s);
 
         if (db.lastError().type() != QSqlError::NoError) {
@@ -187,7 +188,6 @@ bool DatabasePrivate::updateDatabase()
     bool ok = db.commit();
 
     if (db.lastError().type() == QSqlError::NoError) {
-
         q->databaseUpdated(last.version(), current.version());
         if (!last.count())
             q->databaseCreated();
