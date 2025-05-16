@@ -194,14 +194,28 @@ QStringList SqliteGenerator::diffTable(TableModel *oldTable, TableModel *newTabl
     for (auto &f: newTable->foreignKeys()) {
         if (!foreignKeys.isEmpty())
             foreignKeys.append(QStringLiteral(", "));
-        foreignKeys.append(QStringLiteral("FOREIGN KEY(%1) REFERENCES %2(id)")
+        foreignKeys.append(QStringLiteral("FOREIGN KEY(%1) REFERENCES %2(id) ON DELETE CASCADE")
                            .arg(f->localColumn, f->masterTable->name()));
     }
-    ret.append(QStringLiteral("ALTER TABLE ") + newTable->name() + QStringLiteral(" RENAME TO nut_orm_temp_table;"));
+    /* this is wrong for sqlite
+        right impl:
+        Create new table
+        Copy data
+        Drop old table
+        Rename new into old
+    */
+    /*ret.append(QStringLiteral("ALTER TABLE ") + newTable->name() + QStringLiteral(" RENAME TO nut_orm_temp_table;"));
     ret.append(newTableSql);
     ret.append(QStringLiteral("INSERT INTO %1 ( %2 ) SELECT %2 FROM nut_orm_temp_table;")
                .arg(newTable->name(), columns));
     ret.append(QStringLiteral("DROP TABLE nut_orm_temp_table;"));
+    */
+    newTableSql.replaceInStrings("CREATE TABLE ", "CREATE TABLE tmp_");
+    ret.append(newTableSql);
+    ret.append(QStringLiteral("INSERT INTO %1 ( %2 ) SELECT %2 FROM %3;")
+                   .arg("tmp_"+newTable->name(), columns, newTable->name()));
+    ret.append(QStringLiteral("DROP TABLE %1;").arg(newTable->name()));
+    ret.append(QStringLiteral("ALTER TABLE tmp_") + newTable->name() + QStringLiteral(" RENAME TO %1;").arg(newTable->name()));
     return ret;
 }
 void SqliteGenerator::appendSkipTake(QString &sql, int skip, int take)

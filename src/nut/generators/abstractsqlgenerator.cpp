@@ -281,6 +281,14 @@ QStringList AbstractSqlGenerator::diffTable(TableModel *oldTable, TableModel *ne
 //            columnSql << relationDeclare(newRelation);
 //        }
 //    }
+    QString foreignKeys;
+    for (auto &f: newTable->foreignKeys()) {
+        if (!foreignKeys.isEmpty())
+            foreignKeys.append(QStringLiteral(", "));
+        foreignKeys.append(QStringLiteral("FOREIGN KEY(%1) REFERENCES %2(id) ON DELETE CASCADE")
+                               .arg(f->localColumn, f->masterTable->name()));
+    }
+
     QString sql;
     if (oldTable) {
         sql = QStringLiteral("ALTER TABLE %1 \n%2")
@@ -293,8 +301,8 @@ QStringList AbstractSqlGenerator::diffTable(TableModel *oldTable, TableModel *ne
             columnSql << constraints(newTable);
         }
 
-        sql = QStringLiteral("CREATE TABLE %1 \n(%2)")
-                  .arg(newTable->name(), columnSql.join(QStringLiteral(",\n")));
+        sql = QStringLiteral("CREATE TABLE %1 \n(%2,%3)")
+                  .arg(newTable->name(), columnSql.join(QStringLiteral(",\n")), foreignKeys);
 
     }
     return QStringList() << sql;
