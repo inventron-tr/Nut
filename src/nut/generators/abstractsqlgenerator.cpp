@@ -301,9 +301,13 @@ QStringList AbstractSqlGenerator::diffTable(TableModel *oldTable, TableModel *ne
             columnSql << constraints(newTable);
         }
 
-        sql = QStringLiteral("CREATE TABLE %1 \n(%2,%3)")
-                  .arg(newTable->name(), columnSql.join(QStringLiteral(",\n")), foreignKeys);
-
+        if(foreignKeys.isEmpty()) {
+            sql = QStringLiteral("CREATE TABLE %1 \n(%2)")
+            .arg(newTable->name(), columnSql.join(QStringLiteral(",\n")));
+        } else {
+            sql = QStringLiteral("CREATE TABLE %1 \n(%2,%3)")
+            .arg(newTable->name(), columnSql.join(QStringLiteral(",\n")), foreignKeys);
+        }
     }
     return QStringList() << sql;
 }
