@@ -185,8 +185,10 @@ int Table::save(Database *db)
     if(status() == Added && model->isPrimaryKeyAutoIncrement())
         setProperty(model->primaryKey().toLatin1().data(), q.lastInsertId());
 
-    foreach(AbstractTableSet *ts, d->childTableSets)
-        ts->save(db);
+    if(d->status != Deleted)
+        foreach(AbstractTableSet *ts, d->childTableSets) {
+            ts->save(db);
+        }
     setStatus(FetchedFromDB);
 
     return q.numRowsAffected();
