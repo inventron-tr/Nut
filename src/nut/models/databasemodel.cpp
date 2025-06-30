@@ -92,6 +92,9 @@ bool DatabaseModel::operator ==(const DatabaseModel &other) const
     if(size() != other.size())
         return false;
 
+    if(version() != other.version())
+        return false;
+
     for(int i = 0; i < size(); i++){
         TableModel *mine = at(i);
         TableModel *others = other.tableByName(mine->name());
